@@ -21,12 +21,3 @@ pull_request_rules:
     actions:
       label:
         remove: [ "has conflicts" ]
-
-  - name: add core reviewer
-    conditions:
-      # number of review approvals
-      - "#approved-reviews-by<2"
-    actions:
-      request_reviews:
-        users:
-          - Borda
