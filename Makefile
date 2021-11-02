@@ -7,11 +7,11 @@ test:
 	# use this to run tests
 	rm -rf _ckpt_*
 	rm -rf ./lightning_logs
-	python -m coverage run --source pl_sandbox -m pytest pl_sandbox tests -v --flake8
+	python -m coverage run -m pytest tests -v --flake8
 	python -m coverage report
 
 	# specific file
-	# python -m coverage run --source pl_sandbox -m pytest --flake8 --durations=0 -v -k
+	# python -m coverage run -m pytest --flake8 --durations=0 -v -k
 
 clean:
 	# clean all temp runs
