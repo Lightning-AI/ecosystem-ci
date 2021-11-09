@@ -27,22 +27,22 @@ repos:
         args: [--py36-plus]
         name: Upgrade code
 
-  #- repo: https://github.com/myint/docformatter
-  #  rev: v1.4
-  #  hooks:
-  #    - id: docformatter
-  #      args: [--in-place, --wrap-summaries=120, --wrap-descriptions=120]
+  - repo: https://github.com/myint/docformatter
+    rev: v1.4
+    hooks:
+      - id: docformatter
+        args: [--in-place, --wrap-summaries=120, --wrap-descriptions=120]
 
-  #- repo: https://github.com/PyCQA/isort
-  #  rev: 5.9.2
-  #  hooks:
-  #    - id: isort
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.9.2
+    hooks:
+      - id: isort
 
-  #- repo: https://github.com/psf/black
-  #  rev: 21.7b0
-  #  hooks:
-  #    - id: black
-  #      name: Black code
+  - repo: https://github.com/psf/black
+    rev: 21.7b0
+    hooks:
+      - id: black
+        name: Black code
 
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.7
