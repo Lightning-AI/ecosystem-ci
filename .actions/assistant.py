@@ -83,10 +83,15 @@ class AssistantCLI:
         return os.linesep.join(script)
 
     @staticmethod
-    def copy_tests(config_file: str):
+    def specify_tests(config_file: str = "config.yaml"):
         assert os.path.isfile(config_file)
+        with open(config_file) as fp:
+            config = yaml.safe_load(fp)
+        testing = config[AssistantCLI.FIELD_TESTS]
 
-        # TODO
+        dirs = " ".join(testing.get("dirs", []))
+        args = " ".join(testing.get("pytest_args", []))
+        return f"{dirs} {args}"
 
 
 if __name__ == "__main__":
