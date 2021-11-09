@@ -55,7 +55,7 @@ class AssistantCLI:
         assert os.path.isfile(config_file)
         script = list(AssistantCLI.BASH_SCRIPT)
         with open(config_file) as fp:
-            config = yaml.load(fp)
+            config = yaml.safe_load(fp)
         repo = config[AssistantCLI.FIELD_TARGET_REPO]
         script += AssistantCLI._install_repo(repo)
         _, repo_name = AssistantCLI._git_clone(
@@ -67,8 +67,10 @@ class AssistantCLI:
                 repo["copy_tests"] = [repo["copy_tests"]]
             for test in repo["copy_tests"]:
                 path_test = os.path.join(path_root, repo_name, test)
+                test_dir = os.path.dirname(test)
+                if test_dir:
+                    script.append(f"mkdir -p {test_dir}")
                 is_file = os.path.splitext(test)[-1] != ""
-                script.append(f"mkdir -p {os.path.dirname(test)}")
                 script.append(f"cp {'-r' if not is_file else ''} {path_test} {test}")
         script.append(f"rm -rf {repo_name}")
 
