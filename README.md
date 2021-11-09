@@ -5,7 +5,6 @@ This is starter project template which shall set some regular testing between Li
 [![CI testing](https://github.com/PyTorchLightning/compatibility/workflows/CI%20testing/badge.svg?branch=main&event=push)](https://github.com/PyTorchLightning/compatibility/actions?query=workflow%3A%22CI+testing%22)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/PyTorchLightning/compatibility/main.svg?badge_token=mqheL1-cTn-280Vx4cJUdg)](https://results.pre-commit.ci/latest/github/PyTorchLightning/compatibility/main?badge_token=mqheL1-cTn-280Vx4cJUdg)
 
-
 ## Included
 
 Listing the implemented sections:
