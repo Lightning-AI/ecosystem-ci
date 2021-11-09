@@ -52,7 +52,9 @@ jobs:
 
     - name: Installing
       run: |
+        sudo apt install -q tree
         bash prepare_env.sh
+        tree .
       shell: bash
 
     - name: Testing

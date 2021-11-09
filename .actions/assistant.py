@@ -29,7 +29,7 @@ class AssistantCLI:
         return cmd, name
 
     @staticmethod
-    def _install_repo(repo: Dict[str, str]) -> List[str]:
+    def _install_repo(repo: Dict[str, str], remove_dir: bool = True) -> List[str]:
         assert "HTTPS" in repo, f"Missing key `HTTPS` among {repo.keys()}"
         cmd_git, repo_name = AssistantCLI._git_clone(
             repo.get("HTTPS"), token=repo.get("token"), username=repo.get("username"), password=repo.get("password")
@@ -48,6 +48,8 @@ class AssistantCLI:
             assert isinstance(repo["install_file"], str)
             cmds.append(f"pip install --quiet -r {repo['install_file']}")
         cmds.append("cd ..")
+        if remove_dir:
+            cmds.append(f"rm -rf {repo_name}")
         return cmds
 
     @staticmethod
@@ -57,7 +59,7 @@ class AssistantCLI:
         with open(config_file) as fp:
             config = yaml.safe_load(fp)
         repo = config[AssistantCLI.FIELD_TARGET_REPO]
-        script += AssistantCLI._install_repo(repo)
+        script += AssistantCLI._install_repo(repo, remove_dir=False)
         _, repo_name = AssistantCLI._git_clone(
             repo.get("HTTPS"), token=repo.get("token"), username=repo.get("username"), password=repo.get("password")
         )
