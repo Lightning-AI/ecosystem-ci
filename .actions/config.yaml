@@ -1,17 +1,28 @@
 target_repository:
   HTTPS: https://github.com/PyTorchLightning/metrics.git
+  # OPTIONAL, for some protected repository
+  # username: my-nick
+  # OPTIONAL, paired with the username
+  # password: dont-tell-anyone
+  # OPTIONAL, overrides the user/pass
+  # token: authentication-token
+  # OPTIONAL, checkout a particular branch or a tag
   checkout: master
+  # OPTIONAL, define installing package extras
   install_extras: all
-  install_file: requirements.txt
+  # OPTIONAL, install additional requirements
+  # install_file: requirements.txt
+  # OPTIONAL, copy some  test from the target repository
   copy_tests:
     - integrations
 
 dependencies:
   - name: PL
-    HHTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
+    HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
     checkout: release/1.5.x
     install_extras: all
 
 testing:
   dirs:
     - .
+  extra_args: {}
