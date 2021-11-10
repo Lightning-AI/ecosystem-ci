@@ -70,7 +70,7 @@ jobs:
     - name: Show dir tree
       if: runner.os == 'ubuntu'
       run: |
-        sudo apt install -q tree
+        sudo apt install -q -y tree
         tree .
       shell: bash
 
@@ -98,8 +98,9 @@ jobs:
     #    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     #  if: github.ref == 'refs/heads/main' && failure()
 
-    - name: Statistics
-      if: success()
-      run: |
-        coverage report
-        coverage xml
+    # ToDo: need to specify package to be monitored
+    #- name: Statistics
+    #  if: success()
+    #  run: |
+    #    coverage report
+    #    coverage xml

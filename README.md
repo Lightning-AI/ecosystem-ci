@@ -49,4 +49,3 @@ You still need to enable some external integrations such as:
 
 - notification on CI failure to a Slack channel
 - notification on CI failure to via email
-- provide GPU integrations (GridAI/Azure)
