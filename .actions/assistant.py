@@ -9,7 +9,7 @@ _PATH_ROOT = os.path.dirname(os.path.dirname(__file__))
 
 class AssistantCLI:
 
-    _BASH_SCRIPT = ("set -e", )
+    _BASH_SCRIPT = ("set -e",)
     _FIELD_TARGET_REPO = "target_repository"
     _FIELD_REQ = "dependencies"
     _FIELD_TESTS = "testing"

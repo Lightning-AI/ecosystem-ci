@@ -8,7 +8,7 @@ __This is starter project template which shall set some regular testing between 
 Any user who wants to keep her/his project well aligned with PL, should user this project.
 We recommend forking this repository or create your own from this template with setting this one as upstream to be able to receive any future integration fixes and improvements.
 
-To simplify and unify the workflow se expect that a user fills only the `.actiona/config.yaml` file.
+To simplify and unify the workflow se expect that a user fills only the `configs/<Organization>/<project>.yaml` file.
 The actual integration is with GitHub pipelines abut with generated environment scripts it can be easily extended to any other CI such as Azure if you require testing on GPUs or other specific machines.
 A user can test all locally with calling attached Makefile as `make test`.
 
@@ -49,3 +49,5 @@ Eventually you can parametrize multiple configs inside your CI, for example if y
 You still need to enable some external integrations such as:
 
 - notification on CI failure to a Slack channel
+- notification on CI failure to via email
+- provide GPU integrations (GridAI/Azure)
