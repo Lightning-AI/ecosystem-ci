@@ -49,3 +49,4 @@ You still need to enable some external integrations such as:
 
 - notification on CI failure to a Slack channel
 - notification on CI failure to via email
+- update Makefile to run any and all integrations
