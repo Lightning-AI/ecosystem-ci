@@ -102,14 +102,26 @@ class AssistantCLI:
         return os.linesep.join(script)
 
     @staticmethod
+    def _pytest_dirs(dirs: Union[None, str, list, tuple] = "") -> str:
+        dirs = dirs or "."
+        dirs = " ".join(dirs) if isinstance(dirs, (tuple, list, set)) else dirs
+        return dirs
+
+    @staticmethod
+    def _pytest_args(args: Union[None, str, list, tuple] = "") -> str:
+        args = args or ""
+        args = " ".join(args) if isinstance(args, (tuple, list, set)) else args
+        return args
+
+    @staticmethod
     def specify_tests(config_file: str = "config.yaml"):
         assert os.path.isfile(config_file)
         with open(config_file) as fp:
             config = yaml.safe_load(fp)
         testing = config[AssistantCLI._FIELD_TESTS]
 
-        dirs = " ".join(testing.get("dirs", []))
-        args = " ".join(testing.get("pytest_args", []))
+        dirs = AssistantCLI._pytest_dirs(testing.get("dirs"))
+        args = AssistantCLI._pytest_args(testing.get("pytest_args"))
         return f"{dirs} {args}"
 
 

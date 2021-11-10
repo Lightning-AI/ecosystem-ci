@@ -27,4 +27,5 @@ dependencies:
 testing:
   dirs:
     - .
-  pytest_args: {}
+  # OPTIONAL, additional pytest arguments
+  pytest_args: --strict
