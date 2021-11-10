@@ -18,11 +18,17 @@ target_repository:
     - tests/__init__.py
     - tests/helpers
 
+# OPTIONAL, if any installation require some env. variables
+env:
+  HOROVOD_BUILD_ARCH_FLAGS: "-mfma"
+  # HOROVOD_WITHOUT_MXNET: 1
+  # HOROVOD_WITHOUT_TENSORFLOW: 1
+
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
     checkout: release/1.5.x
-    install_extras: all
+    # install_extras: all
 
 testing:
   dirs:

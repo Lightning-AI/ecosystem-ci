@@ -67,11 +67,15 @@ class AssistantCLI:
         cmds.append(f"pip install --quiet {pip_install}")
         if "install_file" in repo:
             assert isinstance(repo["install_file"], str)
-            cmds.append(f"pip install --quiet -r {repo['install_file']}")
+            cmds.append(f"pip install --quiet --upgrade -r {repo['install_file']}")
         cmds.append("cd ..")
         if remove_dir:
             cmds.append(f"rm -rf {repo_name}")
         return cmds
+
+    @staticmethod
+    def _export_env(env: Dict[str, str]) -> List[str]:
+        return [f'export {name}="{val}"' for name, val in env.items()]
 
     @staticmethod
     def prepare_env(config_file: str = "config.yaml", path_root: str = _PATH_ROOT):
@@ -80,6 +84,9 @@ class AssistantCLI:
         with open(config_file) as fp:
             config = yaml.safe_load(fp)
         repo = config[AssistantCLI._FIELD_TARGET_REPO]
+
+        script += AssistantCLI._export_env(config.get("env", {}))
+
         script += AssistantCLI._install_repo(repo, remove_dir=False)
         repo_name, _ = os.path.splitext(os.path.basename(repo.get("HTTPS")))
 
