@@ -18,10 +18,11 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-20.04 , macOS-10.15, windows-2019]
-        python-version: [3.9]
+        python-version: ["3.9"]
         config:
           - "PyTorchLightning/metrics_pl-master.yaml"
-          - "PyTorchLightning/metrics_pl-release.yaml"
+        include:
+          - {os: "ubuntu-20.04", python-version: "3.8", config: "PyTorchLightning/metrics_pl-release.yaml"}
 
     # Timeout: https://stackoverflow.com/a/59076067/4521646
     timeout-minutes: 35
@@ -51,7 +52,7 @@ jobs:
         key: ${{ runner.os }}-py${{ matrix.python-version }}-td${{ steps.times.outputs.period }}-pip-${{ hashFiles('requirements.txt') }}-${{ hashFiles(format('.actions/{0}', matrix.config)) }}
         restore-keys: ${{ runner.os }}-py${{ matrix.python-version }}-td${{ steps.times.outputs.period }}-pip-
 
-    - name: Prepare scripts
+    - name: Create scripts
       run: |
         pip install -q -r requirements.txt
         python .actions/assistant.py prepare_env --config_file=configs/${{ matrix.config }} > prepare_env.sh
@@ -62,7 +63,7 @@ jobs:
       run: echo "::set-output name=args::$(python .actions/assistant.py specify_tests --config_file=configs/${{ matrix.config }} 2>&1)"
       id: spec_tests
 
-    - name: Installing
+    - name: Prepare env.
       run: |
         bash prepare_env.sh
       shell: bash
