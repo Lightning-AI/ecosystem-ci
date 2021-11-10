@@ -10,7 +10,6 @@ We recommend forking this repository or create your own from this template with 
 
 To simplify and unify the workflow se expect that a user fills only the `configs/<Organization>/<project>.yaml` file.
 The actual integration is with GitHub pipelines abut with generated environment scripts it can be easily extended to any other CI such as Azure if you require testing on GPUs or other specific machines.
-A user can test all locally with calling attached Makefile as `make test`.
 
 ## Included
 
