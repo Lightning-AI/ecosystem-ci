@@ -41,7 +41,7 @@ class AssistantCLI:
             repo.get("HTTPS"), token=repo.get("token"), username=repo.get("username"), password=repo.get("password")
         )
 
-        cmd = f"pip install git+{url}"
+        cmd = f"pip install --quiet git+{url}"
         if "checkout" in repo:
             assert isinstance(repo["checkout"], str)
             cmd += f"@{repo['checkout']}"

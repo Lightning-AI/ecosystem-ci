@@ -1,20 +1,15 @@
-.PHONY: test clean docs
+.PHONY: test clean env
 
-test:
-	pip install -r requirements.txt
-	pip install -r tests/requirements.txt
+env:
+	pip install -q -r requirements.txt
+	python .actions/assistant.py prepare_env --config_file=.actions/config.yaml > prepare_env.sh
+	bash prepare_env.sh
 
-	# use this to run tests
-	rm -rf _ckpt_*
-	rm -rf ./lightning_logs
-	python -m coverage run -m pytest tests -v --flake8
-	python -m coverage report
-
-	# specific file
-	# python -m coverage run -m pytest --flake8 --durations=0 -v -k
+test: clean env
+	test_args=$(python .actions/assistant.py specify_tests --config_file=.actions/config.yaml 2>&1)
+	coverage run -m pytest ${test_args} -v
 
 clean:
 	# clean all temp runs
-	rm -rf $(shell find . -name "mlruns")
 	rm -rf .mypy_cache
 	rm -rf .pytest_cache
