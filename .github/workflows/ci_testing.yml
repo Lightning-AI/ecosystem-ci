@@ -8,6 +8,7 @@ on:  # Trigger the workflow on push or pull request, but only for the main branc
   schedule:
     # At the end of every day
     - cron: "0 0 * * *"
+  workflow_dispatch:
 
 jobs:
   pytest:
@@ -84,11 +85,11 @@ jobs:
     # https://www.ravsam.in/blog/send-slack-notification-when-github-actions-fails/
     # https://dev.to/adamkdean/slack-notifications-with-github-actions-1lk5
     # https://axolo.co/blog/p/top-4-github-action-slack-integration
-    #- name: Slack notofication
+    #- name: Slack notification
     #  uses: slackapi/slack-github-action@v1.15.0
     #  env:
     #    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-    #  if: failure()
+    #  if: github.ref == 'refs/heads/main' && failure()
 
     - name: Statistics
       if: success()
