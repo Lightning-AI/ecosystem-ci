@@ -118,7 +118,7 @@ class AssistantCLI:
         assert os.path.isfile(config_file)
         with open(config_file) as fp:
             config = yaml.safe_load(fp)
-        testing = config[AssistantCLI._FIELD_TESTS]
+        testing = config.get(AssistantCLI._FIELD_TESTS, {})
 
         dirs = AssistantCLI._pytest_dirs(testing.get("dirs"))
         args = AssistantCLI._pytest_args(testing.get("pytest_args"))

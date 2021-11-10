@@ -18,6 +18,7 @@ jobs:
       matrix:
         os: [ubuntu-20.04]  # TODO: , macOS-10.15, windows-2019
         python-version: [3.8]
+        config: ["config.yaml", "config-release.yaml"]
 
     # Timeout: https://stackoverflow.com/a/59076067/4521646
     timeout-minutes: 35
@@ -44,18 +45,18 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{ steps.pip-cache.outputs.dir }}
-        key: ${{ runner.os }}-py${{ matrix.python-version }}-td${{ steps.times.outputs.period }}-pip-${{ hashFiles('requirements.txt') }}
+        key: ${{ runner.os }}-py${{ matrix.python-version }}-td${{ steps.times.outputs.period }}-pip-${{ hashFiles('requirements.txt') }}-${{ hashFiles(format('.actions/{0}', matrix.config)) }}
         restore-keys: ${{ runner.os }}-py${{ matrix.python-version }}-td${{ steps.times.outputs.period }}-pip-
 
     - name: Prepare scripts
       run: |
         pip install -q -r requirements.txt
-        python .actions/assistant.py prepare_env --config_file=.actions/config.yaml > prepare_env.sh
+        python .actions/assistant.py prepare_env --config_file=.actions/${{ matrix.config }} > prepare_env.sh
         cat prepare_env.sh
       shell: bash
 
     - name: Specify tests
-      run: echo "::set-output name=args::$(python .actions/assistant.py specify_tests --config_file=.actions/config.yaml 2>&1)"
+      run: echo "::set-output name=args::$(python .actions/assistant.py specify_tests --config_file=.actions/${{ matrix.config }} 2>&1)"
       id: spec_tests
 
     - name: Installing
@@ -66,9 +67,11 @@ jobs:
       shell: bash
 
     - name: Testing
+      env:
+        RESULTS: "junit/test-results-${{ runner.os }}-${{ matrix.python-version }}.xml"
       run: |
         echo ${{ steps.spec_tests.outputs.args }}
-        coverage run -m pytest ${{ steps.spec_tests.outputs.args }} -v --junitxml=junit/test-results-${{ runner.os }}-${{ matrix.python-version }}.xml
+        coverage run -m pytest ${{ steps.spec_tests.outputs.args }} -v --junitxml=$RESULTS
 
     - name: Upload pytest test results
       uses: actions/upload-artifact@v2
@@ -78,6 +81,14 @@ jobs:
       if: failure()
 
     # TODO: report failure to Slack
+    # https://www.ravsam.in/blog/send-slack-notification-when-github-actions-fails/
+    # https://dev.to/adamkdean/slack-notifications-with-github-actions-1lk5
+    # https://axolo.co/blog/p/top-4-github-action-slack-integration
+    #- name: Slack notofication
+    #  uses: slackapi/slack-github-action@v1.15.0
+    #  env:
+    #    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    #  if: failure()
 
     - name: Statistics
       if: success()
