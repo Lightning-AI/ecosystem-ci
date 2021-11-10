@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-20.04]  # TODO: , macOS-10.15, windows-2019
+        os: [ubuntu-20.04 , macOS-10.15, windows-2019]
         python-version: [3.8]
         config: ["config.yaml", "config-release.yaml"]
 
@@ -62,8 +62,13 @@ jobs:
 
     - name: Installing
       run: |
-        sudo apt install -q tree
         bash prepare_env.sh
+      shell: bash
+
+    - name: Show dir tree
+      if: runner.os == 'ubuntu'
+      run: |
+        sudo apt install -q tree
         tree .
       shell: bash
 
