@@ -12,7 +12,7 @@ target_repository:
   install_extras: all
   # OPTIONAL, install additional requirements
   # install_file: requirements.txt
-  # OPTIONAL, copy some  test from the target repository
+  # copy some  test from the target repository
   copy_tests:
     - integrations
     - tests/__init__.py
@@ -32,6 +32,6 @@ dependencies:
 
 testing:
   dirs:
-    - .
+    - integrations
   # OPTIONAL, additional pytest arguments
   pytest_args: --strict

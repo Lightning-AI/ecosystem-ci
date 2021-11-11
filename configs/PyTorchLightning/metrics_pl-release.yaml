@@ -1,10 +1,10 @@
 target_repository:
   HTTPS: https://github.com/PyTorchLightning/metrics.git
-  # OPTIONAL, checkout a particular branch or a tag
+  # checkout a particular branch or a tag
   checkout: master
-  # OPTIONAL, define installing package extras
+  # define installing package extras
   install_extras: all
-  # OPTIONAL, copy some  test from the target repository
+  # copy some  test from the target repository
   copy_tests:
     - integrations
     - tests/__init__.py
