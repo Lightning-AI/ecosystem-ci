@@ -101,6 +101,5 @@ This starter showcase integration between [Pytorch-Lightning](https://github.com
 
 This is still early stage we not all is ideal yet, and actually we are working on:
 
-- enable some external notification on CI failure to a Slack channel
 - enable some external messaging on CI failure to via email
 - update Makefile to run any and all integrations
