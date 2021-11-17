@@ -96,10 +96,3 @@ testing:
 ```
 
 This starter showcase integration between [Pytorch-Lightning](https://github.com/PyTorchLightning/pytorch-lightning) and [TorchMetrics](https://github.com/PyTorchLightning/metrics)
-
-## To be Done
-
-This is still early stage we not all is ideal yet, and actually we are working on:
-
-- enable some external messaging on CI failure to via email
-- update Makefile to run any and all integrations
