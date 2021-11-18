@@ -21,9 +21,10 @@ jobs:
         python-version: ["3.9"]
         config:
           - "PyTorchLightning/metrics_pl-master.yaml"
+          - "PyTorchLightning/transformers_pl-master.yaml"
         include:
           - {os: "ubuntu-20.04", python-version: "3.8", config: "PyTorchLightning/metrics_pl-release.yaml"}
-
+          - {os: "ubuntu-20.04", python-version: "3.8", config: "PyTorchLightning/transformers_pl-release.yaml"}
     # Timeout: https://stackoverflow.com/a/59076067/4521646
     timeout-minutes: 35
 
