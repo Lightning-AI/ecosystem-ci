@@ -13,5 +13,5 @@ target_repository:
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
-    checkout: master
+    checkout: release/1.5.x
     # install_extras: all
