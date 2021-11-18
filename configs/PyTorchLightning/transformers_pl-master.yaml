@@ -6,15 +6,10 @@ target_repository:
   install_extras: all
   # copy some  test from the target repository
   copy_tests:
-    - tests/
-    - tests/__init__.py
+    - tests
 
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
     checkout: master
     # install_extras: all
-
-testing:
-  dirs:
-    - tests
