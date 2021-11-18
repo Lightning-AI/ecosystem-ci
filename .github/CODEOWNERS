@@ -12,3 +12,7 @@
 /.azure/              @borda
 # configs in root
 /*.yml                @borda
+
+# PyTorchLightning
+/configs/PyTorchLightning/metrics*  @borda
+/configs/PyTorchLightning/flash*    @ethanwharris
