@@ -1,0 +1,24 @@
+target_repository:
+  HTTPS: https://github.com/PyTorchLightning/lightning-flash.git
+  # checkout a particular branch or a tag
+  checkout: master
+  # define installing package extras
+  install_extras: image
+  # copy some  test from the target repository
+  copy_tests:
+    - flash_examples
+    - tests/__init__.py
+    - tests/helpers
+    - tests/examples
+
+dependencies:
+  - name: pytorch-lightning
+    HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
+    checkout: master
+    # install_extras: all
+
+testing:
+  dirs:
+    - tests/examples
+  # additional pytest arguments
+  pytest_args: --strict
