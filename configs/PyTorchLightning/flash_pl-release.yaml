@@ -1,7 +1,7 @@
 target_repository:
   HTTPS: https://github.com/PyTorchLightning/lightning-flash.git
   # checkout a particular branch or a tag
-  checkout: bugfix/flexible_loading
+  checkout: master
   # define installing package extras
   install_extras: image
   # copy some  test from the target repository
