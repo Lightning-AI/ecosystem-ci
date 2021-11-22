@@ -8,6 +8,7 @@ target_repository:
   copy_tests:
     - tests
     - examples
+    - conf
 
 dependencies:
   - name: pytorch-lightning
