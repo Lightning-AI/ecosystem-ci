@@ -1,13 +1,13 @@
-# Lightning Compatibility
+# Lightning EcoSystem CI
 
 __This is the integration/compatibility testing platform between PytorchLightning (PL) and other project on regular bases with failure notifications...__
 
-[![CI testing](https://github.com/PyTorchLightning/compatibility/workflows/CI%20testing/badge.svg?branch=main&event=push)](https://github.com/PyTorchLightning/compatibility/actions?query=workflow%3A%22CI+testing%22)
-[![Build Status](https://dev.azure.com/PytorchLightning/compatibility/_apis/build/status/PyTorchLightning.compatibility?branchName=main)](https://dev.azure.com/PytorchLightning/compatibility/_build/latest?definitionId=17&branchName=main)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/PyTorchLightning/compatibility/main.svg?badge_token=mqheL1-cTn-280Vx4cJUdg)](https://results.pre-commit.ci/latest/github/PyTorchLightning/compatibility/main?badge_token=mqheL1-cTn-280Vx4cJUdg)
+[![CI testing](https://github.com/PyTorchLightning/ecosystem-ci/workflows/CI%20testing/badge.svg?branch=main&event=push)](https://github.com/PyTorchLightning/ecosystem-ci/actions?query=workflow%3A%22CI+testing%22)
+[![Build Status](https://dev.azure.com/PytorchLightning/ecosystem-ci/_apis/build/status/PyTorchLightning.ecosystem-ci?branchName=main)](https://dev.azure.com/PytorchLightning/ecosystem-ci/_build/latest?definitionId=17&branchName=main)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/PyTorchLightning/ecosystem-ci/main.svg?badge_token=mqheL1-cTn-280Vx4cJUdg)](https://results.pre-commit.ci/latest/github/PyTorchLightning/ecosystem-ci/main?badge_token=mqheL1-cTn-280Vx4cJUdg)
 
 Any user who wants to keep her/his project well aligned with PL, should user this platform and set integrations.
-One of the main goals to prevent breaking compatibility and discovering all eventual issue on a regular basis not when release is created and published (as it is irreversible  with PIP registry).
+One of the main goals to prevent breaking EcoSystem-CI and discovering all eventual issue on a regular basis not when release is created and published (as it is irreversible  with PIP registry).
 Using this platform you get out of the box nightly testing on CPU as well as multi-GPU.
 An alternative is forking this repository and run all compatibilities in your own environments and resources.
 
@@ -28,7 +28,7 @@ which are wrapped in generated script, so they can be easily extended and used i
 
 ## How to add new project?
 
-We are open to include your project on PytorchLightning family and provide integration/compatibility testing to ensure that we won't accidentally break anything that your project relies on...
+We are open to include your project on PytorchLightning family and provide integration/EcoSystem-CI testing to ensure that we won't accidentally break anything that your project relies on...
 
 For adding your project you need to do these simple steps
 
