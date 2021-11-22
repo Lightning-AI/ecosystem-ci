@@ -7,9 +7,14 @@ target_repository:
   # copy some  test from the target repository
   copy_tests:
     - tests
+    - examples
 
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
     checkout: master
     # install_extras: all
+
+testing:
+  dirs:
+    - tests
