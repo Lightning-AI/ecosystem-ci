@@ -12,3 +12,6 @@
 /.azure/              @borda
 # configs in root
 /*.yml                @borda
+
+# PyTorchLightning
+/configs/PyTorchLightning/lightning_transformers*    @seannaren
