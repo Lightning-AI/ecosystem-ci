@@ -46,9 +46,9 @@ target_repository:
 ...
 ```
 
-If your project tests multiple configurations or you'd like to test against multiple Lightning versions such as master and release branch, add a config for each one of them.
+If your project tests multiple configurations or you'd like to test against multiple Lightning versions such as master and release branches, create a config file for each one of them.
 
-Have a look at the [metrics master](configs/PyTorchLightning/metrics_pl-master.yaml) and [metrics release](configs/PyTorchLightning/metrics_pl-release.yaml) CI files for a real example.
+As an example, have a look at [metrics master](configs/PyTorchLightning/metrics_pl-master.yaml) and [metrics release](configs/PyTorchLightning/metrics_pl-release.yaml) CI files.
 
 4. Add your config filename to the either/both the [GitHub CPU CI file](.github/workflows/ci_testing.yml) or the [Azure GPU CI file](.azure/ci-testig-parameterized.yml).
 
@@ -85,7 +85,7 @@ jobs:
     - "MyUsername/my_project-master.yaml"
 ```
 
-5. Add responsible person to [CODEOWNERS](.github/CODEOWNERS) for your organization folder or just the project.
+5. Add the responsible person(s) to [CODEOWNERS](.github/CODEOWNERS) for your organization folder or just the project.
 
 ```
 # MyProject
@@ -98,7 +98,7 @@ jobs:
 
 ## Configuring my project
 
-Tha config include a few different sections:
+The config include a few different sections:
 
 - `target_repository` include your project
 - `env` (optional) environment variable in case soe compilations expects them
@@ -128,7 +128,7 @@ copy_tests:
     - tests/helpers
 ```
 
-Note: if you define just some files as done above, and they are using internal-cross imports you need to copy also `__init__.py` from each particular package level.
+Note: If you define some files as done above, and they are using internal-cross imports, you need to copy the `__init__.py` files from each particular package level.
 
 The `testing` section provides access to the pytest run args and command.
 
