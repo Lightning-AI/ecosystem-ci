@@ -16,6 +16,19 @@ class AssistantCLI:
     _FOLDER_TESTS = "_integrations"
 
     @staticmethod
+    def folder_local_tests() -> str:
+        return AssistantCLI._FOLDER_TESTS
+
+    @staticmethod
+    def folder_repo(config_file: str = "config.yaml") -> str:
+        assert os.path.isfile(config_file)
+        with open(config_file) as fp:
+            config = yaml.safe_load(fp)
+        repo = config[AssistantCLI._FIELD_TARGET_REPO]
+        repo_name, _ = os.path.splitext(os.path.basename(repo.get("HTTPS")))
+        return repo_name
+
+    @staticmethod
     def _https(
         https: str, token: Optional[str] = None, username: Optional[str] = None, password: Optional[str] = None
     ) -> str:
@@ -79,7 +92,7 @@ class AssistantCLI:
         return [f'export {name}="{val}"' for name, val in env.items()]
 
     @staticmethod
-    def prepare_env(config_file: str = "config.yaml", path_root: str = _PATH_ROOT):
+    def prepare_env(config_file: str = "config.yaml", path_root: str = _PATH_ROOT) -> str:
         assert os.path.isfile(config_file)
         script = list(AssistantCLI._BASH_SCRIPT)
         with open(config_file) as fp:
