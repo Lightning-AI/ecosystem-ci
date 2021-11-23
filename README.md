@@ -1,49 +1,103 @@
 # Lightning EcoSystem CI
 
-__This is the integration/compatibility testing platform between PytorchLightning (PL) and other project on regular bases with failure notifications...__
+**Automated Testing for Lightning EcoSystem Projects**
 
 [![CI testing](https://github.com/PyTorchLightning/ecosystem-ci/workflows/CI%20testing/badge.svg?branch=main&event=push)](https://github.com/PyTorchLightning/ecosystem-ci/actions?query=workflow%3A%22CI+testing%22)
 [![Build Status](https://dev.azure.com/PytorchLightning/ecosystem-ci/_apis/build/status/PyTorchLightning.ecosystem-ci?branchName=main)](https://dev.azure.com/PytorchLightning/ecosystem-ci/_build/latest?definitionId=17&branchName=main)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/PyTorchLightning/ecosystem-ci/main.svg?badge_token=mqheL1-cTn-280Vx4cJUdg)](https://results.pre-commit.ci/latest/github/PyTorchLightning/ecosystem-ci/main?badge_token=mqheL1-cTn-280Vx4cJUdg)
 
-Any user who wants to keep her/his project well aligned with PL, should user this platform and set integrations.
-One of the main goals to prevent breaking EcoSystem-CI and discovering all eventual issue on a regular basis not when release is created and published (as it is irreversible  with PIP registry).
-Using this platform you get out of the box nightly testing on CPU as well as multi-GPU.
-An alternative is forking this repository and run all compatibilities in your own environments and resources.
+______________________________________________________________________
 
-To simplify and unify the workflow we expect that:
+<div align="center">
+  Lightning EcoSystem CI allows your project to be tested against Lightning, helping to discover integration issues as fast as possible.
+  With Lightning EcoSystem CI, you get nightly testing on CPUs as well as Multi-GPUs for free!
+  <br / >
+  Additionally, the EcoSystem CI can alert you via Slack notifications if issues arise.
+</div>
 
-- your project already include some **python tests with PL** as dependency
-- filling the **configuration file** `configs/<Organization>/<project>.yaml` (we will talk about it later)
-- setting a **contact/responsible** person to resolve eventual issues
+## How do I add my own Project?
 
-The actual integration uses GitHub actions and Azure pipelines.
-We also provide native parallelization so all projects are tested in parallel and using cache to speed-up environment creation if it is the same over consecutive runs for a particular project and configuration.
-This platform is build around two simple steps:
+### Pre-requisites
 
-1. prepare target environment with installing or dependencies
-1. copy integration tests and run them
+Here are pre-requisites for your project before adding to the Lightning EcoSystem CI:
 
-which are wrapped in generated script, so they can be easily extended and used in any other CI such as CircleCI if you require testing on other specific machines.
+- Your project already include some **python tests with PyTorch Lightning** as a dependency
+- You'll be a **contact/responsible** person to resolve any issues that the CI finds in the future for your project
 
-## How to add new project?
+### Adding your own project config
 
-We are open to include your project on PytorchLightning family and provide integration/EcoSystem-CI testing to ensure that we won't accidentally break anything that your project relies on...
+1. First Fork this project to be able to create a new Pull Request, and work within a specific branch.
 
-For adding your project you need to do these simple steps
+```bash
+gh repo fork PyTorchLightning/ecosystem-ci
+cd ecosystem-ci/
+```
 
-0. Fork this project to be able to create a new Pull Request, and work within a specific branch
-1. Create new configuration file in `configs/<Organization>` folder and call it `<project>.yaml`
-1. Add path to this new config to at least one CI
-   - with GitHub action you can specify target OS and Python version
-   - with Azure you only add path to the config; OS, Python version are fixed
-1. Add responsible person to the `.github/CODEOWNERS` for your organization folder or just single project
-1. Create a (draft) PR with all early mentioned requirements
-1. \[wip\] join our Slack channel to be notified if your project is breaking
+2. Copy the [template file](configs/template.yaml) and call it `<my_project_name>.yaml`.
 
-If your project shall be run with multiple configurations or test against multiple PL versions such as master and release branch, you would need to and a config ile for each of them.
+```
+cp configs/template.yaml configs/<my_project_name>.yaml
+```
 
-## How to configure my project?
+3. At the minimum, modify the `HTTPS` variable to point to your repository. See [Configuring my project](<>) for more options
+
+```yaml
+target_repository:
+  HTTPS: https://github.com/MyUsername/MyProject.git
+...
+```
+
+If your project tests multiple configurations or you'd like to test against multiple Lightning versions such as master and release branch, add a config for each one of them.
+
+Have a look at the [metrics master](configs/PyTorchLightning/metrics_pl-master.yaml) and [metrics release](configs/PyTorchLightning/metrics_pl-release.yaml) CI files for a real example.
+
+4. Add your config filename to the either/both the [GitHub CPU CI file](.github/workflows/ci_testing.yml) or the [Azure GPU CI file](.azure/ci-testig-parameterized.yml).
+
+For example, for the [GitHub CPU CI file](.github/workflows/ci_testing.yml) we append our config into the pytest parametrization:
+
+```yaml
+...
+jobs:
+  pytest:
+    ...
+        config:
+          - "PyTorchLightning/metrics_pl-release.yaml"
+          - "PyTorchLightning/transformers_pl-release.yaml"
+          - "MyUsername/myproject-release.yaml"
+        include:
+          - {os: "ubuntu-20.04", python-version: "3.8", config: "PyTorchLightning/metrics_pl-master.yaml"}
+          - {os: "ubuntu-20.04", python-version: "3.9", config: "PyTorchLightning/transformers_pl-master.yaml"}
+          - {os: "ubuntu-20.04", python-version: "3.9", config: "MyUsername/my_project-master.yaml"}
+        exclude:
+          - {os: "windows-2019", config: "PyTorchLightning/transformers_pl-release.yaml"}
+...
+```
+
+For example, in the [Azure GPU CI file](.azure/ci-testig-parameterized.yml) file:
+
+```yaml
+...
+jobs:
+- template: testing-template.yml
+  parameters:
+    configs:
+    - "PyTorchLightning/metrics_pl-master.yaml"
+    - "PyTorchLightning/metrics_pl-release.yaml"
+    - "MyUsername/my_project-master.yaml"
+```
+
+5. Add responsible person to [CODEOWNERS](.github/CODEOWNERS) for your organization folder or just the project.
+
+```
+# MyProject
+/configs/Myusername/MyProject*    @Myusername
+```
+
+6. Finally create a draft PR to the repo!
+
+(Optional). \[wip\] join our Slack channel to be notified if your project is breaking
+
+## Configuring my project
 
 Tha config include a few ain sections:
 
@@ -55,8 +109,9 @@ Tha config include a few ain sections:
 All dependencies as well as the target repository is sharing the same template with the only required field `HTTPS` and all others are optional:
 
 ```yaml
+target_repository:
   HTTPS: https://github.com/PyTorchLightning/metrics.git
-  # OPTIONAL, for some protected repository
+  # OPTIONAL, for a private/protected repository
   username: my-nick
   # OPTIONAL, paired with the username
   password: dont-tell-anyone
@@ -66,25 +121,17 @@ All dependencies as well as the target repository is sharing the same template w
   checkout: master
   # define installing package extras
   install_extras: all
-```
 
-In case user is pulling private or protected repository he can use login with username/password or authentication token (the token is prioritized over user/pass).
-The `checkout` allowing user to select a head/branch or tag which shall be installed, in particular the most common option is testing against development (master branch) and stable (release branch) states.
-The `install_extras` refers to standard pip option to install some additional dependencies defined with setuptools, typically used as `<my-package>[<install_extras>]`.
-
-The`target_repository` is an extended version of dependency as described above.
-In addition, this item has to include `copy_tests` with list of folders and/or files with tests.
-Note that if you define just some files, and they are using internal-cross imports you need to copy also `__init__.py` from each particular package level.
-
-```yaml
-  copy_tests:
+copy_tests:
     - integrations
     # this is copied as we use the helpers inside integrations as regular python package
     - tests/__init__.py
     - tests/helpers
 ```
 
-The `testing` section aims only on enrichment the pytest command
+Note: if you define just some files as done above, and they are using internal-cross imports you need to copy also `__init__.py` from each particular package level.
+
+The `testing` section provides access to the pytest run args and command.
 
 ```yaml
 testing:
@@ -94,5 +141,3 @@ testing:
   # OPTIONAL, additional pytest arguments
   pytest_args: --strict
 ```
-
-This starter showcase integration between [Pytorch-Lightning](https://github.com/PyTorchLightning/pytorch-lightning) and [TorchMetrics](https://github.com/PyTorchLightning/metrics)
