@@ -25,14 +25,14 @@ Here are pre-requisites for your project before adding to the Lightning EcoSyste
 
 ### Adding your own project config
 
-1. First, fork this project to be able to create a new Pull Request, and work within a specific branch.
+1. First, fork this project (with [CLI](https://cli.github.com/) or in browser) to be able to create a new Pull Request, and work within a specific branch.
 
 ```bash
 gh repo fork PyTorchLightning/ecosystem-ci
 cd ecosystem-ci/
 ```
 
-2. Copy the [template file](configs/template.yaml) and call it `<my_project_name>.yaml`.
+2. Copy the [template file](configs/_template.yaml) in `configs` folder and call it `<my_project_name>.yaml`.
 
 ```
 cp configs/template.yaml configs/<my_project_name>.yaml
