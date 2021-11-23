@@ -13,13 +13,20 @@ all: clean env ${BUILDS}
 
 %: %.y*ml
 	@echo $<
-	python ${CLI} prepare_env --config_file=$< > prepare_env.sh
-	bash prepare_env.sh
-	$(python $CLI list --config_file=$< 2>&1) coverage run -m pytest $(python $CLI specify_tests --config_file=$< 2>&1) -v
-	rm -rf $(python $CLI folder_local_tests 2>&1)
-	rm -rf $(python $CLI folder_repo --config_file=$< 2>&1)
+	echo "pip install virtualenv" > run.sh
+	echo "python -m virtualenv --system-site-packages venv" >> run.sh
+	echo "source venv/bin/activate" >> run.sh
+	python ${CLI} prepare_env --config_file=$< >> run.sh
+	echo "coverage run -m pytest $(shell python ${CLI} specify_tests --config_file=$<) -v" >> run.sh
+	echo "rm -rf $(shell python ${CLI} folder_local_tests)" >> run.sh
+	echo "rm -rf $(shell python ${CLI} folder_repo --config_file=$<)" >> run.sh
+	echo "deactivate" >> run.sh
+	echo "rm -rf venv" >> run.sh
+	bash run.sh
 
 clean:
 	# clean all temp runs
 	rm -rf .mypy_cache
 	rm -rf .pytest_cache
+	rm -rf $(shell python ${CLI} folder_local_tests)
+	rm -rf venv
