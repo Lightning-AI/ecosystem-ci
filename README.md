@@ -99,7 +99,7 @@ jobs:
 
 ## Configuring my project
 
-Tha config include a few ain sections:
+Tha config include a few different sections:
 
 - `target_repository` include your project
 - `env` (optional) environment variable in case soe compilations expects them
