@@ -99,6 +99,15 @@ class AssistantCLI:
         return cmds
 
     @staticmethod
+    def list_env(config_file: str = "config.yaml") -> str:
+        assert os.path.isfile(config_file)
+        with open(config_file) as fp:
+            config = yaml.safe_load(fp)
+        env = config.get("env", {})
+        env = [f'{name}="{val}"' for name, val in env.items()]
+        return " ".join(env)
+
+    @staticmethod
     def _export_env(env: Dict[str, str]) -> List[str]:
         return [f'export {name}="{val}"' for name, val in env.items()]
 

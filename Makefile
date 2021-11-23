@@ -15,7 +15,7 @@ all: clean env ${BUILDS}
 	@echo $<
 	python ${CLI} prepare_env --config_file=$< > prepare_env.sh
 	bash prepare_env.sh
-	coverage run -m pytest $(python $CLI specify_tests --config_file=$< 2>&1) -v
+	$(python $CLI list --config_file=$< 2>&1) coverage run -m pytest $(python $CLI specify_tests --config_file=$< 2>&1) -v
 	rm -rf $(python $CLI folder_local_tests 2>&1)
 	rm -rf $(python $CLI folder_repo --config_file=$< 2>&1)
 

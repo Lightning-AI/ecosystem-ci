@@ -65,7 +65,9 @@ jobs:
       shell: bash
 
     - name: Specify tests
-      run: echo "::set-output name=args::$(python .actions/assistant.py specify_tests --config_file=configs/${{ matrix.config }} 2>&1)"
+      run: |
+        echo "::set-output name=args::$(python .actions/assistant.py specify_tests --config_file=configs/${{ matrix.config }} 2>&1)"
+        echo "::set-output name=env::$(python .actions/assistant.py list_env --config_file=configs/${{ matrix.config }} 2>&1)"
       id: spec_tests
 
     - name: Prepare env.
@@ -84,8 +86,9 @@ jobs:
       env:
         RESULTS: "junit/test-results-${{ runner.os }}-${{ matrix.python-version }}.xml"
       run: |
-        echo ${{ steps.spec_tests.outputs.args }}
-        coverage run -m pytest ${{ steps.spec_tests.outputs.args }} -v --junitxml=$RESULTS
+        echo "${{ steps.spec_tests.outputs.env }}"
+        echo "${{ steps.spec_tests.outputs.args }}"
+        ${{ steps.spec_tests.outputs.env }} coverage run -m pytest ${{ steps.spec_tests.outputs.args }} -v --junitxml=$RESULTS
 
     - name: Upload pytest test results
       uses: actions/upload-artifact@v2
