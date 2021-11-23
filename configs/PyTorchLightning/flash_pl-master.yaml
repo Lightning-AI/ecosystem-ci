@@ -9,7 +9,9 @@ target_repository:
     - flash_examples
     - tests/__init__.py
     - tests/helpers
-    - tests/examples
+    - tests/examples/__init__.py
+    - tests/examples/utils.py
+    - tests/examples/test_scripts.py
 
 dependencies:
   - name: pytorch-lightning
