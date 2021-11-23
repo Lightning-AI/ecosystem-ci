@@ -9,10 +9,9 @@
 ______________________________________________________________________
 
 <div align="center">
-  Lightning EcoSystem CI allows your project to be tested against Lightning, helping to discover integration issues as fast as possible.
-  With Lightning EcoSystem CI, you get nightly testing on CPUs as well as Multi-GPUs for free!
-  <br / >
-  Additionally, the EcoSystem CI can alert you via Slack notifications if issues arise.
+Lightning EcoSystem CI allows you to discover issues in your own projects against Lightning nightly and the latest release.
+<br / >
+You get CPUs, Multi-GPUs testing for free, and Slack notification alerts if issues arise!
 </div>
 
 ## How do I add my own Project?
