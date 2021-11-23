@@ -22,9 +22,11 @@ jobs:
         config:
           - "PyTorchLightning/metrics_pl-release.yaml"
           - "PyTorchLightning/transformers_pl-release.yaml"
+          - "PyTorchLightning/flash_pl-release.yaml"
         include:
           - {os: "ubuntu-20.04", python-version: "3.8", config: "PyTorchLightning/metrics_pl-master.yaml"}
           - {os: "ubuntu-20.04", python-version: "3.9", config: "PyTorchLightning/transformers_pl-master.yaml"}
+          - {os: "ubuntu-20.04", python-version: "3.8", config: "PyTorchLightning/flash_pl-master.yaml"}
         exclude:
           - {os: "windows-2019", config: "PyTorchLightning/transformers_pl-release.yaml"}
     # Timeout: https://stackoverflow.com/a/59076067/4521646

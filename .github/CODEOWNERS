@@ -14,4 +14,6 @@
 /*.yml                @borda
 
 # PyTorchLightning
+/configs/PyTorchLightning/metrics*  @borda
+/configs/PyTorchLightning/flash*    @ethanwharris
 /configs/PyTorchLightning/lightning_transformers*    @seannaren
