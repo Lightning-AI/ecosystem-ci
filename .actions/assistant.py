@@ -47,21 +47,32 @@ class AssistantCLI:
 
     @staticmethod
     def _install_pip(repo: Dict[str, str]) -> str:
-        assert "HTTPS" in repo, f"Missing key `HTTPS` among {repo.keys()}"
+        assert any(k in repo for k in ["HTTPS", "name"]), f"Missing key `HTTPS` or `name` among {repo.keys()}"
         # pip install -q 'https://github.com/...#egg=lightning-flash[tabular]
-        repo_name, _ = os.path.splitext(os.path.basename(repo.get("HTTPS")))
-        name = repo.get("name", repo_name)
-        url = AssistantCLI._https(
-            repo.get("HTTPS"), token=repo.get("token"), username=repo.get("username"), password=repo.get("password")
-        )
+        name = repo.get("name")
+        if not name:
+            # ig no name is given parse it from repo path as last element
+            name, _ = os.path.splitext(os.path.basename(repo.get("HTTPS")))
+        if "HTTPS" in repo:
+            # creat installation from Git repository
+            url = AssistantCLI._https(
+                repo.get("HTTPS"), token=repo.get("token"), username=repo.get("username"), password=repo.get("password")
+            )
 
-        cmd = f"pip install --quiet git+{url}"
-        if "checkout" in repo:
-            assert isinstance(repo["checkout"], str)
-            cmd += f"@{repo['checkout']}"
-        if "install_extras" in repo:
-            cmd += f"#egg={name}[{AssistantCLI._extras(repo['install_extras'])}]"
-        return cmd
+            cmd = f"git+{url}"
+            if "checkout" in repo:
+                assert isinstance(repo["checkout"], str)
+                cmd += f"@{repo['checkout']}"
+            if "install_extras" in repo:
+                cmd += f"#egg={name}[{AssistantCLI._extras(repo['install_extras'])}]"
+        else:
+            # make installation from pypi package
+            cmd = name
+            if "install_extras" in repo:
+                cmd += f"[{repo['install_extras']}]"
+            if "checkout" in repo:
+                cmd += f"=={repo['checkout']}"
+        return "pip install --quiet " + cmd
 
     @staticmethod
     def _install_repo(repo: Dict[str, str], remove_dir: bool = True) -> List[str]:

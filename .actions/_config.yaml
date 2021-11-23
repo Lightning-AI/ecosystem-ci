@@ -29,6 +29,8 @@ dependencies:
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
     checkout: release/1.5.x
     # install_extras: all
+  - name: Cython
+    checkout: 0.29.24
 
 testing:
   dirs:
