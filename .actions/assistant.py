@@ -13,6 +13,7 @@ class AssistantCLI:
     _FIELD_TARGET_REPO = "target_repository"
     _FIELD_REQ = "dependencies"
     _FIELD_TESTS = "testing"
+    _FOLDER_TESTS = "_integrations"
 
     @staticmethod
     def _https(
@@ -94,15 +95,17 @@ class AssistantCLI:
             if isinstance(repo["copy_tests"], str):
                 repo["copy_tests"] = [repo["copy_tests"]]
             created_dirs = []
+            script.append(f'mkdir "{AssistantCLI._FOLDER_TESTS}"')
             for test in repo["copy_tests"]:
                 test = test.replace("/", os.path.sep)
-                path_test = os.path.join(path_root, repo_name, test)
+                repo_test = os.path.join(path_root, repo_name, test)
                 test_dir = os.path.dirname(test)
                 if test_dir and test_dir not in created_dirs:
-                    script.append(f'mkdir -p "{test_dir}"')
+                    script.append(f'mkdir -p "{os.path.join(AssistantCLI._FOLDER_TESTS, test_dir)}"')
                     created_dirs.append(test_dir)
                 is_file = os.path.splitext(test)[-1] != ""
-                script.append(f'cp {"-r" if not is_file else ""} "{path_test}" "{test}"')
+                copy_flag = "-r" if not is_file else ""
+                script.append(f'cp {copy_flag} "{repo_test}" "{os.path.join(AssistantCLI._FOLDER_TESTS, test)}"')
         script.append(f'rm -rf "{repo_name}"')
 
         reqs = config.get("dependencies", [])
@@ -113,8 +116,11 @@ class AssistantCLI:
 
     @staticmethod
     def _pytest_dirs(dirs: Union[None, str, list, tuple] = "") -> str:
-        dirs = dirs or "."
-        dirs = " ".join(dirs) if isinstance(dirs, (tuple, list, set)) else dirs
+        if dirs:
+            dirs = [os.path.join(AssistantCLI._FOLDER_TESTS, d) for d in dirs]
+            dirs = " ".join(dirs) if isinstance(dirs, (tuple, list, set)) else dirs
+        else:
+            dirs = AssistantCLI._FOLDER_TESTS
         return dirs
 
     @staticmethod
