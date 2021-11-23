@@ -25,7 +25,7 @@ Here are pre-requisites for your project before adding to the Lightning EcoSyste
 
 ### Adding your own project config
 
-1. First Fork this project to be able to create a new Pull Request, and work within a specific branch.
+1. First, fork this project to be able to create a new Pull Request, and work within a specific branch.
 
 ```bash
 gh repo fork PyTorchLightning/ecosystem-ci
