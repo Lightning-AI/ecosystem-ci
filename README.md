@@ -101,7 +101,7 @@ jobs:
 The config include a few different sections:
 
 - `target_repository` include your project
-- `env` (optional) environment variable in case soe compilations expects them
+- `env` (optional) define any environment variables required when running tests
 - `dependencies` listing all dependencies which are taken outside pip
 - `testing` defines specific pytest arguments and what folders shall be tested
 
@@ -116,6 +116,9 @@ target_repository:
   checkout: master # Optional, checkout a particular branch or a tag
   install_extras: all # Refers to standard pip option to install some additional dependencies defined with setuptools, typically used as `<my-package>[<install_extras>]`.
 
+# OPTIONAL, if any installation/tests require some env variables
+env:
+   MY_ENV_VARIABLE: "VAR"
 
 copy_tests:
     - integrations # copied folder from the original repo into the running test directory
