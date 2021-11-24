@@ -116,7 +116,7 @@ target_repository:
   checkout: master # Optional, checkout a particular branch or a tag
   install_extras: all # Refers to standard pip option to install some additional dependencies defined with setuptools, typically used as `<my-package>[<install_extras>]`.
 
-# OPTIONAL, if any installation/tests require some env variables
+# Optional, if any installation/tests require some env variables
 env:
    MY_ENV_VARIABLE: "VAR"
 
@@ -125,6 +125,12 @@ copy_tests:
     # this is copied as we use the helpers inside integrations as regular python package
     - tests/__init__.py
     - tests/helpers
+
+# Optional, additional pytest arguments and control which directory to test on
+testing:
+  dirs:
+    - integrations
+  pytest_args: --strict
 ```
 
 Note: If you define some files as done above, and they are using internal-cross imports, you need to copy the `__init__.py` files from each particular package level.
