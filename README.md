@@ -9,7 +9,7 @@
 ______________________________________________________________________
 
 <div align="center">
-Lightning EcoSystem CI allows you to discover issues in your own projects against Lightning nightly and the latest release.
+Automate issue discovery for your projects against Lightning nightly and releases.
 <br / >
 You get CPUs, Multi-GPUs testing for free, and Slack notification alerts if issues arise!
 </div>
@@ -38,7 +38,7 @@ cd ecosystem-ci/
 cp configs/template.yaml configs/<my_project_name>.yaml
 ```
 
-3. At the minimum, modify the `HTTPS` variable to point to your repository. See [Configuring my project](<>) for more options
+3. At the minimum, modify the `HTTPS` variable to point to your repository. See [Configuring my project](https://github.com/PyTorchLightning/ecosystem-ci/tree/main#configuring-my-project) for more options.
 
 ```yaml
 target_repository:
@@ -110,19 +110,15 @@ All dependencies as well as the target repository is sharing the same template w
 ```yaml
 target_repository:
   HTTPS: https://github.com/PyTorchLightning/metrics.git
-  # OPTIONAL, for a private/protected repository
-  username: my-nick
-  # OPTIONAL, paired with the username
-  password: dont-tell-anyone
-  # OPTIONAL, overrides the user/pass
-  token: authentication-token
-  # OPTIONAL, checkout a particular branch or a tag
-  checkout: master
-  # define installing package extras
-  install_extras: all
+  username: my-nick  # Optional, used when checking out private/protected repo
+  password: dont-tell-anyone # Optional, used when checking out private/protected repo
+  token: authentication-token # Optional, overrides the user/pass when checking out private/protected repo
+  checkout: master # Optional, checkout a particular branch or a tag
+  install_extras: all # Refers to standard pip option to install some additional dependencies defined with setuptools, typically used as `<my-package>[<install_extras>]`.
+
 
 copy_tests:
-    - integrations
+    - integrations # copied folder from the original repo into the running test directory
     # this is copied as we use the helpers inside integrations as regular python package
     - tests/__init__.py
     - tests/helpers
