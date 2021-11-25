@@ -20,7 +20,7 @@ You get CPUs, Multi-GPUs testing for free, and Slack notification alerts if issu
 
 Here are pre-requisites for your project before adding to the Lightning EcoSystem CI:
 
-- Your project already include some **python tests with PyTorch Lightning** as a dependency
+- Your project already includes some **Python tests with PyTorch Lightning** as a dependency
 - You'll be a **contact/responsible** person to resolve any issues that the CI finds in the future for your project
 
 ### Adding your own project config
@@ -50,7 +50,7 @@ If your project tests multiple configurations or you'd like to test against mult
 
 As an example, have a look at [metrics master](configs/PyTorchLightning/metrics_pl-master.yaml) and [metrics release](configs/PyTorchLightning/metrics_pl-release.yaml) CI files.
 
-4. Add your config filename to the either/both the [GitHub CPU CI file](.github/workflows/ci_testing.yml) or the [Azure GPU CI file](.azure/ci-testig-parameterized.yml).
+4. Add your config filename to either/both the [GitHub CPU CI file](.github/workflows/ci_testing.yml) or the [Azure GPU CI file](.azure/ci-testig-parameterized.yml).
 
 For example, for the [GitHub CPU CI file](.github/workflows/ci_testing.yml) we append our config into the pytest parametrization:
 
