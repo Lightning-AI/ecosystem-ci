@@ -21,7 +21,8 @@ class AssistantCLI:
 
     @staticmethod
     def folder_repo(config_file: str = "config.yaml") -> str:
-        assert os.path.isfile(config_file)
+        """Parse the project repository name."""
+        assert os.path.isfile(config_file), f"Missing config file: {config_file}"
         with open(config_file) as fp:
             config = yaml.safe_load(fp)
         repo = config[AssistantCLI._FIELD_TARGET_REPO]
@@ -32,6 +33,7 @@ class AssistantCLI:
     def _https(
         https: str, token: Optional[str] = None, username: Optional[str] = None, password: Optional[str] = None
     ) -> str:
+        """Format the complete HTTPS path in case token or user authentication is required."""
         login = token if token else ""
         if not login and username:
             login = f"{username}:{password}" if password else username
@@ -42,11 +44,14 @@ class AssistantCLI:
 
     @staticmethod
     def _extras(extras: Union[str, list, tuple] = "") -> str:
-        extras = " ".join(extras) if isinstance(extras, (tuple, list, set)) else extras
+        """Create a list of eventual extras fro pip installation."""
+        extras = ",".join(extras) if isinstance(extras, (tuple, list, set)) else extras
         return extras
 
     @staticmethod
     def _install_pip(repo: Dict[str, str]) -> str:
+        """Create command for instaling a project from source (if HTTPS is given) or from PyPI (if at least name is
+        given)."""
         assert any(k in repo for k in ["HTTPS", "name"]), f"Missing key `HTTPS` or `name` among {repo.keys()}"
         # pip install -q 'https://github.com/...#egg=lightning-flash[tabular]
         name = repo.get("name")
@@ -76,6 +81,7 @@ class AssistantCLI:
 
     @staticmethod
     def _install_repo(repo: Dict[str, str], remove_dir: bool = True) -> List[str]:
+        """Create command for installing a project from source assuming it is Git project."""
         assert "HTTPS" in repo, f"Missing key `HTTPS` among {repo.keys()}"
         url = AssistantCLI._https(
             repo.get("HTTPS"), token=repo.get("token"), username=repo.get("username"), password=repo.get("password")
@@ -100,7 +106,8 @@ class AssistantCLI:
 
     @staticmethod
     def list_env(config_file: str = "config.yaml") -> str:
-        assert os.path.isfile(config_file)
+        """Parse environment variables and pass then in format to be accepted before calling testing command."""
+        assert os.path.isfile(config_file), f"Missing config file: {config_file}"
         with open(config_file) as fp:
             config = yaml.safe_load(fp)
         env = config.get("env", {})
@@ -108,18 +115,43 @@ class AssistantCLI:
         return " ".join(env)
 
     @staticmethod
+    def before_commands(
+        config_file: str = "config.yaml", stage: str = "install", as_append: bool = False
+    ) -> Union[str, List[str]]:
+        """Parse commands for eventual custom execution before install or before testing."""
+        assert os.path.isfile(config_file), f"Missing config file: {config_file}"
+        with open(config_file) as fp:
+            config = yaml.safe_load(fp)
+        cmds = config.get(f"before_{stage}", [])
+        if not as_append:
+            cmds = os.linesep.join(list(AssistantCLI._BASH_SCRIPT) + cmds)
+        return cmds
+
+    @staticmethod
     def _export_env(env: Dict[str, str]) -> List[str]:
+        """Create exporting for environment variables from config."""
         return [f'export {name}="{val}"' for name, val in env.items()]
 
     @staticmethod
     def prepare_env(config_file: str = "config.yaml", path_root: str = _PATH_ROOT) -> str:
-        assert os.path.isfile(config_file)
+        """Prepare the CI environment from given project config.
+
+        the workflow includes:
+        1. exporting environment variables
+        2. execute custom before install commands
+        3. install project repository
+        4. copy integrations tests
+        5. install additional/specific dependencies
+        6. execute custom before test commands
+        """
+        assert os.path.isfile(config_file), f"Missing config file: {config_file}"
         script = list(AssistantCLI._BASH_SCRIPT)
         with open(config_file) as fp:
             config = yaml.safe_load(fp)
         repo = config[AssistantCLI._FIELD_TARGET_REPO]
 
         script += AssistantCLI._export_env(config.get("env", {}))
+        script += AssistantCLI.before_commands(config_file, stage="install", as_append=True)
 
         script += AssistantCLI._install_repo(repo, remove_dir=False)
         repo_name, _ = os.path.splitext(os.path.basename(repo.get("HTTPS")))
@@ -145,6 +177,7 @@ class AssistantCLI:
         for req in reqs:
             script.append(AssistantCLI._install_pip(req))
 
+        script += AssistantCLI.before_commands(config_file, stage="test", as_append=True)
         return os.linesep.join(script)
 
     @staticmethod
@@ -164,7 +197,7 @@ class AssistantCLI:
 
     @staticmethod
     def specify_tests(config_file: str = "config.yaml"):
-        assert os.path.isfile(config_file)
+        assert os.path.isfile(config_file), f"Missing config file: {config_file}"
         with open(config_file) as fp:
             config = yaml.safe_load(fp)
         testing = config.get(AssistantCLI._FIELD_TESTS, {})

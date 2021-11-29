@@ -18,6 +18,11 @@ target_repository:
     - tests/__init__.py
     - tests/helpers
 
+# OPTIONAL, running before installing your project
+# WARNING: this is custom for given OS, we do not manage any inter OS compatibility
+before_install:
+  - pip install Cython==3.56
+
 # OPTIONAL, if any installation require some env. variables
 env:
   HOROVOD_BUILD_ARCH_FLAGS: "-mfma"
@@ -31,6 +36,11 @@ dependencies:
     # install_extras: all
   - name: Cython
     checkout: 0.29.24
+
+# OPTIONAL, running before installing your project
+# WARNING: this is custom for given OS, we do not manage any inter OS compatibility
+before_test:
+  - wget https://pl-flash-data.s3.amazonaws.com/titanic.zip
 
 testing:
   dirs:
