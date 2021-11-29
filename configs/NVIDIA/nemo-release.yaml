@@ -8,6 +8,9 @@ target_repository:
   copy_tests:
     - tests
 
+before_install:
+  - apt-get install libsndfile1
+
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
