@@ -12,7 +12,8 @@ target_repository:
 
 contact:
   slack:
-    - Nicki Skafte
+    # Nicki Skafte
+    - USZ6EQ8A2
 
 dependencies:
   - name: pytorch-lightning

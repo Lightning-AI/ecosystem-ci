@@ -12,7 +12,8 @@ target_repository:
 
 contact:
   slack:
-    - Sean Narenthiran
+    # Sean Narenthiran
+    - U01BULUS2BG
 
 dependencies:
   - name: pytorch-lightning

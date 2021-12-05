@@ -15,7 +15,8 @@ target_repository:
 
 contact:
   slack:
-    - Ethan Harris
+    # Ethan Harris
+    - USPB6E0LF
 
 dependencies:
   - name: pytorch-lightning

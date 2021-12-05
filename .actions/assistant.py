@@ -44,7 +44,8 @@ class AssistantCLI:
         if not isinstance(contacts, list):
             contacts = [contacts]
         if channel == "slack":
-            contacts = [f"@{name}" for name in contacts]
+            # see: https://stackoverflow.com/a/58688117/4521646
+            contacts = [f"<@{name}>" for name in contacts]
         return ", ".join(contacts)
 
     @staticmethod
