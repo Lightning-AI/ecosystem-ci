@@ -10,6 +10,10 @@ target_repository:
     - examples
     - conf
 
+contact:
+  slack:
+    - Sean Narenthiran
+
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git

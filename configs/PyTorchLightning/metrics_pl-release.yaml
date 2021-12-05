@@ -10,6 +10,10 @@ target_repository:
     - tests/__init__.py
     - tests/helpers
 
+contact:
+  slack:
+    - Nicki Skafte
+
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
