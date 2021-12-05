@@ -60,21 +60,21 @@ jobs:
         COMMON: ${{ runner.os }}-py${{ matrix.python-version }}
         HASH_FILES: ${{ hashFiles('requirements.txt') }}-${{ hashFiles(format('.actions/{0}', matrix.config)) }}
 
-    - name: Create scripts
+    - name: Create script
       run: |
         pip install -q -r requirements.txt
         python .actions/assistant.py prepare_env --config_file=configs/${{ matrix.config }} > prepare_env.sh
         cat prepare_env.sh
       shell: bash
 
-    - name: Specify tests
+    - name: Some outputs
       run: |
         echo "::set-output name=args::$(python .actions/assistant.py specify_tests --config_file=configs/${{ matrix.config }} 2>&1)"
         echo "::set-output name=env::$(python .actions/assistant.py list_env --config_file=configs/${{ matrix.config }} 2>&1)"
         echo "::set-output name=contacts::$(python .actions/assistant.py contacts --config_file=configs/${{ matrix.config }} 2>&1)"
       id: extras
 
-    - name: Prepare env.
+    - name: Prepare environment
       run: |
         bash prepare_env.sh
       shell: bash
@@ -112,11 +112,10 @@ jobs:
         status: ${{ job.status }}
         token: ${{ secrets.GITHUB_TOKEN }}
         notification_title: ${{ format('Env; {0} py{1} for *{2}*', runner.os, matrix.python-version, matrix.config) }}
-        message_format: '{emoji} *{workflow}* {status_message}, see <{run_url}|detail>, cc: $CC_USERS'
+        message_format: '{emoji} *{workflow}* {status_message}, see <{run_url}|detail>, cc: ${{ steps.extras.outputs.contacts }}'
         footer: 'Linked Repo <{repo_url}|{repo}>'
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        CC_USERS: ${{ steps.extras.outputs.contacts }}
 
     # ToDo: need to specify package to be monitored
     #- name: Statistics
