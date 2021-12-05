@@ -20,14 +20,32 @@ class AssistantCLI:
         return AssistantCLI._FOLDER_TESTS
 
     @staticmethod
-    def folder_repo(config_file: str = "config.yaml") -> str:
-        """Parse the project repository name."""
+    def _load_config(config_file: str = "config.yaml") -> dict:
         assert os.path.isfile(config_file), f"Missing config file: {config_file}"
         with open(config_file) as fp:
             config = yaml.safe_load(fp)
+        return config
+
+    @staticmethod
+    def folder_repo(config_file: str = "config.yaml") -> str:
+        """Parse the project repository name."""
+        config = AssistantCLI._load_config(config_file)
         repo = config[AssistantCLI._FIELD_TARGET_REPO]
         repo_name, _ = os.path.splitext(os.path.basename(repo.get("HTTPS")))
         return repo_name
+
+    @staticmethod
+    def contacts(config_file: str = "config.yaml", channel: str = "slack") -> str:
+        """Parse the project repository name."""
+        config = AssistantCLI._load_config(config_file)
+        contacts = config.get("contact", {}).get(channel)
+        if not contacts:
+            return ""
+        if not isinstance(contacts, list):
+            contacts = [contacts]
+        if channel == "slack":
+            contacts = [f"@{name}" for name in contacts]
+        return ", ".join(contacts)
 
     @staticmethod
     def _https(
@@ -107,9 +125,7 @@ class AssistantCLI:
     @staticmethod
     def list_env(config_file: str = "config.yaml") -> str:
         """Parse environment variables and pass then in format to be accepted before calling testing command."""
-        assert os.path.isfile(config_file), f"Missing config file: {config_file}"
-        with open(config_file) as fp:
-            config = yaml.safe_load(fp)
+        config = AssistantCLI._load_config(config_file)
         env = config.get("env", {})
         env = [f'{name}="{val}"' for name, val in env.items()]
         return " ".join(env)
@@ -119,9 +135,7 @@ class AssistantCLI:
         config_file: str = "config.yaml", stage: str = "install", as_append: bool = False
     ) -> Union[str, List[str]]:
         """Parse commands for eventual custom execution before install or before testing."""
-        assert os.path.isfile(config_file), f"Missing config file: {config_file}"
-        with open(config_file) as fp:
-            config = yaml.safe_load(fp)
+        config = AssistantCLI._load_config(config_file)
         cmds = config.get(f"before_{stage}", [])
         if not as_append:
             cmds = os.linesep.join(list(AssistantCLI._BASH_SCRIPT) + cmds)
@@ -144,10 +158,8 @@ class AssistantCLI:
         5. install additional/specific dependencies
         6. execute custom before test commands
         """
-        assert os.path.isfile(config_file), f"Missing config file: {config_file}"
+        config = AssistantCLI._load_config(config_file)
         script = list(AssistantCLI._BASH_SCRIPT)
-        with open(config_file) as fp:
-            config = yaml.safe_load(fp)
         repo = config[AssistantCLI._FIELD_TARGET_REPO]
 
         script += AssistantCLI._export_env(config.get("env", {}))
@@ -196,10 +208,8 @@ class AssistantCLI:
         return args
 
     @staticmethod
-    def specify_tests(config_file: str = "config.yaml"):
-        assert os.path.isfile(config_file), f"Missing config file: {config_file}"
-        with open(config_file) as fp:
-            config = yaml.safe_load(fp)
+    def specify_tests(config_file: str = "config.yaml") -> str:
+        config = AssistantCLI._load_config(config_file)
         testing = config.get(AssistantCLI._FIELD_TESTS, {})
 
         dirs = AssistantCLI._pytest_dirs(testing.get("dirs"))

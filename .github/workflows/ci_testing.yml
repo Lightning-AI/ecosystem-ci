@@ -54,8 +54,11 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{ steps.pip-cache.outputs.dir }}
-        key: ${{ runner.os }}-py${{ matrix.python-version }}-td${{ steps.times.outputs.period }}-pip-${{ hashFiles('requirements.txt') }}-${{ hashFiles(format('.actions/{0}', matrix.config)) }}
-        restore-keys: ${{ runner.os }}-py${{ matrix.python-version }}-td${{ steps.times.outputs.period }}-pip-
+        key: $COMMON-td${{ steps.times.outputs.period }}-pip-$HASH_FILES
+        restore-keys: $COMMON-td${{ steps.times.outputs.period }}-pip-
+      env:
+        COMMON: ${{ runner.os }}-py${{ matrix.python-version }}
+        HASH_FILES: ${{ hashFiles('requirements.txt') }}-${{ hashFiles(format('.actions/{0}', matrix.config)) }}
 
     - name: Create scripts
       run: |
@@ -68,7 +71,8 @@ jobs:
       run: |
         echo "::set-output name=args::$(python .actions/assistant.py specify_tests --config_file=configs/${{ matrix.config }} 2>&1)"
         echo "::set-output name=env::$(python .actions/assistant.py list_env --config_file=configs/${{ matrix.config }} 2>&1)"
-      id: spec_tests
+        echo "::set-output name=contacts::$(python .actions/assistant.py contacts --config_file=configs/${{ matrix.config }} 2>&1)"
+      id: extras
 
     - name: Prepare env.
       run: |
@@ -86,9 +90,9 @@ jobs:
       env:
         RESULTS: "junit/test-results-${{ runner.os }}-${{ matrix.python-version }}.xml"
       run: |
-        echo "${{ steps.spec_tests.outputs.env }}"
-        echo "${{ steps.spec_tests.outputs.args }}"
-        ${{ steps.spec_tests.outputs.env }} coverage run -m pytest ${{ steps.spec_tests.outputs.args }} -v --junitxml=$RESULTS
+        echo "${{ steps.extras.outputs.env }}"
+        echo "${{ steps.extras.outputs.args }}"
+        ${{ steps.extras.outputs.env }} coverage run -m pytest ${{ steps.extras.outputs.args }} -v --junitxml=$RESULTS
 
     - name: Upload pytest test results
       uses: actions/upload-artifact@v2
@@ -108,10 +112,11 @@ jobs:
         status: ${{ job.status }}
         token: ${{ secrets.GITHUB_TOKEN }}
         notification_title: ${{ format('Env; {0} py{1} for *{2}*', runner.os, matrix.python-version, matrix.config) }}
-        message_format: '{emoji} *{workflow}* {status_message}, see <{run_url}|detail>'
+        message_format: '{emoji} *{workflow}* {status_message}, see <{run_url}|detail>, cc: $CC_USERS'
         footer: 'Linked Repo <{repo_url}|{repo}>'
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        CC_USERS: ${{ steps.extras.outputs.contacts }}
 
     # ToDo: need to specify package to be monitored
     #- name: Statistics
