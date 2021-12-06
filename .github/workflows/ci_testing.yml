@@ -101,12 +101,12 @@ jobs:
         path: junit/test-results-${{ runner.os }}-${{ matrix.python-version }}.xml
       if: failure()
 
-    # TODO: report failure to Slack
+    # report failure to Slack
     # https://www.ravsam.in/blog/send-slack-notification-when-github-actions-fails/
     # https://dev.to/adamkdean/slack-notifications-with-github-actions-1lk5
     # https://axolo.co/blog/p/top-4-github-action-slack-integration
     - name: Slack notification
-      if: failure() # && github.ref == 'refs/heads/main'
+      if: failure() && github.ref == 'refs/heads/main'
       uses: ravsamhq/notify-slack-action@v1
       with:
         status: ${{ job.status }}
@@ -116,10 +116,3 @@ jobs:
         footer: 'Linked Repo <{repo_url}|{repo}>'
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-    # ToDo: need to specify package to be monitored
-    #- name: Statistics
-    #  if: success()
-    #  run: |
-    #    coverage report
-    #    coverage xml
