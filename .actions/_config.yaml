@@ -18,6 +18,11 @@ target_repository:
     - tests/__init__.py
     - tests/helpers
 
+contact:
+  slack:
+    - borda
+  email: []
+
 # OPTIONAL, running before installing your project
 # WARNING: this is custom for given OS, we do not manage any inter OS compatibility
 before_install:

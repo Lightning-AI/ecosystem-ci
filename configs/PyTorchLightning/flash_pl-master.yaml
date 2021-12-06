@@ -13,6 +13,11 @@ target_repository:
     - tests/examples/utils.py
     - tests/examples/test_scripts.py
 
+contact:
+  slack:
+    # Ethan Harris
+    - USPB6E0LF
+
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
