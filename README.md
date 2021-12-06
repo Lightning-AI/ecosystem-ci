@@ -1,4 +1,4 @@
-# Lightning EcoSystem CI
+![Logo](.actions/logo.png)
 
 **Automated Testing for Lightning EcoSystem Projects**
 
