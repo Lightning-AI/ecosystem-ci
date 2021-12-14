@@ -37,14 +37,14 @@ class AssistantCLI:
         return AssistantCLI._FOLDER_TESTS
 
     @staticmethod
-    def changed_configs(pr: int, auth_token: Optional[str] = None) -> List[str]:
+    def changed_configs(pr: int, auth_token: Optional[str] = None) -> str:
         url = f"https://api.github.com/repos/PyTorchLightning/ecosystem-ci/pulls/{pr}/files"
         data = request_url(url, auth_token)
         if not data:
-            return []
+            return ""
         files = [d["filename"] for d in data]
-        cfgs = [f for f in files if f.startswith("configs")]
-        return cfgs
+        configs = [f for f in files if f.startswith("configs")]
+        return "|".join(configs)
 
     @staticmethod
     def _load_config(config_file: str = "config.yaml") -> dict:

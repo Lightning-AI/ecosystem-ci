@@ -52,6 +52,7 @@ jobs:
     # Timeout: https://stackoverflow.com/a/59076067/4521646
     timeout-minutes: 35
     needs: check-PR-diff
+    if: github.ref == 'refs/heads/main' || contains(needs.check-PR-diff.outputs.config-diff, format('configs/{0}', matrix.config))
 
     steps:
     - uses: actions/checkout@v2
@@ -59,7 +60,6 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - run: echo ${{needs.check-PR-diff.outputs.config-diff}}
 
     - name: Cache period
       run: echo "::set-output name=period::$(python -c 'import time ; days = time.time() / 60 / 60 / 24 ; print(int(days / 7))' 2>&1)"
@@ -80,7 +80,7 @@ jobs:
         restore-keys: $COMMON-td${{ steps.times.outputs.period }}-pip-
       env:
         COMMON: ${{ runner.os }}-py${{ matrix.python-version }}
-        HASH_FILES: ${{ hashFiles('requirements.txt') }}-${{ hashFiles(format('actions/{0}', matrix.config)) }}
+        HASH_FILES: ${{ hashFiles('requirements.txt') }}-${{ hashFiles(format('configs/{0}', matrix.config)) }}
 
     - name: Create script
       run: |
@@ -110,7 +110,7 @@ jobs:
 
     - name: Testing
       env:
-        RESULTS: "junit/test-results-${{ matrix.config }}-${{ runner.os }}-${{ matrix.python-version }}.xml"
+        RESULTS: "junit/test-project-${{ matrix.config }}-${{ runner.os }}-${{ matrix.python-version }}.xml"
       run: |
         echo "${{ steps.extras.outputs.env }}"
         echo "${{ steps.extras.outputs.args }}"
