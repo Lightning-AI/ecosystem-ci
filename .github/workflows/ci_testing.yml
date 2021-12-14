@@ -1,4 +1,4 @@
-name: CI testing
+name: CI compatibility
 
 # see: https://help.github.com/en/actions/reference/events-that-trigger-workflows
 on:  # Trigger the workflow on push or pull request, but only for the main branch
@@ -11,7 +11,7 @@ on:  # Trigger the workflow on push or pull request, but only for the main branc
   workflow_dispatch:
 
 jobs:
-  pytest:
+  pytest-project:
 
     runs-on: ${{ matrix.os }}
     strategy:
