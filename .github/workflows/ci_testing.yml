@@ -2,7 +2,6 @@ name: CI compatibility
 
 # see: https://help.github.com/en/actions/reference/events-that-trigger-workflows
 on:  # Trigger the workflow on push or pull request, but only for the main branch
-  push: {}
   pull_request:
     branches: [main]
   schedule:
@@ -28,7 +27,7 @@ jobs:
 
     - name: Get PR diff
       env:
-        PR_NUMBER: $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+        PR_NUMBER: ${{ github.event.pull_request.number }}
       run: |
         echo $PR_NUMBER
         python actions/assistant.py changed_configs $PR_NUMBER
