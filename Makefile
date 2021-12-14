@@ -3,7 +3,7 @@
 # CONFIGS := $(shell find -regex "configs/*/*.y[a]?ml")
 CONFIGS := $(shell find configs/ -name "*.yaml")
 BUILDS := $(CONFIGS:%.yaml=%)
-CLI = ".actions/assistant.py"
+CLI = "actions/assistant.py"
 
 env:
 	pip install -q -r requirements.txt

@@ -1,4 +1,4 @@
-![Logo](.actions/logo.png)
+![Logo](actions/logo.png)
 
 **Automated Testing for Lightning EcoSystem Projects**
 
@@ -30,7 +30,7 @@ Here are pre-requisites for your project before adding to the Lightning EcoSyste
    gh repo fork PyTorchLightning/ecosystem-ci
    cd ecosystem-ci/
    ```
-1. Copy the [template file](.actions/_config.yaml) in `configs` folder and call it `<my_project_name>.yaml`.
+1. Copy the [template file](actions/_config.yaml) in `configs` folder and call it `<my_project_name>.yaml`.
    ```
    cp configs/template.yaml configs/<my_project_name>.yaml
    ```
