@@ -2,7 +2,7 @@
 
 **Automated Testing for Lightning EcoSystem Projects**
 
-[![CI internal](https://github.com/PyTorchLightning/ecosystem-ci/actions/workflows/ci_test-act.yml/badge.svg?branch=main&event=push)](https://github.com/PyTorchLightning/ecosystem-ci/actions/workflows/ci_test-act.yml)
+[![CI internal](https://github.com/PyTorchLightning/ecosystem-ci/actions/workflows/ci_test-acts.yml/badge.svg?branch=main&event=push)](https://github.com/PyTorchLightning/ecosystem-ci/actions/workflows/ci_test-acts.yml)
 [![codecov](https://codecov.io/gh/PytorchLightning/ecosystem-ci/branch/main/graph/badge.svg?token=binMTx5wr4)](https://codecov.io/gh/PytorchLightning/ecosystem-ci)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/PyTorchLightning/ecosystem-ci/main.svg)](https://results.pre-commit.ci/latest/github/PyTorchLightning/ecosystem-ci/main)
 
