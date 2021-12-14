@@ -58,20 +58,20 @@ jobs:
         restore-keys: $COMMON-td${{ steps.times.outputs.period }}-pip-
       env:
         COMMON: ${{ runner.os }}-py${{ matrix.python-version }}
-        HASH_FILES: ${{ hashFiles('requirements.txt') }}-${{ hashFiles(format('.actions/{0}', matrix.config)) }}
+        HASH_FILES: ${{ hashFiles('requirements.txt') }}-${{ hashFiles(format('actions/{0}', matrix.config)) }}
 
     - name: Create script
       run: |
         pip install -q -r requirements.txt
-        python .actions/assistant.py prepare_env --config_file=configs/${{ matrix.config }} > prepare_env.sh
+        python actions/assistant.py prepare_env --config_file=configs/${{ matrix.config }} > prepare_env.sh
         cat prepare_env.sh
       shell: bash
 
     - name: Some outputs
       run: |
-        echo "::set-output name=args::$(python .actions/assistant.py specify_tests --config_file=configs/${{ matrix.config }} 2>&1)"
-        echo "::set-output name=env::$(python .actions/assistant.py list_env --config_file=configs/${{ matrix.config }} 2>&1)"
-        echo "::set-output name=contacts::$(python .actions/assistant.py contacts --config_file=configs/${{ matrix.config }} 2>&1)"
+        echo "::set-output name=args::$(python actions/assistant.py specify_tests --config_file=configs/${{ matrix.config }} 2>&1)"
+        echo "::set-output name=env::$(python actions/assistant.py list_env --config_file=configs/${{ matrix.config }} 2>&1)"
+        echo "::set-output name=contacts::$(python actions/assistant.py contacts --config_file=configs/${{ matrix.config }} 2>&1)"
       id: extras
 
     - name: Prepare environment
@@ -88,7 +88,7 @@ jobs:
 
     - name: Testing
       env:
-        RESULTS: "junit/test-results-${{ runner.os }}-${{ matrix.python-version }}.xml"
+        RESULTS: "junit/test-results-${{ matrix.config }}-${{ runner.os }}-${{ matrix.python-version }}.xml"
       run: |
         echo "${{ steps.extras.outputs.env }}"
         echo "${{ steps.extras.outputs.args }}"
