@@ -52,9 +52,11 @@ jobs:
     # Timeout: https://stackoverflow.com/a/59076067/4521646
     timeout-minutes: 35
     needs: check-PR-diff
-    if: ${{ github.ref == 'refs/heads/main' || contains(needs.check-PR-diff.outputs.config-diff, format('configs/{0}', matrix.config)) }}
 
     steps:
+    - name: cancelling
+      if: ${{ github.event_name == 'pull_request' && ! contains(needs.check-PR-diff.outputs.config-diff, format('configs/{0}', matrix.config)) }}
+      uses: andymckay/cancel-action@0.2
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
