@@ -1,10 +1,27 @@
+import json
 import os
+import traceback
 from typing import Dict, List, Optional, Union
 
 import fire
+import requests
 import yaml
 
 _PATH_ROOT = os.path.dirname(os.path.dirname(__file__))
+_REQUEST_TIMEOUT = 10
+
+
+def request_url(url: str, auth_token: Optional[str] = None) -> Optional[dict]:
+    """General request with checking if request limit was reached."""
+    auth_header = {"Authorization": f"token {auth_token}"} if auth_token else {}
+    try:
+        req = requests.get(url, headers=auth_header, timeout=_REQUEST_TIMEOUT)
+    except requests.exceptions.Timeout:
+        traceback.print_exc()
+        return None
+    if req.status_code == 403:
+        return None
+    return json.loads(req.content.decode(req.encoding))
 
 
 class AssistantCLI:
@@ -18,6 +35,16 @@ class AssistantCLI:
     @staticmethod
     def folder_local_tests() -> str:
         return AssistantCLI._FOLDER_TESTS
+
+    @staticmethod
+    def changed_configs(pr: int, auth_token: Optional[str] = None) -> List[str]:
+        url = f"https://api.github.com/repos/PyTorchLightning/ecosystem-ci/pulls/{pr}/files"
+        data = request_url(url, auth_token)
+        if not data:
+            return []
+        files = [d["filename"] for d in data]
+        cfgs = [f for f in files if f.startswith("configs")]
+        return cfgs
 
     @staticmethod
     def _load_config(config_file: str = "config.yaml") -> dict:
