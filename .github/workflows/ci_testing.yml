@@ -18,7 +18,7 @@ jobs:
     timeout-minutes: 5
     # Map a step output to a job output
     outputs:
-      config-diff: ${{ steps.diff-files.outputs.pr-diff }}
+      matrix: ${{ steps.diff-files.outputs.pr-diff }}
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
@@ -32,40 +32,20 @@ jobs:
       run: |
         pip install -q -r requirements.txt
         python actions/assistant.py changed_configs $PR_NUMBER
-        echo "::set-output name=pr-diff::$(python actions/assistant.py changed_configs $PR_NUMBER 2>&1)"
+        # echo "::set-output name=pr-diff::$(python actions/assistant.py changed_configs $PR_NUMBER 2>&1)"
+        echo "::set-output name=pr-diff::{include: [{\"os\": \"ubuntu-20.04\", \"python-version\": \"3.8\", \"config\": \"PyTorchLightning/metrics_pl-master.yaml\"}]}"
 
   pytest-project:
 
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-      matrix:
-        os: [ubuntu-20.04 , macOS-10.15, windows-2019]
-        python-version: ["3.9"]
-        config:
-          - "PyTorchLightning/metrics_pl-release.yaml"
-          - "PyTorchLightning/transformers_pl-release.yaml"
-          - "PyTorchLightning/flash_pl-release.yaml"
-        include:
-          - {os: "ubuntu-20.04", python-version: "3.8", config: "PyTorchLightning/metrics_pl-master.yaml"}
-          - {os: "ubuntu-20.04", python-version: "3.9", config: "PyTorchLightning/transformers_pl-master.yaml"}
-          - {os: "ubuntu-20.04", python-version: "3.8", config: "PyTorchLightning/flash_pl-master.yaml"}
-        exclude:
-          - {os: "windows-2019", config: "PyTorchLightning/transformers_pl-release.yaml"}
+      matrix: ${{ fromJSON(needs.check-PR-diff.outputs.matrix) }}
     # Timeout: https://stackoverflow.com/a/59076067/4521646
     timeout-minutes: 35
     needs: check-PR-diff
 
     steps:
-    - run: |
-        echo ${{ github.event_name == 'pull_request' }}
-        echo ${{ needs.check-PR-diff.outputs.config-diff }}
-        echo ${{ format('configs/{0}', matrix.config) }}
-        echo ${{ contains(needs.check-PR-diff.outputs.config-diff, format('configs/{0}', matrix.config)) }}
-        echo ${{ github.event_name == 'pull_request' && ! contains(needs.check-PR-diff.outputs.config-diff, format('configs/{0}', matrix.config)) }}
-    - name: cancelling
-      if: ${{ github.event_name == 'pull_request' && ! contains(needs.check-PR-diff.outputs.config-diff, format('configs/{0}', matrix.config)) }}
-      run: exit 0
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
