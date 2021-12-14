@@ -19,7 +19,6 @@ dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
     checkout: master
-    # install_extras: all
 
 testing:
   dirs:

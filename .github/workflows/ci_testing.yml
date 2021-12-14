@@ -11,6 +11,28 @@ on:  # Trigger the workflow on push or pull request, but only for the main branc
   workflow_dispatch:
 
 jobs:
+  pytest-internal:
+
+    runs-on: ubuntu-20.04
+    timeout-minutes: 5
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install requirements
+      run: |
+        pip install -q -r requirements.txt
+
+    - name: Get PR diff
+      env:
+        PR_NUMBER: $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+      run: |
+        echo $PR_NUMBER
+        python actions/assistant.py changed_configs $PR_NUMBER
+
   pytest-project:
 
     runs-on: ${{ matrix.os }}
