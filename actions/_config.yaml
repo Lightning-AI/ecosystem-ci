@@ -52,3 +52,8 @@ testing:
     - integrations
   # OPTIONAL, additional pytest arguments
   pytest_args: --strict
+
+runtimes:
+  - {os: "ubuntu-20.04", python-version: "3.9"}
+  - {os: "macOS-10.15", python-version: "3.7"}
+  - {os: "windows-2019", python-version: "3.8"}
