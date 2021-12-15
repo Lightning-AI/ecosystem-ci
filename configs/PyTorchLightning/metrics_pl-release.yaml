@@ -20,3 +20,8 @@ dependencies:
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
     checkout: release/1.5.x
     # install_extras: all
+
+runtimes:
+  - {os: "ubuntu-20.04", python-version: "3.8"}
+  - {os: "macOS-10.15", python-version: "3.8"}
+  - {os: "windows-2019", python-version: "3.8"}
