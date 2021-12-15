@@ -60,7 +60,9 @@ class AssistantCLI:
     @staticmethod
     def list_runtimes(pr: Optional[int] = None, auth_token: Optional[str] = None) -> str:
         """Extract all runtime combinations in the whole repository or just for particular PR."""
-        configs = AssistantCLI.changed_configs(pr, auth_token) if pr else AssistantCLI.find_all_configs()
+        configs = (
+            AssistantCLI.changed_configs(pr, auth_token) if isinstance(pr, int) else AssistantCLI.find_all_configs()
+        )
         runtimes = []
         for cfg in configs:
             cfg_runtimes = AssistantCLI._load_config(cfg).get("runtimes", {})
