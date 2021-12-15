@@ -22,3 +22,5 @@ testing:
     - tests
   # additional pytest arguments
   pytest_args: -m "not pleasefixme and not torch_tts" --cpu --with_downloads --relax_numba_compat
+runtimes:
+  - {os: "ubuntu-20.04", python-version: "3.8"}
