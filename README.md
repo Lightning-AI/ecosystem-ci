@@ -42,26 +42,16 @@ Here are pre-requisites for your project before adding to the Lightning EcoSyste
    ```
    If your project tests multiple configurations or you'd like to test against multiple Lightning versions such as master and release branches, create a config file for each one of them.
    As an example, have a look at [metrics master](configs/PyTorchLightning/metrics_pl-master.yaml) and [metrics release](configs/PyTorchLightning/metrics_pl-release.yaml) CI files.
-1. Add your config filename to either/both the [GitHub CPU CI file](.github/workflows/ci_testing.yml) or the [Azure GPU CI file](.azure/ci-testig-parameterized.yml).
-   - For example, for the [GitHub CPU CI file](.github/workflows/ci_testing.yml) we append our config into the pytest parametrization:
+1. Define your `runtimes` (OS and Python version) in your config file to be executed on CPU and/or add the config filename in the [Azure GPU CI file](.azure/ci-testig-parameterized.yml).
+   - For CPU integration, specify the OS and Python version combinations inside your config file:
      ```yaml
-     ...
-     jobs:
-       pytest:
-         ...
-             config:
-               - "PyTorchLightning/metrics_pl-release.yaml"
-               - "PyTorchLightning/transformers_pl-release.yaml"
-               - "MyUsername/myproject-release.yaml"
-             include:
-               - {os: "ubuntu-20.04", python-version: "3.8", config: "PyTorchLightning/metrics_pl-master.yaml"}
-               - {os: "ubuntu-20.04", python-version: "3.9", config: "PyTorchLightning/transformers_pl-master.yaml"}
-               - {os: "ubuntu-20.04", python-version: "3.9", config: "MyUsername/my_project-master.yaml"}
-             exclude:
-               - {os: "windows-2019", config: "PyTorchLightning/transformers_pl-release.yaml"}
+     runtimes:
+       - {os: "ubuntu-20.04", python-version: "3.9"}
+       - {os: "macOS-10.15", python-version: "3.7"}
+       - {os: "windows-2019", python-version: "3.8"}
      ...
      ```
-   - For example, in the [Azure GPU CI file](.azure/ci-testig-parameterized.yml) file:
+   - For GPU integration, add your config filename in the [Azure GPU CI file](.azure/ci-testig-parameterized.yml) file:
      ```yaml
      ...
      jobs:

@@ -19,10 +19,12 @@ dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
     checkout: master
-    # install_extras: all
 
 testing:
   dirs:
     - integrations
   # additional pytest arguments
   pytest_args: --strict
+
+runtimes:
+  - {os: "ubuntu-20.04", python-version: "3.8"}
