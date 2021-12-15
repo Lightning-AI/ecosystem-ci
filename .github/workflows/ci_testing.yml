@@ -31,7 +31,7 @@ jobs:
         PR_NUMBER: "${{ github.event.pull_request.number }}"
       run: |
         pip install -q -r requirements.txt
-        python actions/assistant.py changed_configs $PR_NUMBER
+        python actions/assistant.py list_runtimes $PR_NUMBER
         echo "::set-output name=runtimes::{include: $(python actions/assistant.py list_runtimes $PR_NUMBER 2>&1)}"
 
   pytest-project:
