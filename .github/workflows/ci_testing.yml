@@ -18,7 +18,7 @@ jobs:
     timeout-minutes: 5
     # Map a step output to a job output
     outputs:
-      matrix: ${{ steps.diff-files.outputs.pr-diff }}
+      matrix: ${{ steps.diff-files.outputs.runtimes }}
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
@@ -28,12 +28,11 @@ jobs:
     - name: Get PR diff
       id: diff-files
       env:
-        PR_NUMBER: ${{ github.event.pull_request.number }}
+        PR_NUMBER: "${{ github.event.pull_request.number }}"
       run: |
         pip install -q -r requirements.txt
         python actions/assistant.py changed_configs $PR_NUMBER
-        # echo "::set-output name=pr-diff::$(python actions/assistant.py changed_configs $PR_NUMBER 2>&1)"
-        echo "::set-output name=pr-diff::{include: [{\"os\": \"ubuntu-20.04\", \"python-version\": \"3.8\", \"config\": \"PyTorchLightning/metrics_pl-master.yaml\"}]}"
+        echo "::set-output name=runtimes::{include: $(python actions/assistant.py list_runtimes $PR_NUMBER 2>&1)}"
 
   pytest-project:
 
@@ -71,20 +70,20 @@ jobs:
         restore-keys: $COMMON-td${{ steps.times.outputs.period }}-pip-
       env:
         COMMON: ${{ runner.os }}-py${{ matrix.python-version }}
-        HASH_FILES: ${{ hashFiles('requirements.txt') }}-${{ hashFiles(format('configs/{0}', matrix.config)) }}
+        HASH_FILES: ${{ hashFiles('requirements.txt') }}-${{ matrix.config }}
 
     - name: Create script
       run: |
         pip install -q -r requirements.txt
-        python actions/assistant.py prepare_env --config_file=configs/${{ matrix.config }} > prepare_env.sh
+        python actions/assistant.py prepare_env --config_file=${{ matrix.config }} > prepare_env.sh
         cat prepare_env.sh
       shell: bash
 
     - name: Some outputs
       run: |
-        echo "::set-output name=args::$(python actions/assistant.py specify_tests --config_file=configs/${{ matrix.config }} 2>&1)"
-        echo "::set-output name=env::$(python actions/assistant.py list_env --config_file=configs/${{ matrix.config }} 2>&1)"
-        echo "::set-output name=contacts::$(python actions/assistant.py contacts --config_file=configs/${{ matrix.config }} 2>&1)"
+        echo "::set-output name=args::$(python actions/assistant.py specify_tests --config_file=${{ matrix.config }} 2>&1)"
+        echo "::set-output name=env::$(python actions/assistant.py list_env --config_file=${{ matrix.config }} 2>&1)"
+        echo "::set-output name=contacts::$(python actions/assistant.py contacts --config_file=${{ matrix.config }} 2>&1)"
       id: extras
 
     - name: Prepare environment

@@ -1,3 +1,4 @@
+import glob
 import json
 import os
 import traceback
@@ -28,29 +29,56 @@ class AssistantCLI:
 
     _BASH_SCRIPT = ("set -e",)
     _FIELD_TARGET_REPO = "target_repository"
-    _FIELD_REQ = "dependencies"
+    _FIELD_REQUIRE = "dependencies"
     _FIELD_TESTS = "testing"
+    _MANDATORY_FIELDS = (_FIELD_TARGET_REPO, _FIELD_REQUIRE, _FIELD_TESTS, "runtimes")
     _FOLDER_TESTS = "_integrations"
+    _PATH_CONFIGS = os.path.join(_PATH_ROOT, "configs")
 
     @staticmethod
     def folder_local_tests() -> str:
         return AssistantCLI._FOLDER_TESTS
 
     @staticmethod
-    def changed_configs(pr: int, auth_token: Optional[str] = None) -> str:
+    def changed_configs(pr: int, auth_token: Optional[str] = None) -> List[str]:
+        """Determine what configs were change changed in particular PR."""
         url = f"https://api.github.com/repos/PyTorchLightning/ecosystem-ci/pulls/{pr}/files"
         data = request_url(url, auth_token)
         if not data:
-            return ""
+            return []
         files = [d["filename"] for d in data]
         configs = [f for f in files if f.startswith("configs")]
-        return "|".join(configs)
+        return configs
 
     @staticmethod
-    def _load_config(config_file: str = "config.yaml") -> dict:
+    def find_all_configs(configs_folder: str = _PATH_CONFIGS) -> List[str]:
+        """Find all configs YAML|YML in given folder recursively."""
+        files = glob.glob(os.path.join(configs_folder, "**", "*.yaml"), recursive=True)
+        files += glob.glob(os.path.join(configs_folder, "**", "*.yml"), recursive=True)
+        return files
+
+    @staticmethod
+    def list_runtimes(pr: Optional[int] = None, auth_token: Optional[str] = None) -> str:
+        """Extract all runtime combinations in the whole repository or just for particular PR."""
+        configs = AssistantCLI.changed_configs(pr, auth_token) if pr else AssistantCLI.find_all_configs()
+        runtimes = []
+        for cfg in configs:
+            cfg_runtimes = AssistantCLI._load_config(cfg).get("runtimes", {})
+            if not cfg_runtimes:  # filter empty runtimes
+                continue
+            [c.update(dict(config=cfg)) for c in cfg_runtimes]
+            runtimes += cfg_runtimes
+        return json.dumps(runtimes)
+
+    @staticmethod
+    def _load_config(config_file: str = "config.yaml", strict: bool = True) -> dict:
         assert os.path.isfile(config_file), f"Missing config file: {config_file}"
         with open(config_file) as fp:
             config = yaml.safe_load(fp)
+        if strict:
+            miss = [fd for fd in AssistantCLI._MANDATORY_FIELDS if fd not in config]
+            if miss:
+                raise AttributeError(f"Config '{config_file}' has missing following fields: {miss}")
         return config
 
     @staticmethod
