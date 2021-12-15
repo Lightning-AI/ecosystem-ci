@@ -31,7 +31,7 @@ class AssistantCLI:
     _FIELD_TARGET_REPO = "target_repository"
     _FIELD_REQUIRE = "dependencies"
     _FIELD_TESTS = "testing"
-    _MANDATORY_FIELDS = (_FIELD_TARGET_REPO, _FIELD_REQUIRE, _FIELD_TESTS, "runtimes")
+    _MANDATORY_FIELDS = (_FIELD_TARGET_REPO, _FIELD_REQUIRE, "runtimes")
     _FOLDER_TESTS = "_integrations"
     _PATH_CONFIGS = os.path.join(_PATH_ROOT, "configs")
 
