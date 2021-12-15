@@ -24,3 +24,7 @@ dependencies:
 testing:
   dirs:
     - tests
+
+runtimes:
+  - {os: "ubuntu-20.04", python-version: "3.8"}
+  - {os: "macOS-10.15", python-version: "3.8"}

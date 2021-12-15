@@ -29,3 +29,8 @@ testing:
     - tests/examples
   # additional pytest arguments
   pytest_args: --strict
+
+runtimes:
+  - {os: "ubuntu-20.04", python-version: "3.8"}
+  - {os: "macOS-10.15", python-version: "3.8"}
+  - {os: "windows-2019", python-version: "3.8"}
