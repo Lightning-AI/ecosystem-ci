@@ -90,7 +90,7 @@ jobs:
 
     - name: Prepare environment
       run: |
-        bash prepare_env.sh
+        sudo bash prepare_env.sh
       shell: bash
 
     - name: Show dir tree
