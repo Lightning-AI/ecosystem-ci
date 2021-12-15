@@ -13,7 +13,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  check-PR-diff:
+  check-diff:
     runs-on: ubuntu-20.04
     timeout-minutes: 5
     # Map a step output to a job output
@@ -39,10 +39,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(needs.check-PR-diff.outputs.matrix) }}
+      matrix: ${{ fromJSON(needs.check-diff.outputs.matrix) }}
     # Timeout: https://stackoverflow.com/a/59076067/4521646
     timeout-minutes: 35
-    needs: check-PR-diff
+    needs: check-diff
 
     steps:
     - uses: actions/checkout@v2

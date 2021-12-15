@@ -40,15 +40,15 @@ class AssistantCLI:
         return AssistantCLI._FOLDER_TESTS
 
     @staticmethod
-    def changed_configs(pr: int, auth_token: Optional[str] = None) -> List[str]:
+    def changed_configs(pr: int, auth_token: Optional[str] = None, as_list: bool = True) -> Union[str, List[str]]:
         """Determine what configs were change changed in particular PR."""
         url = f"https://api.github.com/repos/PyTorchLightning/ecosystem-ci/pulls/{pr}/files"
         data = request_url(url, auth_token)
         if not data:
-            return []
+            return [] if as_list else ""
         files = [d["filename"] for d in data]
         configs = [f for f in files if f.startswith("configs")]
-        return configs
+        return configs if as_list else "|".join(configs)
 
     @staticmethod
     def find_all_configs(configs_folder: str = _PATH_CONFIGS) -> List[str]:
