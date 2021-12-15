@@ -103,6 +103,7 @@ jobs:
     - name: Testing
       env:
         RESULTS: "junit/test-project-${{ matrix.config }}-${{ runner.os }}-${{ matrix.python-version }}.xml"
+      working-directory: _integrations
       run: |
         echo "${{ steps.extras.outputs.env }}"
         echo "${{ steps.extras.outputs.args }}"

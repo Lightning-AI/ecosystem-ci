@@ -253,11 +253,8 @@ class AssistantCLI:
 
     @staticmethod
     def _pytest_dirs(dirs: Union[None, str, list, tuple] = "") -> str:
-        if dirs:
-            dirs = [os.path.join(AssistantCLI._FOLDER_TESTS, d) for d in dirs]
-            dirs = " ".join(dirs) if isinstance(dirs, (tuple, list, set)) else dirs
-        else:
-            dirs = AssistantCLI._FOLDER_TESTS
+        dirs = "." if not dirs else dirs
+        dirs = " ".join(dirs) if isinstance(dirs, (tuple, list, set)) else dirs
         return dirs
 
     @staticmethod
