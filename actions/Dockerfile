@@ -12,10 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG PYTORCH_VERSION=21.11
+ARG PYTORCH_VERSION=1.8.1
+ARG CUDA_VERSION=11.1
 
 # https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes
-FROM nvcr.io/nvidia/pytorch:${PYTORCH_VERSION}-py3
+#FROM nvcr.io/nvidia/pytorch:${PYTORCH_VERSION}-py3
+FROM pytorch/pytorch:${PYTORCH_VERSION}-cuda${CUDA_VERSION}-cudnn8-devel
 
 LABEL maintainer="PyTorchLightning <https://github.com/PyTorchLightning>"
 
