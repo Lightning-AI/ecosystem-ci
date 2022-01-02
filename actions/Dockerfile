@@ -24,6 +24,15 @@ LABEL maintainer="PyTorchLightning <https://github.com/PyTorchLightning>"
 RUN apt-get update -qq --fix-missing  && \
     apt-get install -y --no-install-recommends \
         sudo \
+        build-essential \
+        pkg-config \
+        cmake \
+        git \
+        wget \
+        curl \
+        unzip \
+        ca-certificates \
+        software-properties-common \
         tree \
     && \
 
