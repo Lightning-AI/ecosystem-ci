@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        pytorch_version: ["21.11"]
+        pytorch_version: ["1.8.1", "1.9.1"]
 
     steps:
       - name: Checkout
@@ -41,4 +41,4 @@ jobs:
           tags: pytorchlightning/ecosystem-ci:pt${{ matrix.pytorch_version }}
         env:
           PUSH_TO_HUB: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
-        timeout-minutes: 15
+        timeout-minutes: 25
