@@ -37,8 +37,6 @@ jobs:
           build-args: |
             PYTORCH_VERSION=${{ matrix.pytorch_version }}
           file: actions/Dockerfile
-          push: $PUSH_TO_HUB
+          push: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
           tags: pytorchlightning/ecosystem-ci:pt${{ matrix.pytorch_version }}
-        env:
-          PUSH_TO_HUB: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
         timeout-minutes: 25
