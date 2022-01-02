@@ -24,10 +24,10 @@ LABEL maintainer="PyTorchLightning <https://github.com/PyTorchLightning>"
 RUN apt-get update -qq --fix-missing  && \
     apt-get install -y --no-install-recommends \
         sudo \
+        tree \
     && \
 
 # Cleaning
     apt-get autoremove -y && \
     apt-get clean && \
-    rm -rf /root/.cache && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /root/.cache
