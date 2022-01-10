@@ -45,7 +45,7 @@ repos:
         name: Black code
 
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.11
+    rev: 0.7.13
     hooks:
       - id: mdformat
         additional_dependencies:
