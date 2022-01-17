@@ -3,7 +3,7 @@ target_repository:
   # checkout a particular branch or a tag
   checkout: master
   # define installing package extras
-  install_extras: all
+  install_extras: image,text,tabular
   # copy some  test from the target repository
   copy_tests:
     - flash_examples
@@ -12,9 +12,6 @@ target_repository:
     - tests/examples/__init__.py
     - tests/examples/utils.py
     - tests/examples/test_scripts.py
-
-before_install:
-  - sudo apt-get install -y libsndfile1
 
 contact:
   slack:
