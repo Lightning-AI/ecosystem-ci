@@ -23,6 +23,10 @@ dependencies:
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
     checkout: master
     # install_extras: all
+  - name: torchmetrics
+    HTTPS: https://github.com/PyTorchLightning/metrics.git
+    checkout: master
+    # install_extras: all
 
 testing:
   dirs:
