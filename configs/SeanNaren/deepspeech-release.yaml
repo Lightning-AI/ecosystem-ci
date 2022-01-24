@@ -6,6 +6,11 @@ target_repository:
     - tests/smoke_test.py
     - labels.json
   install_file: requirements.txt
+  
+contact:
+  slack:
+    # Sean Narenthiran
+    - U01BULUS2BG
 
 before_install:
   - sudo apt install -y sox libsndfile1
