@@ -4,6 +4,7 @@ target_repository:
   copy_tests:
     - data/an4.py
     - tests/smoke_test.py
+    - labels.json
   install_file: requirements.txt
 
 before_install:
