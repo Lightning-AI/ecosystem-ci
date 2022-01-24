@@ -2,7 +2,7 @@ target_repository:
   HTTPS: https://github.com/SeanNaren/deepspeech.pytorch.git
   checkout: master
   copy_tests:
-    - data
+    - data/an4.py
     - tests/smoke_test.py
   install_file: requirements.txt
 
