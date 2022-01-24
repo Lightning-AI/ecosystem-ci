@@ -1,0 +1,16 @@
+target_repository:
+  HTTPS: https://github.com/SeanNaren/deepspeech.pytorch.git
+  checkout: master
+  copy_tests:
+    - tests/smoke_test.py
+
+before_install:
+  - sudo apt install -y sox libsndfile1
+
+dependencies:
+  - name: pytorch-lightning
+    HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
+    checkout: release/1.5.x
+
+runtimes:
+  - {os: "ubuntu-20.04", python-version: "3.8"}
