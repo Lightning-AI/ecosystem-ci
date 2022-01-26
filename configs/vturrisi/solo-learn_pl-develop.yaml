@@ -1,0 +1,41 @@
+target_repository:
+  HTTPS: https://github.com/vturrisi/solo-learn.git
+  checkout: main
+  # OPTIONAL, define installing package extras
+  install_extras: umap
+  # OPTIONAL, install additional requirements
+  # install_file: requirements.txt
+  # copy some  test from the target repository
+  copy_tests:
+    - tests
+
+contact:
+  slack:
+    # Victor Turrisi
+    - U0303D6JSAF
+
+# OPTIONAL, running before installing your project
+# WARNING: this is custom for given OS, we do not manage any inter OS compatibility
+#before_install:
+#  - pip install Cython==3.56
+
+dependencies:
+  - name: pytorch-lightning
+    HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
+    checkout: master
+    # install_extras: all
+
+# OPTIONAL, running before installing your project
+# WARNING: this is custom for given OS, we do not manage any inter OS compatibility
+#before_test:
+#  - wget https://pl-flash-data.s3.amazonaws.com/titanic.zip
+
+testing:
+  dirs:
+    - tests/args
+    - tests/losses
+    - tests/methods
+    - tests/utils
+
+runtimes:
+  - {os: "ubuntu-20.04", python-version: "3.9"}
