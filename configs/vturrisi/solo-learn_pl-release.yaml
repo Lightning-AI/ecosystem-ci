@@ -11,8 +11,8 @@ target_repository:
 
 contact:
   slack:
-    - vturrisi
-  email: []
+    # Victor Turrisi
+    - U0303D6JSAF
 
 # OPTIONAL, running before installing your project
 # WARNING: this is custom for given OS, we do not manage any inter OS compatibility
