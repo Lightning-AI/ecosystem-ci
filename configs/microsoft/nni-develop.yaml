@@ -1,5 +1,5 @@
 target_repository:
-  HTTPS: https://github.com/microsoft/nni.git
+  HTTPS: https://github.com/microsoft/nii.git
   # checkout a particular branch or a tag
   checkout: master
   # NNI needs custom install. `python setup.py install` or `pip install .` won't work.
