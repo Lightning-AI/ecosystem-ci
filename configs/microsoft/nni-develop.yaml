@@ -3,7 +3,7 @@ target_repository:
   # checkout a particular branch or a tag
   checkout: master
   # NNI needs custom install. `python setup.py install` or `pip install .` won't work.
-  install_command: export NNI_RELEASE=`git describe --tags --abbrev=0` && python test/vso_tools/build_wheel.py ${NNI_RELEASE} && pip install dist/*.whl
+  install_command: export NNI_RELEASE=`git describe --tags --abbrev=0` && pip install -r dependencies/develop.txt && python test/vso_tools/build_wheel.py ${NNI_RELEASE} && pip install dist/*.whl
   # copy some tests from the target repository
   copy_tests:
     # only retiarii uses pytorch-lightning for now
@@ -27,3 +27,4 @@ testing:
 
 runtimes:
   - {os: "ubuntu-latest", python-version: "3.8"}
+
