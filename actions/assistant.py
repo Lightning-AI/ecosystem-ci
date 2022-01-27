@@ -245,7 +245,8 @@ class AssistantCLI:
                 is_file = os.path.splitext(test)[-1] != ""
                 copy_flag = "-r" if not is_file else ""
                 script.append(f'cp {copy_flag} "{repo_test}" "{os.path.join(AssistantCLI._FOLDER_TESTS, test)}"')
-        script.append(f'rm -rf "{repo_name}"')
+        if repo.get("remove_dir", True):
+            script.append(f'rm -rf "{repo_name}"')
 
         reqs = config.get("dependencies", [])
         for req in reqs:
