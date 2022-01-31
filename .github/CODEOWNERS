@@ -18,3 +18,4 @@
 /configs/PyTorchLightning/flash*    @ethanwharris
 /configs/PyTorchLightning/lightning_transformers*    @seannaren
 /configs/SeanNaren/*    @seannaren
+/configs/wdika/mridc/*    @wdika
