@@ -72,7 +72,7 @@ Here are pre-requisites for your project before adding to the Lightning EcoSyste
 
 ### Additional suggestions and engagement rules
 
-- For qualification to use GPU machine we set min number of GitHub starts as 100+ (please note it s for capacity reasons and we this threshold may change in the future :)
+- To qualify for GPU machines we require your project to have 100+ GitHub stars (please note that this is for capacity reasons and may change in future)
 - (**Optional**) Join our [Slack](https://join.slack.com/t/pytorch-lightning/shared_invite/zt-12iz3cds1-uyyyBYJLiaL2bqVmMN7n~A) channel `#alerts-ecosystem-ci` to be notified if your project is breaking
 - (**Kind request**) include Lightning badge in your readme:
   ```md
