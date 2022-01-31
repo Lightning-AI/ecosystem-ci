@@ -2,6 +2,7 @@
 
 **Automated Testing for Lightning EcoSystem Projects**
 
+[![Lightning](https://img.shields.io/badge/-Lightning-792ee5?logo=pytorchlightning&logoColor=white)](https://pytorchlightning.ai)
 [![CI internal](https://github.com/PyTorchLightning/ecosystem-ci/actions/workflows/ci_test-acts.yml/badge.svg?branch=main&event=push)](https://github.com/PyTorchLightning/ecosystem-ci/actions/workflows/ci_test-acts.yml)
 [![codecov](https://codecov.io/gh/PytorchLightning/ecosystem-ci/branch/main/graph/badge.svg?token=binMTx5wr4)](https://codecov.io/gh/PytorchLightning/ecosystem-ci)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/PyTorchLightning/ecosystem-ci/main.svg)](https://results.pre-commit.ci/latest/github/PyTorchLightning/ecosystem-ci/main)
@@ -69,7 +70,14 @@ Here are pre-requisites for your project before adding to the Lightning EcoSyste
    ```
 1. Finally, create a draft PR to the repo!
 
-(Optional). \[wip\] join our Slack channel to be notified if your project is breaking
+### Additional suggestions and engagement rules
+
+- For qualification to use GPU machine we set min number of GitHub starts as 100+ (please note it s for capacity reasons and we this threshold may change in the future :)
+- (**Optional**) Join our [Slack](https://join.slack.com/t/pytorch-lightning/shared_invite/zt-12iz3cds1-uyyyBYJLiaL2bqVmMN7n~A) channel `#alerts-ecosystem-ci` to be notified if your project is breaking
+- (**Kind request**) include Lightning badge in your readme:
+  ```md
+  [![Lightning](https://img.shields.io/badge/-Lightning-792ee5?logo=pytorchlightning&logoColor=white)](https://pytorchlightning.ai)
+  ```
 
 ## Configuring my project
 
