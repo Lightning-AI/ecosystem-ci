@@ -2,6 +2,8 @@ target_repository:
   HTTPS: https://github.com/wdika/mridc
   # checkout a particular branch or a tag
   checkout: main
+  # define installing package extras
+  install_extras: all
   # copy some  test from the target repository
   copy_tests:
     - tests
