@@ -20,6 +20,9 @@ target_repository:
     - test/ut/retiarii
     - test/ut/__init__.py
 
+before_install:
+  - pip install numpy
+
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
