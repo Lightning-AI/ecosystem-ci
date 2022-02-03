@@ -18,11 +18,8 @@ target_repository:
     - test/ut/retiarii
     - test/ut/__init__.py
 
-before_install: |
-    if [ -x "$(command -v nvidia-smi)" ]; then
-      echo 'GPU exist, use recommended_gpu.txt'
-      mv dependencies/recommended_gpu.txt dependencies/recommended.txt;
-    fi
+before_install:
+  - if [ -x "$(command -v nvidia-smi)" ]; then mv dependencies/recommended_gpu.txt dependencies/recommended.txt; fi
 
 dependencies:
   - name: pytorch-lightning
