@@ -169,6 +169,9 @@ class AssistantCLI:
         if "checkout" in repo:
             assert isinstance(repo["checkout"], str)
             cmds.append(f"git checkout {repo['checkout']}")
+
+        cmds += AssistantCLI.before_commands(repo, stage="install", as_append=True)
+
         if "install_files" in repo:
             files = repo["install_files"]
             files = [files] if isinstance(files, str) else files
