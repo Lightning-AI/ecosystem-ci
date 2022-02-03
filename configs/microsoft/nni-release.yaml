@@ -3,21 +3,12 @@ target_repository:
   # checkout a particular branch or a tag
   checkout: master
   # NNI needs custom install. `python setup.py install` or `pip install .` won't work.
-  install_command: |
-    if [ -x "$(command -v nvidia-smi)" ]; then
-      echo 'GPU exist, use recommended_gpu.txt'
-      mv dependencies/recommended_gpu.txt dependencies/recommended.txt;
-    fi
-    echo '===== develop ====='
-    pip install -r dependencies/develop.txt
-    echo '===== required ====='
-    pip install -r dependencies/required.txt
-    echo '===== required extra ====='
-    pip install -r dependencies/required_extra.txt
-    echo '===== recommended ====='
-    pip install -r dependencies/recommended.txt
-    echo '===== running develop install ====='
-    python setup.py develop
+  install_files:
+    - dependencies/develop.txt
+    - dependencies/required.txt
+    - dependencies/required_extra.txt
+    - dependencies/recommended.txt
+  install_command: python setup.py develop
   # development build. Cannot remove dir
   remove_dir: false
   # copy some tests from the target repository
@@ -26,6 +17,12 @@ target_repository:
     # might add more in future
     - test/ut/retiarii
     - test/ut/__init__.py
+
+before_install: |
+    if [ -x "$(command -v nvidia-smi)" ]; then
+      echo 'GPU exist, use recommended_gpu.txt'
+      mv dependencies/recommended_gpu.txt dependencies/recommended.txt;
+    fi
 
 dependencies:
   - name: pytorch-lightning
