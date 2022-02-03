@@ -1,0 +1,15 @@
+target_repository:
+  HTTPS: https://github.com/microsoft/DeepSpeed.git
+  checkout: master
+  copy_tests:
+    - tests/lightning/
+
+contact:
+  slack:
+    # Sean Narenthiran
+    - U01BULUS2BG
+
+dependencies:
+  - name: pytorch-lightning
+    HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
+    checkout: release/1.5.x
