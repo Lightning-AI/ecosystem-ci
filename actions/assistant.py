@@ -169,13 +169,16 @@ class AssistantCLI:
         if "checkout" in repo:
             assert isinstance(repo["checkout"], str)
             cmds.append(f"git checkout {repo['checkout']}")
+
+        if "install_files" in repo:
+            files = repo["install_files"]
+            files = [files] if isinstance(files, str) else files
+            cmds.append(f"pip install --quiet --upgrade {' '.join([f'-r {fn}' for fn in files])}")
+
         pip_install = "."
         if "install_extras" in repo:
             pip_install += f"[{AssistantCLI._extras(repo['install_extras'])}]"
         cmds.append(f"pip install --quiet {pip_install}")
-        if "install_file" in repo:
-            assert isinstance(repo["install_file"], str)
-            cmds.append(f"pip install --quiet --upgrade -r {repo['install_file']}")
         cmds.append("cd ..")
         if remove_dir:
             cmds.append(f"rm -rf {repo_name}")
