@@ -4,7 +4,7 @@ target_repository:
   # OPTIONAL, define installing package extras
   install_extras: umap
   # OPTIONAL, install additional requirements
-  # install_files: requirements.txt
+  # requirements: -r requirements.txt
   # copy some  test from the target repository
   copy_tests:
     - tests

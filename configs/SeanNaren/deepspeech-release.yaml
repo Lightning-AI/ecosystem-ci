@@ -5,7 +5,7 @@ target_repository:
     - data/an4.py
     - tests/smoke_test.py
     - labels.json
-  install_files: requirements.txt
+  requirements: -r requirements.txt
 
 contact:
   slack:
