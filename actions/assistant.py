@@ -170,10 +170,10 @@ class AssistantCLI:
             assert isinstance(repo["checkout"], str)
             cmds.append(f"git checkout {repo['checkout']}")
 
-        if "requirements" in repo:
-            reqs = repo["requirements"]
+        if "requirement_file" in repo:
+            reqs = repo["requirement_file"]
             reqs = [reqs] if isinstance(reqs, str) else reqs
-            cmds.append(f"pip install --quiet --upgrade {' '.join(reqs)}")
+            cmds.append(f"pip install --quiet --upgrade {' '.join([f'-r {req}' for req in reqs])}")
 
         pip_install = "."
         if "install_extras" in repo:

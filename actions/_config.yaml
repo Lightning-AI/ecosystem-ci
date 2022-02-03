@@ -11,7 +11,7 @@ target_repository:
   # OPTIONAL, define installing package extras
   install_extras: all
   # OPTIONAL, install additional requirements from a file
-  # requirements: -r requirements.txt
+  # requirement_file: requirements.txt
   # copy some  test from the target repository
   copy_tests:
     - integrations
