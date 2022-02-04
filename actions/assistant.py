@@ -199,10 +199,10 @@ class AssistantCLI:
 
     @staticmethod
     def before_commands(
-        config_file: str = "config.yaml", stage: str = "install", as_append: bool = False
+        config_file: Union[str, dict] = "config.yaml", stage: str = "install", as_append: bool = False
     ) -> Union[str, List[str]]:
         """Parse commands for eventual custom execution before install or before testing."""
-        config = AssistantCLI._load_config(config_file)
+        config = AssistantCLI._load_config(config_file) if isinstance(config_file, str) else config_file
         cmds = config.get(f"before_{stage}", [])
         if not as_append:
             cmds = os.linesep.join(list(AssistantCLI._BASH_SCRIPT) + cmds)
