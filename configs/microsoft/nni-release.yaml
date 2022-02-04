@@ -5,7 +5,7 @@ target_repository:
   before_install:
     - if [ -x "$(command -v nvidia-smi)" ]; then mv dependencies/recommended_gpu.txt dependencies/recommended.txt; fi
   # NNI needs custom install. `python setup.py install` or `pip install .` won't work.
-  install_files:
+  requirements_file:
     - dependencies/develop.txt
     - dependencies/required.txt
     - dependencies/required_extra.txt
