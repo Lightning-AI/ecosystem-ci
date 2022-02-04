@@ -10,9 +10,9 @@ target_repository:
     - dependencies/required.txt
     - dependencies/required_extra.txt
     - dependencies/recommended.txt
-  # install_command: python setup.py develop
+  install_command: python setup.py develop
   # development build. Cannot remove dir
-  remove_dir: false
+  # remove_dir: false
   # copy some tests from the target repository
   copy_tests:
     # only retiarii uses pytorch-lightning for now
