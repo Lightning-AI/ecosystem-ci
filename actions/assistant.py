@@ -172,10 +172,11 @@ class AssistantCLI:
 
         cmds += AssistantCLI.before_commands(repo, stage="install", as_append=True)
 
-        if "install_files" in repo:
-            files = repo["install_files"]
-            files = [files] if isinstance(files, str) else files
-            cmds.append(f"pip install --quiet --upgrade {' '.join([f'-r {fn}' for fn in files])}")
+        if "requirements_file" in repo:
+            reqs = repo["requirements_file"]
+            reqs = [reqs] if isinstance(reqs, str) else reqs
+            cmds.append(f"pip install --quiet --upgrade {' '.join([f'-r {req}' for req in reqs])}")
+
         if "install_command" in repo:
             cmds.append(repo["install_command"])
         else:
