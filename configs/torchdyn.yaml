@@ -1,0 +1,24 @@
+target_repository:
+  HTTPS: https://github.com/DiffEqML/torchdyn
+  checkout: master
+  install_extras: all
+  requirements_file: pl-ci-reqs.txt
+  # copy test from the target repository
+  copy_tests:
+    - test/test_energy.py
+
+contact:
+  slack:
+    - archis
+  email: []
+
+before_install:
+  - sudo apt install -y sox libsndfile1
+
+dependencies:
+  - name: pytorch-lightning
+    HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
+    checkout: release/1.5.x
+
+runtimes:
+  - {os: "ubuntu-20.04", python-version: "3.9"}
