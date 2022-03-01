@@ -1,7 +1,7 @@
 target_repository:
   HTTPS: https://github.com/PyTorchLightning/lightning-flash.git
   # checkout a particular branch or a tag
-  checkout: master
+  checkout: ecosystem
   # define installing package extras
   install_extras: image,text,tabular,test
   # copy some  test from the target repository
@@ -12,9 +12,6 @@ target_repository:
     - tests/examples/__init__.py
     - tests/examples/utils.py
     - tests/examples/test_scripts.py
-
-env:
-  MKL_SERVICE_FORCE_INTEL: 1
 
 contact:
   slack:
