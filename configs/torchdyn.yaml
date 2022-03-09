@@ -9,7 +9,8 @@ target_repository:
 
 contact:
   slack:
-    - archis
+    # archis
+    - U036CR7PCBU
   email: []
 
 before_install:
