@@ -24,7 +24,7 @@ dependencies:
 
 testing:
   # additional pytest arguments
-  pytest_args: -m "not pleasefixme and not torch_tts" --cpu --with_downloads --relax_numba_compat --ignore=tests/manualtest_model_downloads.py
+  pytest_args: -m "not pleasefixme and not torch_tts" --cpu --with_downloads --relax_numba_compat -k "not testclass_downloads"
 
 runtimes:
   - {os: "ubuntu-20.04", python-version: "3.8"}
