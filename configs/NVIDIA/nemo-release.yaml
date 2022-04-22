@@ -13,7 +13,6 @@ before_install:
   - pip install numpy==1.21
 
 after_install:
-  - pip install numpy==1.21
   - pip uninstall pesq -y
   - pip install pesq
 
