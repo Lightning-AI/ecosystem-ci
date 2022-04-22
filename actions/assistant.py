@@ -178,7 +178,7 @@ class AssistantCLI:
         pip_install = "."
         if "install_extras" in repo:
             pip_install += f"[{AssistantCLI._extras(repo['install_extras'])}]"
-        cmds.append(f"pip install --quiet {pip_install}")
+        cmds.append(f"pip install {pip_install}")
         cmds.append("cd ..")
         if remove_dir:
             cmds.append(f"rm -rf {repo_name}")
@@ -199,6 +199,17 @@ class AssistantCLI:
         """Parse commands for eventual custom execution before install or before testing."""
         config = AssistantCLI._load_config(config_file)
         cmds = config.get(f"before_{stage}", [])
+        if not as_append:
+            cmds = os.linesep.join(list(AssistantCLI._BASH_SCRIPT) + cmds)
+        return cmds
+
+    @staticmethod
+    def after_commands(
+        config_file: str = "config.yaml", stage: str = "install", as_append: bool = False
+    ) -> Union[str, List[str]]:
+        """Parse commands for eventual custom execution before install or before testing."""
+        config = AssistantCLI._load_config(config_file)
+        cmds = config.get(f"after_{stage}", [])
         if not as_append:
             cmds = os.linesep.join(list(AssistantCLI._BASH_SCRIPT) + cmds)
         return cmds
@@ -228,6 +239,7 @@ class AssistantCLI:
         script += AssistantCLI.before_commands(config_file, stage="install", as_append=True)
 
         script += AssistantCLI._install_repo(repo, remove_dir=False)
+        script += AssistantCLI.after_commands(config_file, stage="install", as_append=True)
         repo_name, _ = os.path.splitext(os.path.basename(repo.get("HTTPS")))
 
         if "copy_tests" in repo:

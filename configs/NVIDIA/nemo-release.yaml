@@ -12,6 +12,11 @@ before_install:
   - sudo apt-get install -y libsndfile1
   - pip install numpy==1.21
 
+after_install:
+  - pip install numpy==1.21
+  - pip uninstall pesq
+  - pip install pesq
+
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
