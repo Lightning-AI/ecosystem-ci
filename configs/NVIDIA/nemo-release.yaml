@@ -10,7 +10,7 @@ target_repository:
 
 before_install:
   - sudo apt-get install -y libsndfile1
-  - pip install numpy
+  - pip install numpy -U
 
 dependencies:
   - name: pytorch-lightning
