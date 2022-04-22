@@ -178,7 +178,7 @@ class AssistantCLI:
         pip_install = "."
         if "install_extras" in repo:
             pip_install += f"[{AssistantCLI._extras(repo['install_extras'])}]"
-        cmds.append(f"pip install --quiet {pip_install}")
+        cmds.append(f"pip install {pip_install}")
         cmds.append("cd ..")
         if remove_dir:
             cmds.append(f"rm -rf {repo_name}")
