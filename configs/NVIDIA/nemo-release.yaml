@@ -10,6 +10,8 @@ target_repository:
 
 before_install:
   - sudo apt-get install -y libsndfile1
+  - pip uninstall pesq
+  - pip install pesq -U
 
 dependencies:
   - name: pytorch-lightning
