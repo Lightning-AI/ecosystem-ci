@@ -20,7 +20,7 @@ after_install:
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
-    checkout: 1.6.x
+    checkout: release/stable
     install_extras: loggers
 
 testing:
