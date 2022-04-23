@@ -14,7 +14,7 @@ before_install:
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
-    checkout: release/1.5.x
+    checkout: release/1.6.x
     install_extras: loggers
 
 # testing:
