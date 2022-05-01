@@ -12,4 +12,4 @@ contact:
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
-    checkout: release/1.5.x
+    checkout: release/stable
