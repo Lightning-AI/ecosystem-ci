@@ -13,9 +13,6 @@ target_repository:
     - tests/examples/utils.py
     - tests/examples/test_scripts.py
 
-before_install:
-  - pip install pytest-forked
-
 contact:
   slack:
     # Ethan Harris
@@ -25,7 +22,11 @@ dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
     checkout: release/stable
+  - name: torchmetrics
+    HTTPS: https://github.com/PyTorchLightning/metrics.git
+    checkout: release/latest
     # install_extras: all
+  - name: pytest-forked
 
 testing:
   dirs:

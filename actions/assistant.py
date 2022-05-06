@@ -127,7 +127,7 @@ class AssistantCLI:
 
     @staticmethod
     def _install_pip(repo: Dict[str, str]) -> str:
-        """Create command for instaling a project from source (if HTTPS is given) or from PyPI (if at least name is
+        """Create command for installing a project from source (if HTTPS is given) or from PyPI (if at least name is
         given)."""
         assert any(k in repo for k in ["HTTPS", "name"]), f"Missing key `HTTPS` or `name` among {repo.keys()}"
         # pip install -q 'https://github.com/...#egg=lightning-flash[tabular]
