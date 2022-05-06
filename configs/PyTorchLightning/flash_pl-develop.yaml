@@ -27,6 +27,7 @@ dependencies:
     HTTPS: https://github.com/PyTorchLightning/metrics.git
     checkout: master
     # install_extras: all
+  - name: pytest-forked
 
 testing:
   dirs:
