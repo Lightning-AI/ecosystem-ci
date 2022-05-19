@@ -1,0 +1,16 @@
+target_repository:
+  HTTPS: https://github.com/pykeen/pykeen.git
+  checkout: master
+  # copy some tests
+  copy_tests:
+    - tests
+
+dependencies:
+  - name: pytorch-lightning
+    HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
+    checkout: release/stable
+    
+testing:
+  dirs:
+    - tests
+
