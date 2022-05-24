@@ -7,9 +7,7 @@ target_repository:
   # OPTIONAL, overrides the user/pass
   # token: authentication-token
   # OPTIONAL, checkout a particular branch or a tag
-  # TODO: change once https://github.com/pykeen/pykeen/pull/930 is merged
-  checkout: pyl-tests
-  # checkout: master
+  checkout: master
   # OPTIONAL, define installing package extras
   install_extras: lightning
   # OPTIONAL, install additional requirements from a file
