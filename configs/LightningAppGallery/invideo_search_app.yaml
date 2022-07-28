@@ -33,12 +33,9 @@ env:
   # HOROVOD_WITHOUT_TENSORFLOW: 1
 
 dependencies:
-#  - name: pytorch-lightning
-#    HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
-#    checkout: release/1.5.x
-#    # install_extras: all
-#  - name: Cython
-#    checkout: 0.29.24
+  - name: lightning
+    HTTPS: https://github.com/Lightning-AI/lightning.git
+    checkout: release/stable
 
 # OPTIONAL, running before installing your project
 # WARNING: this is custom for given OS, we do not manage any inter OS compatibility
