@@ -8,7 +8,6 @@ target_repository:
   copy_tests:
     - tests
     - examples
-    - conf
 
 contact:
   slack:
