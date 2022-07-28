@@ -21,10 +21,6 @@ contact:
     - mansy
   email: [mansy@lightning.ai]
 
-# OPTIONAL, running before installing your project
-# WARNING: this is custom for given OS, we do not manage any inter OS compatibility
-before_install:
-  - pip install Cython==3.56
 
 # OPTIONAL, if any installation require some env. variables
 env:
@@ -37,14 +33,10 @@ dependencies:
     HTTPS: https://github.com/Lightning-AI/lightning.git
     checkout: release/stable
 
-# OPTIONAL, running before installing your project
-# WARNING: this is custom for given OS, we do not manage any inter OS compatibility
-before_test:
-#  - wget https://pl-flash-data.s3.amazonaws.com/titanic.zip
 
 testing:
   dirs:
-    - integrations
+    - tests
   # OPTIONAL, additional pytest arguments
   pytest_args: --strict
 
