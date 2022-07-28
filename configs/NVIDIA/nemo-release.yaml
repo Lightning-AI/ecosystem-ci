@@ -11,10 +11,14 @@ target_repository:
 before_install:
   - sudo apt-get install -y libsndfile1
 
+env:
+  # let's limit the installation only to Pytorch-Lightning
+  PACKAGE_NAME: pytorch
+
 dependencies:
   - name: pytorch-lightning
-    HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
-    checkout: release/stable
+    HTTPS: https://github.com/Lightning-AI/lightning.git
+    checkout: release/pytorch
     install_extras: loggers
 
 testing:

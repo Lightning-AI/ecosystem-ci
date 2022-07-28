@@ -20,7 +20,7 @@ contact:
 
 dependencies:
   - name: pytorch-lightning
-    HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
+    HTTPS: https://github.com/Lightning-AI/lightning.git
     checkout: master
     # install_extras: all
   - name: torchmetrics
