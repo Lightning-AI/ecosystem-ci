@@ -42,7 +42,7 @@ class AssistantCLI:
     @staticmethod
     def changed_configs(pr: int, auth_token: Optional[str] = None, as_list: bool = True) -> Union[str, List[str]]:
         """Determine what configs were changed in particular PR."""
-        url = f"https://api.github.com/repos/PyTorchLightning/ecosystem-ci/pulls/{pr}/files"
+        url = f"https://api.github.com/repos/Lightning-AI/ecosystem-ci/pulls/{pr}/files"
         data = request_url(url, auth_token)
         if not data:
             return [] if as_list else ""

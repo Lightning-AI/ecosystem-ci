@@ -13,8 +13,8 @@
 # configs in root
 /*.yml                @borda
 
-# PyTorchLightning
-/configs/PyTorchLightning/metrics*  @borda
-/configs/PyTorchLightning/flash*    @ethanwharris
-/configs/PyTorchLightning/lightning_transformers*    @seannaren
+# Lightning-AI
+/configs/Lightning-AI/metrics*  @borda
+/configs/Lightning-AI/flash*    @ethanwharris
+/configs/Lightning-AI/lightning_transformers*    @seannaren
 /configs/SeanNaren/*    @seannaren

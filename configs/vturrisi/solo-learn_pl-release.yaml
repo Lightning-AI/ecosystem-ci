@@ -17,10 +17,14 @@ contact:
 #before_install:
 #  - pip install Cython==3.56
 
+env:
+  # let's limit the installation only to Pytorch-Lightning
+  PACKAGE_NAME: pytorch
+
 dependencies:
   - name: pytorch-lightning
-    HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
-    checkout: release/stable
+    HTTPS: https://github.com/Lightning-AI/lightning.git
+    checkout: release/pytorch
     # install_extras: all
 
 # OPTIONAL, running before installing your project

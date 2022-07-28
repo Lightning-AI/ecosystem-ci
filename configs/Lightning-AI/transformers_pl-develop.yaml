@@ -1,5 +1,5 @@
 target_repository:
-  HTTPS: https://github.com/PyTorchLightning/lightning-transformers.git
+  HTTPS: https://github.com/Lightning-AI/lightning-transformers.git
   # checkout a particular branch or a tag
   checkout: master
   # define installing package extras
@@ -8,7 +8,6 @@ target_repository:
   copy_tests:
     - tests
     - examples
-    - conf
 
 contact:
   slack:
@@ -17,7 +16,7 @@ contact:
 
 dependencies:
   - name: pytorch-lightning
-    HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
+    HTTPS: https://github.com/Lightning-AI/lightning.git
     checkout: master
     # install_extras: all
 

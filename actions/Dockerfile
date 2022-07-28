@@ -19,7 +19,7 @@ ARG CUDA_VERSION=11.1
 #FROM nvcr.io/nvidia/pytorch:${PYTORCH_VERSION}-py3
 FROM pytorch/pytorch:${PYTORCH_VERSION}-cuda${CUDA_VERSION}-cudnn8-runtime
 
-LABEL maintainer="PyTorchLightning <https://github.com/PyTorchLightning>"
+LABEL maintainer="Lightning-AI <https://github.com/Lightning-AI>"
 
 RUN apt-get update -qq --fix-missing  && \
     apt-get install -y --no-install-recommends \
