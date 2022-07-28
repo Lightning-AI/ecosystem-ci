@@ -1,30 +1,29 @@
 target_repository:
-  HTTPS: https://github.com/PyTorchLightning/metrics.git
+  HTTPS: https://github.com/Lightning-AI/lightning-transformers.git
   # checkout a particular branch or a tag
   checkout: master
   # define installing package extras
-  install_extras: all
+  install_extras: extra
   # copy some  test from the target repository
   copy_tests:
-    - integrations
-    - tests/__init__.py
-    - tests/helpers
+    - tests
+    - examples
+    - conf
 
 contact:
   slack:
-    # Nicki Skafte
-    - USZ6EQ8A2
+    # Sean Narenthiran
+    - U01BULUS2BG
 
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/Lightning-AI/lightning.git
     checkout: master
+    # install_extras: all
 
 testing:
   dirs:
-    - integrations
-  # additional pytest arguments
-  pytest_args: --strict
+    - tests
 
 runtimes:
   - {os: "ubuntu-20.04", python-version: "3.8"}

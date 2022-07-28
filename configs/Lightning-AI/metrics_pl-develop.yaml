@@ -1,37 +1,28 @@
 target_repository:
-  HTTPS: https://github.com/PyTorchLightning/lightning-flash.git
+  HTTPS: https://github.com/Lightning-AI/metrics.git
   # checkout a particular branch or a tag
   checkout: master
   # define installing package extras
-  install_extras: image,text,tabular
+  install_extras: all
   # copy some  test from the target repository
   copy_tests:
-    - flash_examples
+    - integrations
     - tests/__init__.py
     - tests/helpers
-    - tests/examples/__init__.py
-    - tests/examples/utils.py
-    - tests/examples/test_scripts.py
 
 contact:
   slack:
-    # Ethan Harris
-    - USPB6E0LF
+    # Nicki Skafte
+    - USZ6EQ8A2
 
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/Lightning-AI/lightning.git
     checkout: master
-    # install_extras: all
-  - name: torchmetrics
-    HTTPS: https://github.com/PyTorchLightning/metrics.git
-    checkout: master
-    # install_extras: all
-  - name: pytest-forked
 
 testing:
   dirs:
-    - tests/examples
+    - integrations
   # additional pytest arguments
   pytest_args: --strict
 

@@ -1,5 +1,5 @@
 target_repository:
-  HTTPS: https://github.com/PyTorchLightning/lightning-flash.git
+  HTTPS: https://github.com/Lightning-AI/lightning-flash.git
   # checkout a particular branch or a tag
   checkout: master
   # define installing package extras
@@ -18,17 +18,14 @@ contact:
     # Ethan Harris
     - USPB6E0LF
 
-env:
-  # let's limit the installation only to Pytorch-Lightning
-  PACKAGE_NAME: pytorch
-
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/Lightning-AI/lightning.git
-    checkout: release/pytorch
+    checkout: master
+    # install_extras: all
   - name: torchmetrics
-    HTTPS: https://github.com/PyTorchLightning/metrics.git
-    checkout: release/latest
+    HTTPS: https://github.com/Lightning-AI/metrics.git
+    checkout: master
     # install_extras: all
   - name: pytest-forked
 
@@ -40,5 +37,3 @@ testing:
 
 runtimes:
   - {os: "ubuntu-20.04", python-version: "3.8"}
-  - {os: "macOS-10.15", python-version: "3.8"}
-  - {os: "windows-2019", python-version: "3.8"}

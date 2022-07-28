@@ -1,19 +1,22 @@
 target_repository:
-  HTTPS: https://github.com/PyTorchLightning/lightning-transformers.git
+  HTTPS: https://github.com/Lightning-AI/lightning-flash.git
   # checkout a particular branch or a tag
   checkout: master
   # define installing package extras
-  install_extras: extra
+  install_extras: image,text,tabular
   # copy some  test from the target repository
   copy_tests:
-    - tests
-    - examples
-    - conf
+    - flash_examples
+    - tests/__init__.py
+    - tests/helpers
+    - tests/examples/__init__.py
+    - tests/examples/utils.py
+    - tests/examples/test_scripts.py
 
 contact:
   slack:
-    # Sean Narenthiran
-    - U01BULUS2BG
+    # Ethan Harris
+    - USPB6E0LF
 
 env:
   # let's limit the installation only to Pytorch-Lightning
@@ -23,12 +26,19 @@ dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/Lightning-AI/lightning.git
     checkout: release/pytorch
+  - name: torchmetrics
+    HTTPS: https://github.com/Lightning-AI/metrics.git
+    checkout: release/latest
     # install_extras: all
+  - name: pytest-forked
 
 testing:
   dirs:
-    - tests
+    - tests/examples
+  # additional pytest arguments
+  pytest_args: --strict
 
 runtimes:
   - {os: "ubuntu-20.04", python-version: "3.8"}
   - {os: "macOS-10.15", python-version: "3.8"}
+  - {os: "windows-2019", python-version: "3.8"}

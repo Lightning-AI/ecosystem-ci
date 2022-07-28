@@ -1,5 +1,5 @@
 target_repository:
-  HTTPS: https://github.com/PyTorchLightning/metrics.git
+  HTTPS: https://github.com/Lightning-AI/metrics.git
   # OPTIONAL, for some protected repository
   # username: my-nick
   # OPTIONAL, paired with the username
