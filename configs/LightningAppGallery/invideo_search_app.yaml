@@ -9,7 +9,6 @@ target_repository:
   # OPTIONAL, checkout a particular branch or a tag
   checkout: lai2-9876-create-gallery-e2e-test-for-invideo
   # OPTIONAL, define installing package extras
-  install_extras: all
   # OPTIONAL, install additional requirements from a file
   requirements_file: tests/requirements.txt
   # copy some  test from the target repository
@@ -31,7 +30,7 @@ env:
 dependencies:
   - name: lightning
     HTTPS: https://github.com/Lightning-AI/lightning.git
-    checkout: release/stable
+    checkout: master
 
 
 testing:
