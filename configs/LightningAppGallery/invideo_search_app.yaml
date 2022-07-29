@@ -1,0 +1,38 @@
+target_repository:
+  # TODO: the target repo and the git SHA should be retrieved from the gallery.
+  HTTPS: https://github.com/Lightning-AI/LAI-InVideo-search-App.git
+  checkout: lai2-9876-create-gallery-e2e-test-for-invideo
+  requirements_file: tests/requirements.txt
+  # copy some  test from the target repository
+  copy_tests:
+    - tests/test_app_gallery.py
+
+contact:
+  slack:
+    # Mansy
+    - U03GWAKP3MK
+
+# TODO: remove duplicate env vars
+env:
+  LIGHTNING_USER_ID: ${{ secrets.LIGHTNING_USER_ID }}
+  LIGHTNING_API_KEY: ${{ secrets.LIGHTNING_API_KEY }}
+  LIGHTNING_USERNAME: ${{ secrets.LIGHTNING_USERNAME }}
+  LIGHTNING_CLOUD_URL: ${{ secrets.LIGHTNING_CLOUD_URL }}
+  TEST_APP_NAME: InVideo Search
+  GRID_USER_ID: ${{ secrets.LIGHTNING_USER_ID }}
+  GRID_USER_KEY: ${{ secrets.LIGHTNING_API_KEY }}
+  GRID_URL: ${{ secrets.LIGHTNING_CLOUD_URL }}
+  _GRID_USERNAME: ${{ secrets.LIGHTNING_USERNAME }}
+
+dependencies:
+  - name: lightning
+    HTTPS: https://github.com/Lightning-AI/lightning.git
+    checkout: master
+
+
+testing:
+  dirs:
+    - tests
+
+runtimes:
+  - {os: "ubuntu-20.04", python-version: "3.9"}
