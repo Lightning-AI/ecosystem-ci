@@ -1,15 +1,7 @@
 target_repository:
+  # TODO: the target repo and the git SHA should be retrieved from the gallery.
   HTTPS: https://github.com/Lightning-AI/LAI-InVideo-search-App.git
-  # OPTIONAL, for some protected repository
-  # username: my-nick
-  # OPTIONAL, paired with the username
-  # password: dont-tell-anyone
-  # OPTIONAL, overrides the user/pass
-  # token: authentication-token
-  # OPTIONAL, checkout a particular branch or a tag
   checkout: lai2-9876-create-gallery-e2e-test-for-invideo
-  # OPTIONAL, define installing package extras
-  # OPTIONAL, install additional requirements from a file
   requirements_file: tests/requirements.txt
   # copy some  test from the target repository
   copy_tests:
@@ -17,15 +9,20 @@ target_repository:
 
 contact:
   slack:
-    - mansy
-  email: [mansy@lightning.ai]
+    # Mansy
+    - U03GWAKP3MK
 
-
-# OPTIONAL, if any installation require some env. variables
+# TODO: remove duplicate env vars
 env:
-  HOROVOD_BUILD_ARCH_FLAGS: "-mfma"
-  # HOROVOD_WITHOUT_MXNET: 1
-  # HOROVOD_WITHOUT_TENSORFLOW: 1
+  LIGHTNING_USER_ID: ${{ secrets.LIGHTNING_USER_ID }}
+  LIGHTNING_API_KEY: ${{ secrets.LIGHTNING_API_KEY }}
+  LIGHTNING_USERNAME: ${{ secrets.LIGHTNING_USERNAME }}
+  LIGHTNING_CLOUD_URL: ${{ secrets.LIGHTNING_CLOUD_URL }}
+  TEST_APP_NAME: InVideo Search
+  GRID_USER_ID: ${{ secrets.LIGHTNING_USER_ID }}
+  GRID_USER_KEY: ${{ secrets.LIGHTNING_API_KEY }}
+  GRID_URL: ${{ secrets.LIGHTNING_CLOUD_URL }}
+  _GRID_USERNAME: ${{ secrets.LIGHTNING_USERNAME }}
 
 dependencies:
   - name: lightning
@@ -36,8 +33,6 @@ dependencies:
 testing:
   dirs:
     - tests
-  # OPTIONAL, additional pytest arguments
-  pytest_args: --strict
 
 runtimes:
   - {os: "ubuntu-20.04", python-version: "3.9"}
