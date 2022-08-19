@@ -196,7 +196,7 @@ class AssistantCLI:
     def dict_env(config_file: str = "config.yaml") -> str:
         """Parse environment variables and pass then as dictionary/string for testing command."""
         config = AssistantCLI._load_config(config_file)
-        env = config.get("env", {"none": 42})
+        env = config.get("env", {})
         return json.dumps(env)
 
     @staticmethod

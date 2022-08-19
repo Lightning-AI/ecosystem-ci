@@ -85,7 +85,7 @@ jobs:
     - name: Some outputs
       run: |
         echo "::set-output name=args::$(python actions/assistant.py specify_tests --config_file=${{ matrix.config }} 2>&1)"
-        echo "::set-output name=env::$(python actions/assistant.py list_env --config_file=${{ matrix.config }} 2>&1)"
+        echo "::set-output name=env::$(python actions/assistant.py dict_env --config_file=${{ matrix.config }} 2>&1)"
         echo "::set-output name=contacts::$(python actions/assistant.py contacts --config_file=${{ matrix.config }} 2>&1)"
       id: extras
 
