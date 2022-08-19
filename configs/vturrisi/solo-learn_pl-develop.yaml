@@ -22,6 +22,7 @@ dependencies:
     HTTPS: https://github.com/Lightning-AI/lightning.git
     checkout: master
     # install_extras: all
+  - name: h5py
 
 # OPTIONAL, running before installing your project
 # WARNING: this is custom for given OS, we do not manage any inter OS compatibility
