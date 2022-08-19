@@ -12,6 +12,10 @@ contact:
     # Victor Turrisi
     - U0303D6JSAF
 
+env:
+  # let's limit the installation only to Pytorch-Lightning
+  PACKAGE_NAME: pytorch
+
 # OPTIONAL, running before installing your project
 # WARNING: this is custom for given OS, we do not manage any inter OS compatibility
 #before_install:

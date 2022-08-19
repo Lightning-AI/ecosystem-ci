@@ -13,6 +13,10 @@ contact:
     # Nicki Skafte
     - USZ6EQ8A2
 
+env:
+  # let's limit the installation only to Pytorch-Lightning
+  PACKAGE_NAME: pytorch
+
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/Lightning-AI/lightning.git

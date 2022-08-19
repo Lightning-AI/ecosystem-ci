@@ -18,6 +18,10 @@ contact:
     # Ethan Harris
     - USPB6E0LF
 
+env:
+  # let's limit the installation only to Pytorch-Lightning
+  PACKAGE_NAME: pytorch
+
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/Lightning-AI/lightning.git
