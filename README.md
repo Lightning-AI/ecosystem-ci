@@ -47,9 +47,9 @@ Here are pre-requisites for your project before adding to the Lightning EcoSyste
    - For CPU integration, specify the OS and Python version combinations inside your config file:
      ```yaml
      runtimes:
-       - {os: "ubuntu-20.04", python-version: "3.9"}
-       - {os: "macOS-10.15", python-version: "3.7"}
-       - {os: "windows-2019", python-version: "3.8"}
+       - {os: "ubuntu-20.04", python: "3.9"}
+       - {os: "macOS-10.15", python: "3.7"}
+       - {os: "windows-2019", python: "3.8"}
      ...
      ```
    - For GPU integration, add your config filename in the [Azure GPU CI file](.azure/ci-testig-parameterized.yml) file:

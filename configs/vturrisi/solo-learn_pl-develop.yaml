@@ -37,4 +37,4 @@ testing:
     - tests/utils
 
 runtimes:
-  - {os: "ubuntu-20.04", python-version: "3.9"}
+  - {os: "ubuntu-20.04", python: "3.9"}
