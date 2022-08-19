@@ -105,8 +105,7 @@ jobs:
       env: ${{ fromJSON(steps.extras.outputs.env) }}
       working-directory: _integrations
       run: |
-        results_file="junit/test-project-${{ matrix.config }}-${{ runner.os }}-${{ matrix.python-version }}.xml"
-        coverage run -m pytest ${{ steps.extras.outputs.args }} -v --junitxml=$results_file
+        coverage run -m pytest ${{ steps.extras.outputs.args }} -v --junitxml="junit/test-project-${{ matrix.config }}-${{ runner.os }}-${{ matrix.python-version }}.xml"
 
     - name: Upload pytest test results
       uses: actions/upload-artifact@v2
