@@ -46,8 +46,8 @@ class AssistantCLI:
         data = request_url(url, auth_token)
         if not data:
             return [] if as_list else ""
-        files = [d["filename"] for d in data]
-        configs = [f for f in files if f.startswith("configs")]
+        files = [d["filename"] for d in data if os.path.isfile(d["filename"])]
+        configs = [f.replace("configs/", "") for f in files if f.startswith("configs/")]
         return configs if as_list else "|".join(configs)
 
     @staticmethod
@@ -55,6 +55,7 @@ class AssistantCLI:
         """Find all configs YAML|YML in given folder recursively."""
         files = glob.glob(os.path.join(configs_folder, "**", "*.yaml"), recursive=True)
         files += glob.glob(os.path.join(configs_folder, "**", "*.yml"), recursive=True)
+        files = [cfg.replace("configs/", "") if cfg.startswith("configs/") else cfg for cfg in files]
         return files
 
     @staticmethod
@@ -69,8 +70,7 @@ class AssistantCLI:
             cfg_runtimes = AssistantCLI._load_config(cfg).get("runtimes", {})
             if not cfg_runtimes:  # filter empty runtimes
                 continue
-            cfg_ = cfg.replace("configs/", "") if cfg.startswith("configs/") else cfg
-            runtimes += [dict(config=cfg_, **c) for c in cfg_runtimes]
+            runtimes += [dict(config=cfg, **c) for c in cfg_runtimes]
         return json.dumps(runtimes)
 
     @staticmethod
@@ -140,7 +140,10 @@ class AssistantCLI:
         if "HTTPS" in repo:
             # creat installation from Git repository
             url = AssistantCLI._https(
-                repo.get("HTTPS"), token=repo.get("token"), username=repo.get("username"), password=repo.get("password")
+                repo.get("HTTPS"),
+                token=repo.get("token"),
+                username=repo.get("username"),
+                password=repo.get("password"),
             )
 
             cmd = f"git+{url}"
