@@ -69,12 +69,14 @@ class AssistantCLI:
             cfg_runtimes = AssistantCLI._load_config(cfg).get("runtimes", {})
             if not cfg_runtimes:  # filter empty runtimes
                 continue
-            [c.update(dict(config=cfg)) for c in cfg_runtimes]
-            runtimes += cfg_runtimes
+            cfg_ = cfg.replace("configs/", "") if cfg.startswith("configs/") else cfg
+            runtimes += [dict(config=cfg_, **c) for c in cfg_runtimes]
         return json.dumps(runtimes)
 
     @staticmethod
     def _load_config(config_file: str = "config.yaml", strict: bool = True) -> dict:
+        if not os.path.isfile(config_file):
+            config_file = os.path.join("configs", config_file)
         assert os.path.isfile(config_file), f"Missing config file: {config_file}"
         with open(config_file) as fp:
             config = yaml.safe_load(fp)
