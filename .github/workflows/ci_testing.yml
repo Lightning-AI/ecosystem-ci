@@ -102,13 +102,11 @@ jobs:
       shell: bash
 
     - name: Testing
-      env:
-        RESULTS: "junit/test-project-${{ matrix.config }}-${{ runner.os }}-${{ matrix.python-version }}.xml"
+      env: ${{ fromJSON(steps.extras.outputs.env) }}
       working-directory: _integrations
       run: |
-        echo "${{ steps.extras.outputs.env }}"
-        echo "${{ steps.extras.outputs.args }}"
-        ${{ steps.extras.outputs.env }} coverage run -m pytest ${{ steps.extras.outputs.args }} -v --junitxml=$RESULTS
+        results_file="junit/test-project-${{ matrix.config }}-${{ runner.os }}-${{ matrix.python-version }}.xml"
+        coverage run -m pytest ${{ steps.extras.outputs.args }} -v --junitxml=$results_file
 
     - name: Upload pytest test results
       uses: actions/upload-artifact@v2

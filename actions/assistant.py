@@ -193,6 +193,13 @@ class AssistantCLI:
         return " ".join(env)
 
     @staticmethod
+    def dict_env(config_file: str = "config.yaml") -> str:
+        """Parse environment variables and pass then as dictionary/string for testing command."""
+        config = AssistantCLI._load_config(config_file)
+        env = config.get("env", {})
+        return json.dumps(env)
+
+    @staticmethod
     def before_commands(
         config_file: str = "config.yaml", stage: str = "install", as_append: bool = False
     ) -> Union[str, List[str]]:
