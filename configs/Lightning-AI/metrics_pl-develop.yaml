@@ -19,8 +19,6 @@ dependencies:
     checkout: master
 
 testing:
-  dirs:
-    - integrations
   # additional pytest arguments
   pytest_args: --strict
 
