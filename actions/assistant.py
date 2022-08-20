@@ -190,12 +190,15 @@ class AssistantCLI:
         return cmds
 
     @staticmethod
-    def list_env(config_file: str = "config.yaml") -> str:
+    def list_env(config_file: str = "config.yaml", export: bool = False) -> str:
         """Parse environment variables and pass then in format to be accepted before calling testing command."""
         config = AssistantCLI._load_config(config_file)
         env = config.get("env", {})
         env = [f'{name}="{val}"' for name, val in env.items()]
-        return " ".join(env)
+        if export:
+            env = [f'export {e}"' for e in env]
+        sep = " & " if export else " "
+        return sep.join(env)
 
     @staticmethod
     def dict_env(config_file: str = "config.yaml") -> str:
