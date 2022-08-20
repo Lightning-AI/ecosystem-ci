@@ -196,7 +196,7 @@ class AssistantCLI:
         env = config.get("env", {})
         env = [f'{name}="{val}"' for name, val in env.items()]
         if export:
-            env = [f'export {e}' for e in env]
+            env = [f"export {e}" for e in env]
         sep = " ; " if export else " "
         return sep.join(env)
 
