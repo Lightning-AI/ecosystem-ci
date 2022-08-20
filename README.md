@@ -3,9 +3,9 @@
 **Automated Testing for Lightning EcoSystem Projects**
 
 [![Lightning](https://img.shields.io/badge/-Lightning-792ee5?logo=pytorchlightning&logoColor=white)](https://pytorchlightning.ai)
-[![CI internal](https://github.com/PyTorchLightning/ecosystem-ci/actions/workflows/ci_test-acts.yml/badge.svg?branch=main&event=push)](https://github.com/PyTorchLightning/ecosystem-ci/actions/workflows/ci_test-acts.yml)
-[![codecov](https://codecov.io/gh/PytorchLightning/ecosystem-ci/branch/main/graph/badge.svg?token=binMTx5wr4)](https://codecov.io/gh/PytorchLightning/ecosystem-ci)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/PyTorchLightning/ecosystem-ci/main.svg)](https://results.pre-commit.ci/latest/github/PyTorchLightning/ecosystem-ci/main)
+[![CI internal](https://github.com/Lightning-AI/ecosystem-ci/actions/workflows/ci_test-acts.yml/badge.svg?branch=main&event=push)](https://github.com/Lightning-AI/ecosystem-ci/actions/workflows/ci_test-acts.yml)
+[![codecov](https://codecov.io/gh/Lightning-AI/ecosystem-ci/branch/main/graph/badge.svg?token=binMTx5wr4)](https://codecov.io/gh/Lightning-AI/ecosystem-ci)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Lightning-AI/ecosystem-ci/main.svg)](https://results.pre-commit.ci/latest/github/Lightning-AI/ecosystem-ci/main)
 
 ______________________________________________________________________
 
@@ -28,28 +28,28 @@ Here are pre-requisites for your project before adding to the Lightning EcoSyste
 
 1. First, fork this project (with [CLI](https://cli.github.com/) or in browser) to be able to create a new Pull Request, and work within a specific branch.
    ```bash
-   gh repo fork PyTorchLightning/ecosystem-ci
+   gh repo fork Lightning-AI/ecosystem-ci
    cd ecosystem-ci/
    ```
 1. Copy the [template file](actions/_config.yaml) in `configs` folder and call it `<my_project_name>.yaml`.
    ```
    cp configs/template.yaml configs/<my_project_name>.yaml
    ```
-1. At the minimum, modify the `HTTPS` variable to point to your repository. See [Configuring my project](https://github.com/PyTorchLightning/ecosystem-ci/tree/main#configuring-my-project) for more options.
+1. At the minimum, modify the `HTTPS` variable to point to your repository. See [Configuring my project](https://github.com/Lightning-AI/ecosystem-ci/tree/main#configuring-my-project) for more options.
    ```yaml
    target_repository:
      HTTPS: https://github.com/MyUsername/MyProject.git
    ...
    ```
    If your project tests multiple configurations or you'd like to test against multiple Lightning versions such as master and release branches, create a config file for each one of them.
-   As an example, have a look at [metrics master](configs/PyTorchLightning/metrics_pl-develop.yaml) and [metrics release](configs/PyTorchLightning/metrics_pl-release.yaml) CI files.
+   As an example, have a look at [metrics master](configs/Lightning-AI/metrics_pl-develop.yaml) and [metrics release](configs/Lightning-AI/metrics_pl-release.yaml) CI files.
 1. Define your `runtimes` (OS and Python version) in your config file to be executed on CPU and/or add the config filename in the [Azure GPU CI file](.azure/ci-testig-parameterized.yml).
    - For CPU integration, specify the OS and Python version combinations inside your config file:
      ```yaml
      runtimes:
-       - {os: "ubuntu-20.04", python-version: "3.9"}
-       - {os: "macOS-10.15", python-version: "3.7"}
-       - {os: "windows-2019", python-version: "3.8"}
+       - {os: "ubuntu-20.04", python: "3.9"}
+       - {os: "macOS-10.15", python: "3.7"}
+       - {os: "windows-2019", python: "3.8"}
      ...
      ```
    - For GPU integration, add your config filename in the [Azure GPU CI file](.azure/ci-testig-parameterized.yml) file:
@@ -59,8 +59,8 @@ Here are pre-requisites for your project before adding to the Lightning EcoSyste
      - template: testing-template.yml
        parameters:
          configs:
-         - "PyTorchLightning/metrics_pl-develop.yaml"
-         - "PyTorchLightning/metrics_pl-release.yaml"
+         - "Lightning-AI/metrics_pl-develop.yaml"
+         - "Lightning-AI/metrics_pl-release.yaml"
          - "MyUsername/my_project-master.yaml"
      ```
 1. Add the responsible person(s) to [CODEOWNERS](.github/CODEOWNERS) for your organization folder or just the project.
@@ -92,7 +92,7 @@ All dependencies as well as the target repository is sharing the same template w
 
 ```yaml
 target_repository:
-  HTTPS: https://github.com/PyTorchLightning/metrics.git
+  HTTPS: https://github.com/Lightning-AI/metrics.git
   username: my-nick  # Optional, used when checking out private/protected repo
   password: dont-tell-anyone # Optional, used when checking out private/protected repo
   token: authentication-token # Optional, overrides the user/pass when checking out private/protected repo
