@@ -1,5 +1,5 @@
 target_repository:
-  HTTPS: https://github.com/PyTorchLightning/metrics.git
+  HTTPS: https://github.com/Lightning-AI/metrics.git
   # OPTIONAL, for some protected repository
   # username: my-nick
   # OPTIONAL, paired with the username
@@ -36,7 +36,7 @@ env:
 
 dependencies:
   - name: pytorch-lightning
-    HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
+    HTTPS: https://github.com/Lightning-AI/lightning.git
     checkout: release/1.5.x
     # install_extras: all
   - name: Cython
@@ -54,6 +54,6 @@ testing:
   pytest_args: --strict
 
 runtimes:
-  - {os: "ubuntu-20.04", python-version: "3.9"}
-  - {os: "macOS-10.15", python-version: "3.7"}
-  - {os: "windows-2019", python-version: "3.8"}
+  - {os: "ubuntu-20.04", python: "3.9"}
+  - {os: "macOS-10.15", python: "3.7"}
+  - {os: "windows-2019", python: "3.8"}

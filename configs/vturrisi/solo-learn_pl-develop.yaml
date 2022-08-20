@@ -12,6 +12,10 @@ contact:
     # Victor Turrisi
     - U0303D6JSAF
 
+env:
+  # let's limit the installation only to Pytorch-Lightning
+  PACKAGE_NAME: pytorch
+
 # OPTIONAL, running before installing your project
 # WARNING: this is custom for given OS, we do not manage any inter OS compatibility
 #before_install:
@@ -19,9 +23,10 @@ contact:
 
 dependencies:
   - name: pytorch-lightning
-    HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
+    HTTPS: https://github.com/Lightning-AI/lightning.git
     checkout: master
     # install_extras: all
+  - name: h5py
 
 # OPTIONAL, running before installing your project
 # WARNING: this is custom for given OS, we do not manage any inter OS compatibility
@@ -36,4 +41,4 @@ testing:
     - tests/utils
 
 runtimes:
-  - {os: "ubuntu-20.04", python-version: "3.9"}
+  - {os: "ubuntu-20.04", python: "3.9"}

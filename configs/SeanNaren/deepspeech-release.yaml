@@ -15,10 +15,14 @@ contact:
 before_install:
   - sudo apt install -y sox libsndfile1
 
+env:
+  # let's limit the installation only to Pytorch-Lightning
+  PACKAGE_NAME: pytorch
+
 dependencies:
   - name: pytorch-lightning
-    HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
-    checkout: release/1.5.x
+    HTTPS: https://github.com/Lightning-AI/lightning.git
+    checkout: release/pytorch
 
 runtimes:
-  - {os: "ubuntu-20.04", python-version: "3.8"}
+  - {os: "ubuntu-20.04", python: "3.8"}
