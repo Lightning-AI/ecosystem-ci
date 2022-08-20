@@ -16,6 +16,7 @@ _PATH_CONFIG = os.path.join(_PATH_DIR, "_config.yaml")
         "list_runtimes",
         "contacts",
         "list_env",
+        "dict_env",
         "before_commands",
         "prepare_env",
         "specify_tests",

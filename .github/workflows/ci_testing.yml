@@ -49,10 +49,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python ${{ matrix.python }}
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: ${{ matrix.python }}
 
     - name: Cache period
       run: echo "::set-output name=period::$(python -c 'import time ; days = time.time() / 60 / 60 / 24 ; print(int(days / 7))' 2>&1)"
@@ -72,7 +72,7 @@ jobs:
         key: $COMMON-td${{ steps.times.outputs.period }}-pip-$HASH_FILES
         restore-keys: $COMMON-td${{ steps.times.outputs.period }}-pip-
       env:
-        COMMON: ${{ runner.os }}-py${{ matrix.python-version }}
+        COMMON: ${{ runner.os }}-py${{ matrix.python }}
         HASH_FILES: ${{ hashFiles('requirements.txt') }}-${{ matrix.config }}
 
     - name: Create script
@@ -85,7 +85,7 @@ jobs:
     - name: Some outputs
       run: |
         echo "::set-output name=args::$(python actions/assistant.py specify_tests --config_file=${{ matrix.config }} 2>&1)"
-        echo "::set-output name=env::$(python actions/assistant.py list_env --config_file=${{ matrix.config }} 2>&1)"
+        echo "::set-output name=env::$(python actions/assistant.py dict_env --config_file=${{ matrix.config }} 2>&1)"
         echo "::set-output name=contacts::$(python actions/assistant.py contacts --config_file=${{ matrix.config }} 2>&1)"
       id: extras
 
@@ -102,19 +102,16 @@ jobs:
       shell: bash
 
     - name: Testing
-      env:
-        RESULTS: "junit/test-project-${{ matrix.config }}-${{ runner.os }}-${{ matrix.python-version }}.xml"
+      env: ${{ fromJSON(steps.extras.outputs.env) }}
       working-directory: _integrations
       run: |
-        echo "${{ steps.extras.outputs.env }}"
-        echo "${{ steps.extras.outputs.args }}"
-        ${{ steps.extras.outputs.env }} coverage run -m pytest ${{ steps.extras.outputs.args }} -v --junitxml=$RESULTS
+        coverage run -m pytest ${{ steps.extras.outputs.args }} -v --junitxml="junit/test-project-${{ matrix.config }}-${{ runner.os }}-${{ matrix.python }}.xml"
 
     - name: Upload pytest test results
       uses: actions/upload-artifact@v2
       with:
-        name: pytest-results-${{ runner.os }}-${{ matrix.python-version }}
-        path: junit/test-results-${{ runner.os }}-${{ matrix.python-version }}.xml
+        name: pytest-results-${{ runner.os }}-${{ matrix.python }}
+        path: junit/test-results-${{ runner.os }}-${{ matrix.python }}.xml
       if: failure()
 
     # report failure to Slack
@@ -127,7 +124,7 @@ jobs:
       with:
         status: ${{ job.status }}
         token: ${{ secrets.GITHUB_TOKEN }}
-        notification_title: ${{ format('Env; {0} py{1} for *{2}*', runner.os, matrix.python-version, matrix.config) }}
+        notification_title: ${{ format('Env; {0} py{1} for *{2}*', runner.os, matrix.python, matrix.config) }}
         message_format: '{emoji} *{workflow}* {status_message}, see <{run_url}|detail>, cc: ${{ steps.extras.outputs.contacts }}'
         footer: 'Linked Repo <{repo_url}|{repo}>'
       env:

@@ -14,16 +14,16 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-20.04 , macOS-10.15, windows-2019]
-        python-version: ["3.9"]
+        python: ["3.9"]
     # Timeout: https://stackoverflow.com/a/59076067/4521646
     timeout-minutes: 10
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python ${{ matrix.python }}
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: ${{ matrix.python }}
 
     # Note: This uses an internal pip API and may not always work
     # https://github.com/actions/cache/blob/master/examples.md#multiple-oss-in-a-workflow
@@ -36,8 +36,8 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{ steps.pip-cache.outputs.dir }}
-        key: ${{ runner.os }}-py${{ matrix.python-version }}-pip-${{ hashFiles('requirements.txt') }}
-        restore-keys: ${{ runner.os }}-py${{ matrix.python-version }}-pip-
+        key: ${{ runner.os }}-py${{ matrix.python }}-pip-${{ hashFiles('requirements.txt') }}
+        restore-keys: ${{ runner.os }}-py${{ matrix.python }}-pip-
 
     - name: Install requirements
       run: |
@@ -45,13 +45,13 @@ jobs:
 
     - name: Testing
       run: |
-        coverage run -m pytest actions -v --junitxml="junit/test-results-${{ runner.os }}-${{ matrix.python-version }}.xml"
+        coverage run -m pytest actions -v --junitxml="junit/test-results-${{ runner.os }}-${{ matrix.python }}.xml"
 
     - name: Upload pytest test results
       uses: actions/upload-artifact@v2
       with:
-        name: pytest-results-${{ runner.os }}-${{ matrix.python-version }}
-        path: junit/test-results-${{ runner.os }}-${{ matrix.python-version }}.xml
+        name: pytest-results-${{ runner.os }}-${{ matrix.python }}
+        path: junit/test-results-${{ runner.os }}-${{ matrix.python }}.xml
       if: failure()
 
     - name: Statistics
