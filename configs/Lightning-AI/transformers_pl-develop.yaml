@@ -11,8 +11,8 @@ target_repository:
 
 contact:
   slack:
-    # Sean Narenthiran
-    - U01BULUS2BG
+    # Rohit Gupta
+    - U02EG9MDKUP
 
 env:
   # let's limit the installation only to Pytorch-Lightning
