@@ -42,12 +42,12 @@ class AssistantCLI:
     @staticmethod
     def changed_configs(pr: int, auth_token: Optional[str] = None, as_list: bool = True) -> Union[str, List[str]]:
         """Determine what configs were changed in particular PR."""
-        url = f"https://api.github.com/repos/PyTorchLightning/ecosystem-ci/pulls/{pr}/files"
+        url = f"https://api.github.com/repos/Lightning-AI/ecosystem-ci/pulls/{pr}/files"
         data = request_url(url, auth_token)
         if not data:
             return [] if as_list else ""
-        files = [d["filename"] for d in data]
-        configs = [f for f in files if f.startswith("configs")]
+        files = [d["filename"] for d in data if os.path.isfile(d["filename"])]
+        configs = [f.replace("configs/", "") for f in files if f.startswith("configs/")]
         return configs if as_list else "|".join(configs)
 
     @staticmethod
@@ -55,6 +55,7 @@ class AssistantCLI:
         """Find all configs YAML|YML in given folder recursively."""
         files = glob.glob(os.path.join(configs_folder, "**", "*.yaml"), recursive=True)
         files += glob.glob(os.path.join(configs_folder, "**", "*.yml"), recursive=True)
+        files = [cfg.replace("configs/", "") if cfg.startswith("configs/") else cfg for cfg in files]
         return files
 
     @staticmethod
@@ -69,12 +70,13 @@ class AssistantCLI:
             cfg_runtimes = AssistantCLI._load_config(cfg).get("runtimes", {})
             if not cfg_runtimes:  # filter empty runtimes
                 continue
-            [c.update(dict(config=cfg)) for c in cfg_runtimes]
-            runtimes += cfg_runtimes
+            runtimes += [dict(config=cfg, **c) for c in cfg_runtimes]
         return json.dumps(runtimes)
 
     @staticmethod
     def _load_config(config_file: str = "config.yaml", strict: bool = True) -> dict:
+        if not os.path.isfile(config_file):
+            config_file = os.path.join("configs", config_file)
         assert os.path.isfile(config_file), f"Missing config file: {config_file}"
         with open(config_file) as fp:
             config = yaml.safe_load(fp)
@@ -138,7 +140,10 @@ class AssistantCLI:
         if "HTTPS" in repo:
             # creat installation from Git repository
             url = AssistantCLI._https(
-                repo.get("HTTPS"), token=repo.get("token"), username=repo.get("username"), password=repo.get("password")
+                repo.get("HTTPS"),
+                token=repo.get("token"),
+                username=repo.get("username"),
+                password=repo.get("password"),
             )
 
             cmd = f"git+{url}"
@@ -185,12 +190,22 @@ class AssistantCLI:
         return cmds
 
     @staticmethod
-    def list_env(config_file: str = "config.yaml") -> str:
+    def list_env(config_file: str = "config.yaml", export: bool = False) -> str:
         """Parse environment variables and pass then in format to be accepted before calling testing command."""
         config = AssistantCLI._load_config(config_file)
         env = config.get("env", {})
         env = [f'{name}="{val}"' for name, val in env.items()]
-        return " ".join(env)
+        if export:
+            env = [f"export {e}" for e in env]
+        sep = " ; " if export else " "
+        return sep.join(env)
+
+    @staticmethod
+    def dict_env(config_file: str = "config.yaml") -> str:
+        """Parse environment variables and pass then as dictionary/string for testing command."""
+        config = AssistantCLI._load_config(config_file)
+        env = config.get("env", {})
+        return json.dumps(env)
 
     @staticmethod
     def before_commands(

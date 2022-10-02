@@ -1,5 +1,5 @@
 target_repository:
-  HTTPS: https://github.com/PyTorchLightning/lightning-transformers.git
+  HTTPS: https://github.com/Lightning-AI/lightning-transformers.git
   # checkout a particular branch or a tag
   checkout: master
   # define installing package extras
@@ -8,17 +8,20 @@ target_repository:
   copy_tests:
     - tests
     - examples
-    - conf
 
 contact:
   slack:
-    # Sean Narenthiran
-    - U01BULUS2BG
+    # Rohit Gupta
+    - U02EG9MDKUP
+
+env:
+  # let's limit the installation only to Pytorch-Lightning
+  PACKAGE_NAME: pytorch
 
 dependencies:
   - name: pytorch-lightning
-    HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
-    checkout: release/stable
+    HTTPS: https://github.com/Lightning-AI/lightning.git
+    checkout: master
     # install_extras: all
 
 testing:
@@ -26,5 +29,4 @@ testing:
     - tests
 
 runtimes:
-  - {os: "ubuntu-20.04", python-version: "3.8"}
-  - {os: "macOS-10.15", python-version: "3.8"}
+  - {os: "ubuntu-20.04", python: "3.8"}

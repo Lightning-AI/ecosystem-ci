@@ -1,15 +1,18 @@
 target_repository:
-  HTTPS: https://github.com/NVIDIA/NeMo.git
+  HTTPS: https://github.com/Lightning-AI/lightning-transformers.git
   # checkout a particular branch or a tag
-  checkout: main
+  checkout: master
   # define installing package extras
-  install_extras: all
+  install_extras: extra
   # copy some  test from the target repository
   copy_tests:
     - tests
+    - examples
 
-before_install:
-  - sudo apt-get install -y libsndfile1
+contact:
+  slack:
+    # Rohit Gupta
+    - U02EG9MDKUP
 
 env:
   # let's limit the installation only to Pytorch-Lightning
@@ -19,11 +22,12 @@ dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/Lightning-AI/lightning.git
     checkout: release/pytorch
-    install_extras: loggers
+    # install_extras: all
 
 testing:
-  # additional pytest arguments
-  pytest_args: -m "not pleasefixme and not torch_tts" --cpu --with_downloads --relax_numba_compat
+  dirs:
+    - tests
 
 runtimes:
   - {os: "ubuntu-20.04", python: "3.8"}
+  - {os: "macOS-10.15", python: "3.8"}
