@@ -19,9 +19,11 @@ contact:
 
 before_install:
   - pip install Faker==15.0.0
+  - pip install Cython==3.56
 
 # OPTIONAL, if any installation require some env. variables
 env:
+  PACKAGE_NAME: pytorch
   NEPTUNE_API_TOKEN: ANONYMOUS
   NEPTUNE_LIGHTNING_ECOSYSTEM_CI_PROJECT: common/lightning-ecosystem-ci
 
