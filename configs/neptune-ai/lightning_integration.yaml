@@ -10,7 +10,10 @@ target_repository:
   copy_tests:
     - e2e_tests/integrations/__init__.py
     - e2e_tests/integrations/test_lightning.py
-    - e2e_tests/*.py
+    - e2e_tests/conftest.py
+    - e2e_tests/base.py
+    - e2e_tests/utils.py
+    - e2e_tests/exceptions.py
 
 contact:
   slack:
@@ -19,6 +22,7 @@ contact:
 
 before_install:
   - pip install Faker==15.0.0
+  - pip install pytorch-lightning
 
 # OPTIONAL, if any installation require some env. variables
 env:
