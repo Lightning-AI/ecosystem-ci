@@ -15,6 +15,9 @@ contact:
     - Aleksander Wojnarowicz
   email: [aleksander.wojnarowicz@neptune.ai, backend@neptune.ai]
 
+before_install:
+  - pip install Faker==15.0.0
+
 # OPTIONAL, if any installation require some env. variables
 env:
   NEPTUNE_API_TOKEN: ANONYMOUS
@@ -23,10 +26,8 @@ env:
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/Lightning-AI/lightning.git
-    checkout: release/1.5.x
+    checkout: release/pytorch
     # install_extras: all
-  - name: Cython
-    checkout: 0.29.24
 
 testing:
   dirs:
