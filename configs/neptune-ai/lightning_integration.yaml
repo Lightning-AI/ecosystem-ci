@@ -23,6 +23,7 @@ contact:
 before_install:
   - pip install Faker==15.0.0
   - pip install pytorch-lightning
+  - pip install -e .
 
 # OPTIONAL, if any installation require some env. variables
 env:
