@@ -1,0 +1,59 @@
+target_repository:
+  HTTPS: https://github.com/neptune-ai/neptune-client
+  # OPTIONAL, for some protected repository
+  # username: my-nick
+  # OPTIONAL, paired with the username
+  # password: dont-tell-anyone
+  # OPTIONAL, overrides the user/pass
+  # token: authentication-token
+  # OPTIONAL, checkout a particular branch or a tag
+  checkout: aw/adjust_e2e_tests
+  # OPTIONAL, define installing package extras
+  install_extras: all
+  # OPTIONAL, install additional requirements from a file
+  requirements_file: requirements.txt
+  # copy some  test from the target repository
+  copy_tests:
+    - e2e_tests/integrations/
+
+contact:
+  slack:
+    - Aleksander Wojnarowicz
+  email: [aleksander.wojnarowicz@neptune.ai]
+
+# OPTIONAL, running before installing your project
+# WARNING: this is custom for given OS, we do not manage any inter OS compatibility
+before_install:
+  - pip install Cython==3.56
+
+# OPTIONAL, if any installation require some env. variables
+env:
+  HOROVOD_BUILD_ARCH_FLAGS: "-mfma"
+  # HOROVOD_WITHOUT_MXNET: 1
+  # HOROVOD_WITHOUT_TENSORFLOW: 1
+  NEPTUNE_API_TOKEN: ANONYMOUS
+  NEPTUNE_LIGHTNING_ECOSYSTEM_CI_PROJECT: common/lightning-ecosystem-ci
+
+dependencies:
+  - name: pytorch-lightning
+    HTTPS: https://github.com/Lightning-AI/lightning.git
+    checkout: release/1.5.x
+    # install_extras: all
+  - name: Cython
+    checkout: 0.29.24
+
+# OPTIONAL, running before installing your project
+# WARNING: this is custom for given OS, we do not manage any inter OS compatibility
+# before_test:
+#  - wget https://pl-flash-data.s3.amazonaws.com/titanic.zip
+
+testing:
+  dirs:
+    - .
+  # OPTIONAL, additional pytest arguments
+  pytest_args: -m lightning
+
+runtimes:
+  - {os: "ubuntu-20.04", python: "3.7"}
+  - {os: "macOS-10.15", python: "3.7"}
+  - {os: "windows-2019", python: "3.7"}
