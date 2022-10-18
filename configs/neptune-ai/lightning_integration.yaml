@@ -14,6 +14,7 @@ target_repository:
     - e2e_tests/base.py
     - e2e_tests/utils.py
     - e2e_tests/exceptions.py
+    - e2e_tests/pytest.ini
 
 contact:
   slack:
