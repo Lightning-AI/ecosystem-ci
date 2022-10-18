@@ -19,7 +19,7 @@ target_repository:
 contact:
   slack:
     - Aleksander Wojnarowicz
-  email: [aleksander.wojnarowicz@neptune.ai]
+  email: [aleksander.wojnarowicz@neptune.ai, backend@neptune.ai]
 
 # OPTIONAL, running before installing your project
 # WARNING: this is custom for given OS, we do not manage any inter OS compatibility
