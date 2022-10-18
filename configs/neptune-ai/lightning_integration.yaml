@@ -8,7 +8,9 @@ target_repository:
   requirements_file: requirements.txt
   # copy some  test from the target repository
   copy_tests:
-    - e2e_tests/integrations/
+    - e2e_tests/integrations/__init__.py
+    - e2e_tests/integrations/test_lightning.py
+    - e2e_tests/*.py
 
 contact:
   slack:
