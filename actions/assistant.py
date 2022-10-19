@@ -168,7 +168,7 @@ class AssistantCLI:
         url = AssistantCLI._https(
             repo.get("HTTPS"), token=repo.get("token"), username=repo.get("username"), password=repo.get("password")
         )
-        cmd_git = f"git clone {url} --depth 0"
+        cmd_git = f"git clone {url} --depth 100"
         repo_name, _ = os.path.splitext(os.path.basename(repo.get("HTTPS")))
         cmds = [cmd_git, f"cd {repo_name}"]
         if "checkout" in repo:
