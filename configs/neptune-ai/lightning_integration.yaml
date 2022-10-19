@@ -9,7 +9,7 @@ target_repository:
   # copy some  test from the target repository
   copy_tests:
     - e2e_tests/integrations/__init__.py
-    - e2e_tests/integrations/test_lightning.py
+    - e2e_tests/integrations/test_pytorch_lightning.py
     - e2e_tests/conftest.py
     - e2e_tests/base.py
     - e2e_tests/utils.py
