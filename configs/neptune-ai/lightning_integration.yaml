@@ -24,7 +24,6 @@ contact:
 before_install:
   - pip install Faker==15.0.0
   - pip install pytorch-lightning
-  - pip install neptune-client==0.15.0
 
 # OPTIONAL, if any installation require some env. variables
 env:
