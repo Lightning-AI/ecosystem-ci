@@ -1,7 +1,7 @@
 target_repository:
   HTTPS: https://github.com/neptune-ai/neptune-client
   # OPTIONAL, checkout a particular branch or a tag
-  checkout: aw/adjust_e2e_tests
+  checkout: master
   # copy some  test from the target repository
   copy_tests:
     - e2e_tests/integrations/__init__.py
