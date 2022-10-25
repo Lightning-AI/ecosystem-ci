@@ -14,7 +14,8 @@ target_repository:
 
 contact:
   slack:
-    - Aleksander Wojnarowicz
+    # Aleksander Wojnarowicz
+    - U046VPPNVE0
   email: [aleksander.wojnarowicz@neptune.ai, backend@neptune.ai]
 
 before_install:
