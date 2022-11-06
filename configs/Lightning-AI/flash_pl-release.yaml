@@ -28,7 +28,7 @@ dependencies:
     checkout: release/pytorch
   - name: torchmetrics
     HTTPS: https://github.com/Lightning-AI/metrics.git
-    checkout: release/latest
+    checkout: release/stable
     # install_extras: all
   - name: pytest-forked
 
