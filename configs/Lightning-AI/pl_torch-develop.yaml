@@ -2,8 +2,6 @@ target_repository:
   HTTPS: https://github.com/Lightning-AI/lightning.git
   # checkout a particular branch or a tag
   checkout: master
-  # define installing package extras
-  install_extras: all
   # copy some  test from the target repository
   copy_tests:
     - tests/tests_pytorch
