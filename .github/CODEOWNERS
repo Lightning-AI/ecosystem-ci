@@ -18,3 +18,6 @@
 /configs/Lightning-AI/flash*    @ethanwharris
 /configs/Lightning-AI/lightning_transformers*    @seannaren
 /configs/SeanNaren/*    @seannaren
+
+# neptune-ai
+/configs/neptune-ai/*  @AleksanderWWW @aniezurawski @shnela @Raalsky @pitercl @twolodzko @PatrykGala
