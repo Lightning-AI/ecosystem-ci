@@ -29,4 +29,4 @@ testing:
 runtimes:
   - {os: "ubuntu-22.04", python: "3.10"}
   - {os: "macOS-12", python: "3.10"}
-  - {os: "windows-2022", python: "3.10"}
+#  - {os: "windows-2022", python: "3.10"}
