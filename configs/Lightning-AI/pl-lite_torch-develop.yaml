@@ -1,0 +1,32 @@
+target_repository:
+  HTTPS: https://github.com/Lightning-AI/lightning.git
+  # checkout a particular branch or a tag
+  checkout: master
+  # define installing package extras
+  install_extras: all
+  # copy some  test from the target repository
+  copy_tests:
+    - tests/tests_lite
+
+contact:
+  slack:
+    # Adrian Wälchli
+    - URC536Z0W
+
+env:
+  # let's limit the installation only to Pytorch-Lightning
+  PACKAGE_NAME: lite
+
+dependencies:
+  - name: torch
+    HTTPS: https://github.com/pytorch/pytorch.git
+    checkout: master
+
+testing:
+  # additional pytest arguments
+  pytest_args: --strict
+
+runtimes:
+  - {os: "ubuntu-22.04", python: "3.10"}
+  - {os: "macOS-12", python: "3.10"}
+  - {os: "windows-2022", python: "3.10"}
