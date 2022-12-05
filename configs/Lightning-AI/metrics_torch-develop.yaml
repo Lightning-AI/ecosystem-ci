@@ -1,0 +1,27 @@
+target_repository:
+  HTTPS: https://github.com/Lightning-AI/metrics.git
+  # checkout a particular branch or a tag
+  checkout: master
+  # define installing package extras
+  install_extras: all
+  # copy some  test from the target repository
+  copy_tests:
+    - tests/unittests
+
+contact:
+  slack:
+    # Nicki Skafte
+    - USZ6EQ8A2
+
+dependencies:
+  - name: torch
+    HTTPS: https://github.com/pytorch/pytorch.git
+    checkout: master
+
+testing:
+  # additional pytest arguments
+  pytest_args: --strict
+
+runtimes:
+  - {os: "ubuntu-22.04", python: "3.10"}
+  - {os: "macOS-12", python: "3.10"}
