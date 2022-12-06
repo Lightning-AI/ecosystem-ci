@@ -4,13 +4,13 @@ target_repository:
   checkout: master
   # copy some  test from the target repository
   copy_tests:
-    - e2e_tests/integrations/__init__.py
-    - e2e_tests/integrations/test_lightning.py
-    - e2e_tests/conftest.py
-    - e2e_tests/base.py
-    - e2e_tests/utils.py
-    - e2e_tests/exceptions.py
-    - e2e_tests/pytest.ini
+    - tests/e2e/integrations/__init__.py
+    - tests/e2e/integrations/test_lightning.py
+    - tests/e2e/conftest.py
+    - tests/e2e/base.py
+    - tests/e2e/utils.py
+    - tests/e2e/exceptions.py
+    - tests/e2e/pytest.ini
 
 contact:
   slack:
@@ -22,17 +22,19 @@ contact:
 env:
   NEPTUNE_API_TOKEN: ANONYMOUS
   NEPTUNE_LIGHTNING_ECOSYSTEM_CI_PROJECT: common/lightning-ecosystem-ci
+  # let's limit the installation only to Pytorch-Lightning
+  PACKAGE_NAME: pytorch
 
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/Lightning-AI/lightning.git
-    checkout: release/pytorch
+    checkout: release/stable
   - name: Faker
     checkout: 15.0.0
 
 testing:
   dirs:
-    - e2e_tests
+    - tests/e2e
   # OPTIONAL, additional pytest arguments
   pytest_args: -m lightning
 
