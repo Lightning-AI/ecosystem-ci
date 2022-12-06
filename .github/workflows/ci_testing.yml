@@ -53,7 +53,9 @@ jobs:
         python-version: ${{ matrix.python }}
 
     - name: Cache period
-      run: python -c 'import time ; days = time.time() / 60 / 60 / 24 ; print(f"period={int(days / 7)}")' >> $GITHUB_OUTPUT
+      run: |
+        offset=$(python -c "import time ; days = time.time() / 60 / 60 / 24 ; print(int(days / 7))")
+        echo "period=$offset" >> $GITHUB_OUTPUT
       id: times
 
     - name: Get pip cache dir
