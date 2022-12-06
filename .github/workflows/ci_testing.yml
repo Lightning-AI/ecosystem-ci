@@ -60,14 +60,12 @@ jobs:
       run: python -c 'import time ; days = time.time() / 60 / 60 / 24 ; print("period=" + str(int(days / 7)))'
       id: times
 
-    # Note: This uses an internal pip API and may not always work
-    # https://github.com/actions/cache/blob/master/examples.md#multiple-oss-in-a-workflow
-    - name: Get pip cache
+    - name: Get pip cache dir
       id: pip-cache
       run: echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
 
     - name: Cache pip
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ${{ steps.pip-cache.outputs.dir }}
         key: $COMMON-td${{ steps.times.outputs.period }}-pip-$HASH_FILES
