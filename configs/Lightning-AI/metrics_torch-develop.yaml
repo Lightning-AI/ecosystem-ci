@@ -3,7 +3,9 @@ target_repository:
   # checkout a particular branch or a tag
   checkout: master
   # define installing package extras
-  install_extras: all
+  install_extras:
+    - all
+    - test
   # copy some  test from the target repository
   copy_tests:
     - tests/unittests
