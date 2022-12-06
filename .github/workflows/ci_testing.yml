@@ -15,6 +15,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   check-diff:
     runs-on: ubuntu-20.04
@@ -77,7 +81,6 @@ jobs:
         pip install -q -r requirements.txt
         python actions/assistant.py prepare_env --config_file=${{ matrix.config }} > prepare_env.sh
         cat prepare_env.sh
-      shell: bash
 
     - name: Some outputs
       run: |
@@ -89,14 +92,12 @@ jobs:
     - name: Prepare environment
       run: |
         bash prepare_env.sh
-      shell: bash
 
     - name: Show dir tree
       if: runner.os == 'Linux'
       run: |
         sudo apt install -q -y tree
         tree .
-      shell: bash
 
     - name: Testing
       env: ${{ fromJSON(steps.extras.outputs.env) }}

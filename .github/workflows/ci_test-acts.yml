@@ -6,6 +6,10 @@ on:  # Trigger the workflow on push or pull request, but only for the main branc
   pull_request:
     branches: [main]
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   pytest-internal:
 
