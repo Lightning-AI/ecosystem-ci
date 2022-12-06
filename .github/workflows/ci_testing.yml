@@ -15,6 +15,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   check-diff:
     runs-on: ubuntu-20.04
@@ -34,21 +38,17 @@ jobs:
         PR_NUMBER: "${{ github.event.pull_request.number }}"
       run: |
         pip install -q -r requirements.txt
-        python actions/assistant.py list_runtimes $PR_NUMBER
         pr_runtimes=$(python actions/assistant.py list_runtimes $PR_NUMBER 2>&1)
         echo $pr_runtimes
-        echo "runtimes=$pr_runtimes" >> $GITHUB_OUTPUT
+        echo "runtimes={include: $pr_runtimes}" >> $GITHUB_OUTPUT
 
   pytest-project:
-
+    needs: check-diff
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.check-diff.outputs.matrix) }}
-    # Timeout: https://stackoverflow.com/a/59076067/4521646
     timeout-minutes: 90
-    needs: check-diff
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python }}
@@ -57,7 +57,9 @@ jobs:
         python-version: ${{ matrix.python }}
 
     - name: Cache period
-      run: python -c 'import time ; days = time.time() / 60 / 60 / 24 ; print("period=" + str(int(days / 7)))' >> $GITHUB_OUTPUT
+      run: |
+        offset=$(python -c "import time ; days = time.time() / 60 / 60 / 24 ; print(int(days / 7))")
+        echo "period=$offset" >> $GITHUB_OUTPUT
       id: times
 
     - name: Get pip cache dir
@@ -79,7 +81,6 @@ jobs:
         pip install -q -r requirements.txt
         python actions/assistant.py prepare_env --config_file=${{ matrix.config }} > prepare_env.sh
         cat prepare_env.sh
-      shell: bash
 
     - name: Some outputs
       run: |
@@ -91,14 +92,12 @@ jobs:
     - name: Prepare environment
       run: |
         bash prepare_env.sh
-      shell: bash
 
     - name: Show dir tree
       if: runner.os == 'Linux'
       run: |
         sudo apt install -q -y tree
         tree .
-      shell: bash
 
     - name: Testing
       env: ${{ fromJSON(steps.extras.outputs.env) }}
