@@ -2,7 +2,7 @@ import glob
 import json
 import os
 import traceback
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Sequence, Union
 
 import fire
 import requests
@@ -128,7 +128,7 @@ class AssistantCLI:
         return extras
 
     @staticmethod
-    def _get_flags(repo: dict, defaults: Tuple[str] = ("--quiet",)) -> List[str]:
+    def _get_flags(repo: dict, defaults: Sequence[str] = ("--quiet",)) -> List[str]:
         """Extract the install's flags with some defaults."""
         flags = repo.get("install_flags", [])
         flags = [flags] if isinstance(flags, str) else flags
@@ -170,7 +170,7 @@ class AssistantCLI:
                 pkg += f"[{repo['install_extras']}]"
             if "checkout" in repo:
                 pkg += f"=={repo['checkout']}"
-        flags = AssistantCLI._get_flags(repo)
+        flags = AssistantCLI._get_flags(repo, defaults=("--quiet", "--upgrade"))
         cmd = " ".join(["pip install", pkg, " ".join(flags)])
         return cmd
 

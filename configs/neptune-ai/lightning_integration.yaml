@@ -22,11 +22,13 @@ contact:
 env:
   NEPTUNE_API_TOKEN: ANONYMOUS
   NEPTUNE_LIGHTNING_ECOSYSTEM_CI_PROJECT: common/lightning-ecosystem-ci
+  # let's limit the installation only to Pytorch-Lightning
+  PACKAGE_NAME: pytorch
 
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/Lightning-AI/lightning.git
-    checkout: release/pytorch
+    checkout: release/stable
   - name: Faker
     checkout: 15.0.0
 
