@@ -34,21 +34,17 @@ jobs:
         PR_NUMBER: "${{ github.event.pull_request.number }}"
       run: |
         pip install -q -r requirements.txt
-        python actions/assistant.py list_runtimes $PR_NUMBER
         pr_runtimes=$(python actions/assistant.py list_runtimes $PR_NUMBER 2>&1)
         echo $pr_runtimes
         echo "runtimes=$pr_runtimes" >> $GITHUB_OUTPUT
 
   pytest-project:
-
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.check-diff.outputs.matrix) }}
-    # Timeout: https://stackoverflow.com/a/59076067/4521646
     timeout-minutes: 35
     needs: check-diff
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python }}
