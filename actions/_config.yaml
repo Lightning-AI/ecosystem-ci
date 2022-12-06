@@ -9,9 +9,7 @@ target_repository:
   # OPTIONAL, checkout a particular branch or a tag
   checkout: master
   # OPTIONAL, define installing package extras
-  install_extras:
-    - all
-    - test
+  install_extras: all
   # OPTIONAL, install additional requirements from a file
   # requirements_file: requirements.txt
   # passing additional `pip install` flags
