@@ -15,8 +15,9 @@ contact:
 
 dependencies:
   - name: torch
-    HTTPS: https://github.com/pytorch/pytorch.git
-    checkout: master
+    install_flags:
+      - "-f https://download.pytorch.org/whl/nightly/torch_nightly.html"
+      - "--pre"
 
 testing:
   # additional pytest arguments

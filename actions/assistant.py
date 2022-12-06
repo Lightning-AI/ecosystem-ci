@@ -130,7 +130,11 @@ class AssistantCLI:
     @staticmethod
     def _install_pip(repo: Dict[str, str]) -> str:
         """Create command for installing a project from source (if HTTPS is given) or from PyPI (if at least name is
-        given)."""
+        given).
+
+        Args:
+            repo: it is package or repository with additional key fields
+        """
         assert any(k in repo for k in ["HTTPS", "name"]), f"Missing key `HTTPS` or `name` among {repo.keys()}"
         # pip install -q 'https://github.com/...#egg=lightning-flash[tabular]
         name = repo.get("name")
@@ -146,20 +150,22 @@ class AssistantCLI:
                 password=repo.get("password"),
             )
 
-            cmd = f"git+{url}"
+            pkg = f"git+{url}"
             if "checkout" in repo:
                 assert isinstance(repo["checkout"], str)
-                cmd += f"@{repo['checkout']}"
+                pkg += f"@{repo['checkout']}"
             if "install_extras" in repo:
-                cmd += f"#egg={name}[{AssistantCLI._extras(repo['install_extras'])}]"
+                pkg += f"#egg={name}[{AssistantCLI._extras(repo['install_extras'])}]"
         else:
             # make installation from pypi package
-            cmd = name
+            pkg = name
             if "install_extras" in repo:
-                cmd += f"[{repo['install_extras']}]"
+                pkg += f"[{repo['install_extras']}]"
             if "checkout" in repo:
-                cmd += f"=={repo['checkout']}"
-        return "pip install --quiet " + cmd
+                pkg += f"=={repo['checkout']}"
+        flags = " ".join(["--quiet"] + repo.get('install_flags', []))
+        cmd = " ".join(["pip install", pkg, flags])
+        return cmd
 
     @staticmethod
     def _install_repo(repo: Dict[str, str], remove_dir: bool = True) -> List[str]:
