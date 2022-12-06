@@ -163,8 +163,8 @@ class AssistantCLI:
                 pkg += f"[{repo['install_extras']}]"
             if "checkout" in repo:
                 pkg += f"=={repo['checkout']}"
-        flags = " ".join(["--quiet"] + repo.get('install_flags', []))
-        cmd = " ".join(["pip install", pkg, flags])
+        flags = set(["--quiet"] + repo.get("install_flags", []))
+        cmd = " ".join(["pip install", pkg, " ".join(flags)])
         return cmd
 
     @staticmethod
@@ -184,13 +184,18 @@ class AssistantCLI:
         if "requirements_file" in repo:
             reqs = repo["requirements_file"]
             reqs = [reqs] if isinstance(reqs, str) else reqs
-            cmds.append(f"pip install --quiet --upgrade {' '.join([f'-r {req}' for req in reqs])}")
+            args = [f"-r {req}" for req in reqs] + ["--quiet", "--upgrade"]
+            cmds.append("pip install " + " ".join(args))
 
         pip_install = "."
         if "install_extras" in repo:
             pip_install += f"[{AssistantCLI._extras(repo['install_extras'])}]"
-        cmds.append(f"pip install --quiet {pip_install}")
+
+        flags = ["--quiet"] + repo.get("install_flags", [])
+        cmds.append("pip install " + " ".join([pip_install] + flags))
+        cmds.append("pip list")
         cmds.append("cd ..")
+
         if remove_dir:
             cmds.append(f"rm -rf {repo_name}")
         return cmds
