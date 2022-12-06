@@ -26,5 +26,5 @@ testing:
   pytest_args: --strict
 
 runtimes:
-  - {os: "ubuntu-22.04", python: "3.10"}
-  - {os: "macOS-12", python: "3.10"}
+  - {os: "ubuntu-20.04", python: "3.9"}
+  - {os: "macOS-12", python: "3.9"}

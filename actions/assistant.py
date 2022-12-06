@@ -276,6 +276,7 @@ class AssistantCLI:
         reqs = config.get("dependencies", [])
         for req in reqs:
             script.append(AssistantCLI._install_pip(req))
+        script.append("pip list")
 
         script += AssistantCLI.before_commands(config_file, stage="test", as_append=True)
         return os.linesep.join(script)
