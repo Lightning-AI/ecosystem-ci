@@ -35,7 +35,9 @@ jobs:
       run: |
         pip install -q -r requirements.txt
         python actions/assistant.py list_runtimes $PR_NUMBER
-        echo "::set-output name=runtimes::{include: $(python actions/assistant.py list_runtimes $PR_NUMBER 2>&1)}"
+        pr_runtimes=$(python actions/assistant.py list_runtimes $PR_NUMBER 2>&1)
+        echo $pr_runtimes
+        echo "runtimes=$pr_runtimes" >> $GITHUB_OUTPUT
 
   pytest-project:
 
@@ -55,15 +57,14 @@ jobs:
         python-version: ${{ matrix.python }}
 
     - name: Cache period
-      run: echo "::set-output name=period::$(python -c 'import time ; days = time.time() / 60 / 60 / 24 ; print(int(days / 7))' 2>&1)"
+      run: python -c 'import time ; days = time.time() / 60 / 60 / 24 ; print("period=" + str(int(days / 7)))'
       id: times
 
     # Note: This uses an internal pip API and may not always work
     # https://github.com/actions/cache/blob/master/examples.md#multiple-oss-in-a-workflow
     - name: Get pip cache
       id: pip-cache
-      run: |
-        python -c "from pip._internal.locations import USER_CACHE_DIR; print('::set-output name=dir::' + USER_CACHE_DIR)"
+      run: echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
 
     - name: Cache pip
       uses: actions/cache@v2
@@ -84,9 +85,9 @@ jobs:
 
     - name: Some outputs
       run: |
-        echo "::set-output name=args::$(python actions/assistant.py specify_tests --config_file=${{ matrix.config }} 2>&1)"
-        echo "::set-output name=env::$(python actions/assistant.py dict_env --config_file=${{ matrix.config }} 2>&1)"
-        echo "::set-output name=contacts::$(python actions/assistant.py contacts --config_file=${{ matrix.config }} 2>&1)"
+        echo "args=$(python actions/assistant.py specify_tests --config_file=${{ matrix.config }} 2>&1)" >> $GITHUB_OUTPUT
+        echo "env=$(python actions/assistant.py dict_env --config_file=${{ matrix.config }} 2>&1)" >> $GITHUB_OUTPUT
+        echo "contacts=$(python actions/assistant.py contacts --config_file=${{ matrix.config }} 2>&1)" >> $GITHUB_OUTPUT
       id: extras
 
     - name: Prepare environment
