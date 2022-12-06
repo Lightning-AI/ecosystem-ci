@@ -36,15 +36,15 @@ jobs:
         pip install -q -r requirements.txt
         pr_runtimes=$(python actions/assistant.py list_runtimes $PR_NUMBER 2>&1)
         echo $pr_runtimes
-        echo "runtimes=$pr_runtimes" >> $GITHUB_OUTPUT
+        echo "runtimes={include: $pr_runtimes}" >> $GITHUB_OUTPUT
 
   pytest-project:
+    needs: check-diff
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.check-diff.outputs.matrix) }}
     timeout-minutes: 35
-    needs: check-diff
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python }}
