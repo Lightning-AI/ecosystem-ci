@@ -83,9 +83,9 @@ jobs:
 
     - name: Some outputs
       run: |
-        echo "args=$(python actions/assistant.py specify_tests --config_file=${{ matrix.config }} 2>&1)" >> $GITHUB_OUTPUT
-        echo "env=$(python actions/assistant.py dict_env --config_file=${{ matrix.config }} 2>&1)" >> $GITHUB_OUTPUT
-        echo "contacts=$(python actions/assistant.py contacts --config_file=${{ matrix.config }} 2>&1)" >> $GITHUB_OUTPUT
+        echo "args=$(python actions/assistant.py specify_tests --config_file=${{ matrix.config }})" >> $GITHUB_OUTPUT
+        echo "env=$(python actions/assistant.py dict_env --config_file=${{ matrix.config }})" >> $GITHUB_OUTPUT
+        echo "contacts=$(python actions/assistant.py contacts --config_file=${{ matrix.config }})" >> $GITHUB_OUTPUT
       id: extras
 
     - name: Prepare environment

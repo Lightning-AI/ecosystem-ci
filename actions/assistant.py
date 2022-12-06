@@ -2,7 +2,7 @@ import glob
 import json
 import os
 import traceback
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Tuple, Union
 
 import fire
 import requests
@@ -128,6 +128,13 @@ class AssistantCLI:
         return extras
 
     @staticmethod
+    def _get_flags(repo: dict, defaults: Tuple[str] = ("--quiet",)) -> List[str]:
+        """Extract the install's flags with some defaults."""
+        flags = repo.get("install_flags", [])
+        flags = [flags] if isinstance(flags, str) else flags
+        return list(set(flags + list(defaults)))
+
+    @staticmethod
     def _install_pip(repo: Dict[str, str]) -> str:
         """Create command for installing a project from source (if HTTPS is given) or from PyPI (if at least name is
         given).
@@ -163,7 +170,7 @@ class AssistantCLI:
                 pkg += f"[{repo['install_extras']}]"
             if "checkout" in repo:
                 pkg += f"=={repo['checkout']}"
-        flags = set(["--quiet"] + repo.get("install_flags", []))
+        flags = AssistantCLI._get_flags(repo)
         cmd = " ".join(["pip install", pkg, " ".join(flags)])
         return cmd
 
@@ -191,7 +198,7 @@ class AssistantCLI:
         if "install_extras" in repo:
             pip_install += f"[{AssistantCLI._extras(repo['install_extras'])}]"
 
-        flags = ["--quiet"] + repo.get("install_flags", [])
+        flags = AssistantCLI._get_flags(repo)
         cmds.append("pip install " + " ".join([pip_install] + flags))
         cmds.append("pip list")
         cmds.append("cd ..")
