@@ -29,6 +29,9 @@ jobs:
       id: pip-cache
       run: echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
 
+    # FIXME
+    - run: echo ${{ steps.pip-cache.outputs.dir }}
+
     - name: Cache pip
       uses: actions/cache@v3
       with:
