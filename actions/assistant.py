@@ -285,6 +285,7 @@ class AssistantCLI:
             script.append(AssistantCLI._install_pip(req))
         script.append("pip list")
 
+        script += [f"cd {AssistantCLI._FOLDER_TESTS}"]
         script += AssistantCLI.before_commands(config_file, stage="test", as_append=True)
         return os.linesep.join(script)
 
