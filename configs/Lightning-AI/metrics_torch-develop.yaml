@@ -6,6 +6,8 @@ target_repository:
   install_extras:
     - all
     - test
+  # install additional requirements from a file
+  requirements_file: requirements/audio_test.txt
   # copy some  test from the target repository
   copy_tests:
     - tests/unittests
