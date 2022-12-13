@@ -23,6 +23,12 @@ dependencies:
       - "-f https://download.pytorch.org/whl/nightly/torch_nightly.html"
       - "--pre"
 
+# running before installing your project
+before_test:
+  - wget https://pl-public-data.s3.amazonaws.com/metrics/data.zip
+  - unzip -o data.zip
+  - ls -l _data/*
+
 testing:
   # additional pytest arguments
   pytest_args: --strict
