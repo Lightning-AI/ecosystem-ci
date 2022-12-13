@@ -27,7 +27,7 @@ dependencies:
 before_test:
   - wget https://pl-public-data.s3.amazonaws.com/metrics/data.zip
   - unzip -o data.zip
-  - ls -l _data/*
+  - mv _data tests/
 
 testing:
   # additional pytest arguments
