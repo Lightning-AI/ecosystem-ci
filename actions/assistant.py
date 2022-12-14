@@ -200,7 +200,7 @@ class AssistantCLI:
 
         flags = AssistantCLI._get_flags(repo)
         cmds.append("pip install " + " ".join([pip_install] + flags))
-        cmds.append("pip list")
+        # cmds.append("pip list")
         cmds.append("cd ..")
 
         if remove_dir:

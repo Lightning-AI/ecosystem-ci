@@ -48,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.check-diff.outputs.matrix) }}
-    timeout-minutes: 90
+    timeout-minutes: 150
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python }}
@@ -90,6 +90,7 @@ jobs:
       id: extras
 
     - name: Prepare environment
+      timeout-minutes: 30
       run: |
         bash prepare_env.sh
 

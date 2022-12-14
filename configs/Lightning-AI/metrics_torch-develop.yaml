@@ -31,7 +31,7 @@ before_test:
 
 testing:
   # additional pytest arguments
-  pytest_args: --strict
+  pytest_args: --timeout=120
 
 runtimes:
   - {os: "ubuntu-20.04", python: "3.9"}
