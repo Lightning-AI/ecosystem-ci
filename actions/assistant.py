@@ -26,7 +26,6 @@ def request_url(url: str, auth_token: Optional[str] = None) -> Optional[dict]:
 
 
 class AssistantCLI:
-
     _BASH_SCRIPT = ("set -e",)
     _FIELD_TARGET_REPO = "target_repository"
     _FIELD_REQUIRE = "dependencies"
