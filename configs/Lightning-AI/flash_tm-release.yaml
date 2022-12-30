@@ -18,14 +18,11 @@ contact:
     # Kushashwa Ravi Shrimali
     - U030AS8BRCY
 
-env:
-  # let's limit the installation only to Pytorch-Lightning
-  PACKAGE_NAME: pytorch
-
 dependencies:
-  - name: pytorch-lightning
-    HTTPS: https://github.com/Lightning-AI/lightning.git
+  - name: torchmetrics
+    HTTPS: https://github.com/Lightning-AI/metrics.git
     checkout: release/stable
+    # install_extras: all
   - name: pytest-forked
 
 testing:

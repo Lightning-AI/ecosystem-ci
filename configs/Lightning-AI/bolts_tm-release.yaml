@@ -1,0 +1,28 @@
+target_repository:
+  HTTPS: https://github.com/Lightning-AI/lightning-bolts.git
+  # checkout a particular branch or a tag
+  checkout: master
+  # define installing package extras
+  install_extras: extra
+  # copy some  test from the target repository
+  copy_tests:
+    - tests
+
+contact:
+  slack:
+    # Rohit Gupta
+    - U02EG9MDKUP
+
+dependencies:
+  - name: torchmetrics
+    HTTPS: https://github.com/Lightning-AI/metrics.git
+    checkout: release/stable
+    # install_extras: all
+
+testing:
+  dirs:
+    - tests
+
+runtimes:
+  - {os: "ubuntu-20.04", python: "3.8"}
+  - {os: "macOS-10.15", python: "3.8"}

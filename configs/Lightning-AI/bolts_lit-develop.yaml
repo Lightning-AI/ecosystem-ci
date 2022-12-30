@@ -22,6 +22,9 @@ dependencies:
     HTTPS: https://github.com/Lightning-AI/lightning.git
     checkout: master
     # install_extras: all
+  - name: torchmetrics
+    HTTPS: https://github.com/Lightning-AI/metrics.git
+    checkout: master
 
 testing:
   dirs:
