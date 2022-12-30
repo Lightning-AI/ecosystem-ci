@@ -25,6 +25,12 @@ dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/Lightning-AI/lightning.git
     checkout: master
+  - name: torchmetrics
+    HTTPS: https://github.com/Lightning-AI/metrics.git
+    checkout: master
+  - name: lightning-bolts
+    HTTPS: https://github.com/Lightning-AI/lightning-bolts.git
+    checkout: master
     # install_extras: all
   - name: h5py
 
