@@ -34,5 +34,5 @@ testing:
   pytest_args: --timeout=120
 
 runtimes:
-  - {os: "ubuntu-20.04", python: "3.9"}
-  - {os: "macOS-12", python: "3.9"}
+  - {os: "ubuntu-22.04", python: "3.9"}
+#  - {os: "macOS-12", python: "3.9"}
