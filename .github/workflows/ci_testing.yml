@@ -21,7 +21,7 @@ defaults:
 
 jobs:
   check-diff:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     # Map a step output to a job output
     outputs:
@@ -32,13 +32,15 @@ jobs:
       with:
         python-version: 3.8
 
+    - name: Install requirements
+      run: pip install -q -r requirements.txt
+
     - name: Get PR diff
       id: diff-files
       env:
         PR_NUMBER: "${{ github.event.pull_request.number }}"
       run: |
-        pip install -q -r requirements.txt
-        pr_runtimes=$(python actions/assistant.py list_runtimes $PR_NUMBER 2>&1)
+        pr_runtimes=$(python actions/assistant.py list_runtimes --pr=$PR_NUMBER)
         echo $pr_runtimes
         echo "runtimes={include: $pr_runtimes}" >> $GITHUB_OUTPUT
 
