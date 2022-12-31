@@ -12,11 +12,6 @@ contact:
     # Victor Turrisi
     - U0303D6JSAF
 
-# OPTIONAL, running before installing your project
-# WARNING: this is custom for given OS, we do not manage any inter OS compatibility
-#before_install:
-#  - pip install Cython==3.56
-
 env:
   # let's limit the installation only to Pytorch-Lightning
   PACKAGE_NAME: pytorch
@@ -33,11 +28,6 @@ dependencies:
     HTTPS: https://github.com/Lightning-AI/lightning-bolts.git
     checkout: release/stable
   - name: h5py
-
-# OPTIONAL, running before installing your project
-# WARNING: this is custom for given OS, we do not manage any inter OS compatibility
-#before_test:
-#  - wget https://pl-flash-data.s3.amazonaws.com/titanic.zip
 
 testing:
   dirs:
