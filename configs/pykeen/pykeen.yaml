@@ -16,17 +16,6 @@ contact:
     - U03DAAVMLSH
   email: []
 
-# OPTIONAL, running before installing your project
-# WARNING: this is custom for given OS, we do not manage any inter OS compatibility
-#before_install:
-#  - pip install Cython==3.56
-
-# OPTIONAL, if any installation require some env. variables
-#env:
-#  HOROVOD_BUILD_ARCH_FLAGS: "-mfma"
-#  # HOROVOD_WITHOUT_MXNET: 1
-#  # HOROVOD_WITHOUT_TENSORFLOW: 1
-
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
