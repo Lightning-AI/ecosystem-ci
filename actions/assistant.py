@@ -2,7 +2,7 @@ import glob
 import json
 import os
 import traceback
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Sequence, Union
 
 import fire
 import requests
@@ -26,7 +26,6 @@ def request_url(url: str, auth_token: Optional[str] = None) -> Optional[dict]:
 
 
 class AssistantCLI:
-
     _BASH_SCRIPT = ("set -e",)
     _FIELD_TARGET_REPO = "target_repository"
     _FIELD_REQUIRE = "dependencies"
@@ -128,9 +127,20 @@ class AssistantCLI:
         return extras
 
     @staticmethod
+    def _get_flags(repo: dict, defaults: Sequence[str] = ("--quiet",)) -> List[str]:
+        """Extract the install's flags with some defaults."""
+        flags = repo.get("install_flags", [])
+        flags = [flags] if isinstance(flags, str) else flags
+        return list(set(flags + list(defaults)))
+
+    @staticmethod
     def _install_pip(repo: Dict[str, str]) -> str:
         """Create command for installing a project from source (if HTTPS is given) or from PyPI (if at least name is
-        given)."""
+        given).
+
+        Args:
+            repo: it is package or repository with additional key fields
+        """
         assert any(k in repo for k in ["HTTPS", "name"]), f"Missing key `HTTPS` or `name` among {repo.keys()}"
         # pip install -q 'https://github.com/...#egg=lightning-flash[tabular]
         name = repo.get("name")
@@ -146,20 +156,22 @@ class AssistantCLI:
                 password=repo.get("password"),
             )
 
-            cmd = f"git+{url}"
+            pkg = f"git+{url}"
             if "checkout" in repo:
                 assert isinstance(repo["checkout"], str)
-                cmd += f"@{repo['checkout']}"
+                pkg += f"@{repo['checkout']}"
             if "install_extras" in repo:
-                cmd += f"#egg={name}[{AssistantCLI._extras(repo['install_extras'])}]"
+                pkg += f"#egg={name}[{AssistantCLI._extras(repo['install_extras'])}]"
         else:
             # make installation from pypi package
-            cmd = name
+            pkg = name
             if "install_extras" in repo:
-                cmd += f"[{repo['install_extras']}]"
+                pkg += f"[{repo['install_extras']}]"
             if "checkout" in repo:
-                cmd += f"=={repo['checkout']}"
-        return "pip install --quiet " + cmd
+                pkg += f"=={repo['checkout']}"
+        flags = AssistantCLI._get_flags(repo, defaults=("--quiet", "--upgrade"))
+        cmd = " ".join(["pip install", pkg, " ".join(flags)])
+        return cmd
 
     @staticmethod
     def _install_repo(repo: Dict[str, str], remove_dir: bool = True) -> List[str]:
@@ -180,7 +192,8 @@ class AssistantCLI:
         if "requirements_file" in repo:
             reqs = repo["requirements_file"]
             reqs = [reqs] if isinstance(reqs, str) else reqs
-            cmds.append(f"pip install --quiet --upgrade {' '.join([f'-r {req}' for req in reqs])}")
+            args = [f"-r {req}" for req in reqs] + ["--quiet", "--upgrade"]
+            cmds.append("pip install " + " ".join(args))
 
         if "install_command" in repo:
             cmds.append(repo["install_command"])
@@ -188,8 +201,12 @@ class AssistantCLI:
             pip_install = "."
             if "install_extras" in repo:
                 pip_install += f"[{AssistantCLI._extras(repo['install_extras'])}]"
-            cmds.append(f"pip install --quiet {pip_install}")
+
+            flags = AssistantCLI._get_flags(repo)
+            cmds.append("pip install " + " ".join([pip_install] + flags))
+        cmds.append("pip list")
         cmds.append("cd ..")
+
         if remove_dir:
             cmds.append(f"rm -rf {repo_name}")
         return cmds
@@ -271,6 +288,7 @@ class AssistantCLI:
         reqs = config.get("dependencies", [])
         for req in reqs:
             script.append(AssistantCLI._install_pip(req))
+        script.append("pip list")
 
         script += AssistantCLI.before_commands(config_file, stage="test", as_append=True)
         return os.linesep.join(script)

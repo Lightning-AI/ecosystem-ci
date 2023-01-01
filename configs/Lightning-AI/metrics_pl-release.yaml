@@ -20,10 +20,10 @@ env:
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/Lightning-AI/lightning.git
-    checkout: release/pytorch
+    checkout: release/stable
     # install_extras: all
 
 runtimes:
   - {os: "ubuntu-20.04", python: "3.8"}
-  - {os: "macOS-10.15", python: "3.8"}
-  - {os: "windows-2019", python: "3.8"}
+  - {os: "macOS-11", python: "3.8"}
+  - {os: "windows-2022", python: "3.8"}
