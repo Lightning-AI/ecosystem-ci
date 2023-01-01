@@ -1,0 +1,44 @@
+target_repository:
+  HTTPS: https://github.com/neptune-ai/neptune-client
+  # OPTIONAL, checkout a particular branch or a tag
+  checkout: master
+  # copy some  test from the target repository
+  copy_tests:
+    - tests/e2e/integrations/__init__.py
+    - tests/e2e/integrations/test_lightning.py
+    - tests/e2e/conftest.py
+    - tests/e2e/base.py
+    - tests/e2e/utils.py
+    - tests/e2e/exceptions.py
+    - tests/e2e/pytest.ini
+
+contact:
+  slack:
+    # Aleksander Wojnarowicz
+    - U046VPPNVE0
+  email: [aleksander.wojnarowicz@neptune.ai, backend@neptune.ai]
+
+# OPTIONAL, if any installation require some env. variables
+env:
+  NEPTUNE_API_TOKEN: ANONYMOUS
+  NEPTUNE_LIGHTNING_ECOSYSTEM_CI_PROJECT: common/lightning-ecosystem-ci
+  # let's limit the installation only to Pytorch-Lightning
+  PACKAGE_NAME: pytorch
+
+dependencies:
+  - name: pytorch-lightning
+    HTTPS: https://github.com/Lightning-AI/lightning.git
+    checkout: release/stable
+  - name: Faker
+    checkout: 15.0.0
+
+testing:
+  dirs:
+    - tests/e2e
+  # OPTIONAL, additional pytest arguments
+  pytest_args: -m lightning
+
+runtimes:
+  - {os: "ubuntu-20.04", python: "3.8"}
+  - {os: "macOS-10.15", python: "3.8"}
+#  - {os: "windows-2019", python: "3.7"}

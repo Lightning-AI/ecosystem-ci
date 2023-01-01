@@ -15,8 +15,8 @@ target_repository:
 
 contact:
   slack:
-    # Ethan Harris
-    - USPB6E0LF
+    # Kushashwa Ravi Shrimali
+    - U030AS8BRCY
 
 env:
   # let's limit the installation only to Pytorch-Lightning
@@ -25,10 +25,10 @@ env:
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/Lightning-AI/lightning.git
-    checkout: release/pytorch
+    checkout: release/stable
   - name: torchmetrics
     HTTPS: https://github.com/Lightning-AI/metrics.git
-    checkout: release/latest
+    checkout: release/stable
     # install_extras: all
   - name: pytest-forked
 
