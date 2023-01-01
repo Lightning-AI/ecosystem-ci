@@ -9,6 +9,7 @@ target_repository:
   # copy some  test from the target repository
   copy_tests:
     - tests/test_lightning.py
+    - tests/utils.py
 
 contact:
   slack:
