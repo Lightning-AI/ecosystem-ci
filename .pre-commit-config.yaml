@@ -8,7 +8,7 @@ ci:
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.3.0
+    rev: v4.4.0
     hooks:
       - id: end-of-file-fixer
       - id: trailing-whitespace
@@ -21,25 +21,25 @@ repos:
       - id: detect-private-key
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.1.0
+    rev: v3.3.1
     hooks:
       - id: pyupgrade
-        args: [--py36-plus]
+        args: [--py38-plus]
         name: Upgrade code
 
   - repo: https://github.com/PyCQA/docformatter
-    rev: v1.5.0
+    rev: v1.5.1
     hooks:
       - id: docformatter
         args: [--in-place, --wrap-summaries=120, --wrap-descriptions=120]
 
   - repo: https://github.com/PyCQA/isort
-    rev: 5.10.1
+    rev: 5.11.4
     hooks:
       - id: isort
 
   - repo: https://github.com/psf/black
-    rev: 22.10.0
+    rev: 22.12.0
     hooks:
       - id: black
         name: Black code
@@ -59,6 +59,6 @@ repos:
       - id: yesqa
 
   - repo: https://github.com/PyCQA/flake8
-    rev: 5.0.4
+    rev: 6.0.0
     hooks:
       - id: flake8

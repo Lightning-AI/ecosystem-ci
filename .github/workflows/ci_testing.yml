@@ -15,6 +15,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   check-diff:
     runs-on: ubuntu-20.04
@@ -34,19 +38,17 @@ jobs:
         PR_NUMBER: "${{ github.event.pull_request.number }}"
       run: |
         pip install -q -r requirements.txt
-        python actions/assistant.py list_runtimes $PR_NUMBER
-        echo "::set-output name=runtimes::{include: $(python actions/assistant.py list_runtimes $PR_NUMBER 2>&1)}"
+        pr_runtimes=$(python actions/assistant.py list_runtimes $PR_NUMBER 2>&1)
+        echo $pr_runtimes
+        echo "runtimes={include: $pr_runtimes}" >> $GITHUB_OUTPUT
 
   pytest-project:
-
+    needs: check-diff
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.check-diff.outputs.matrix) }}
-    # Timeout: https://stackoverflow.com/a/59076067/4521646
     timeout-minutes: 35
-    needs: check-diff
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python }}
@@ -55,18 +57,17 @@ jobs:
         python-version: ${{ matrix.python }}
 
     - name: Cache period
-      run: echo "::set-output name=period::$(python -c 'import time ; days = time.time() / 60 / 60 / 24 ; print(int(days / 7))' 2>&1)"
+      run: |
+        offset=$(python -c "import time ; days = time.time() / 60 / 60 / 24 ; print(int(days / 7))")
+        echo "period=$offset" >> $GITHUB_OUTPUT
       id: times
 
-    # Note: This uses an internal pip API and may not always work
-    # https://github.com/actions/cache/blob/master/examples.md#multiple-oss-in-a-workflow
-    - name: Get pip cache
+    - name: Get pip cache dir
       id: pip-cache
-      run: |
-        python -c "from pip._internal.locations import USER_CACHE_DIR; print('::set-output name=dir::' + USER_CACHE_DIR)"
+      run: echo "::set-output name=dir::$(pip cache dir)"
 
     - name: Cache pip
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ${{ steps.pip-cache.outputs.dir }}
         key: $COMMON-td${{ steps.times.outputs.period }}-pip-$HASH_FILES
@@ -80,26 +81,23 @@ jobs:
         pip install -q -r requirements.txt
         python actions/assistant.py prepare_env --config_file=${{ matrix.config }} > prepare_env.sh
         cat prepare_env.sh
-      shell: bash
 
     - name: Some outputs
       run: |
-        echo "::set-output name=args::$(python actions/assistant.py specify_tests --config_file=${{ matrix.config }} 2>&1)"
-        echo "::set-output name=env::$(python actions/assistant.py dict_env --config_file=${{ matrix.config }} 2>&1)"
-        echo "::set-output name=contacts::$(python actions/assistant.py contacts --config_file=${{ matrix.config }} 2>&1)"
+        echo "args=$(python actions/assistant.py specify_tests --config_file=${{ matrix.config }})" >> $GITHUB_OUTPUT
+        echo "env=$(python actions/assistant.py dict_env --config_file=${{ matrix.config }})" >> $GITHUB_OUTPUT
+        echo "contacts=$(python actions/assistant.py contacts --config_file=${{ matrix.config }})" >> $GITHUB_OUTPUT
       id: extras
 
     - name: Prepare environment
       run: |
         bash prepare_env.sh
-      shell: bash
 
     - name: Show dir tree
       if: runner.os == 'Linux'
       run: |
         sudo apt install -q -y tree
         tree .
-      shell: bash
 
     - name: Testing
       env: ${{ fromJSON(steps.extras.outputs.env) }}

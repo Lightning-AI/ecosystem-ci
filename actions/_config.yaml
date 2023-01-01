@@ -11,7 +11,9 @@ target_repository:
   # OPTIONAL, define installing package extras
   install_extras: all
   # OPTIONAL, install additional requirements from a file
-  requirements_file: requirements.txt
+  # requirements_file: requirements.txt
+  # passing additional `pip install` flags
+  install_flags: "--use-pep517"
   # copy some  test from the target repository
   copy_tests:
     - integrations
@@ -30,17 +32,16 @@ before_install:
 
 # OPTIONAL, if any installation require some env. variables
 env:
-  HOROVOD_BUILD_ARCH_FLAGS: "-mfma"
-  # HOROVOD_WITHOUT_MXNET: 1
-  # HOROVOD_WITHOUT_TENSORFLOW: 1
+  PACKAGE_NAME: "pytorch"
 
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/Lightning-AI/lightning.git
-    checkout: release/1.5.x
+    checkout: release/stable
     # install_extras: all
   - name: Cython
     checkout: 0.29.24
+    install_flags: "--use-pep517"
 
 # OPTIONAL, running before installing your project
 # WARNING: this is custom for given OS, we do not manage any inter OS compatibility
