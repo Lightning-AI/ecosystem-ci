@@ -11,6 +11,8 @@ target_repository:
 contact:
   slack:
     - UR9FXE6QG  # borda
+    # Justus Schock
+    - U010XFPFETH
 
 dependencies:
   - name: torchmetrics

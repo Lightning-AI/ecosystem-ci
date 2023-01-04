@@ -12,6 +12,8 @@ contact:
   slack:
     # Nicki Skafte
     - USZ6EQ8A2
+    # Justus Schock
+    - U010XFPFETH
 
 env:
   # let's limit the installation only to Pytorch-Lightning

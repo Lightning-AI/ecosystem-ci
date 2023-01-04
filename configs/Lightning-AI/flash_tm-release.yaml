@@ -17,6 +17,8 @@ contact:
   slack:
     # Ethan Harris
     - USPB6E0LF
+    # Justus Schock
+    - U010XFPFETH
 
 dependencies:
   - name: torchmetrics
