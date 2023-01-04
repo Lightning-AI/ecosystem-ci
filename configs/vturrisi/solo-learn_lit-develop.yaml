@@ -16,11 +16,6 @@ env:
   # let's limit the installation only to Pytorch-Lightning
   PACKAGE_NAME: pytorch
 
-# OPTIONAL, running before installing your project
-# WARNING: this is custom for given OS, we do not manage any inter OS compatibility
-#before_install:
-#  - pip install Cython==3.56
-
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/Lightning-AI/lightning.git
@@ -33,11 +28,6 @@ dependencies:
     checkout: master
     # install_extras: all
   - name: h5py
-
-# OPTIONAL, running before installing your project
-# WARNING: this is custom for given OS, we do not manage any inter OS compatibility
-#before_test:
-#  - wget https://pl-flash-data.s3.amazonaws.com/titanic.zip
 
 testing:
   dirs:
