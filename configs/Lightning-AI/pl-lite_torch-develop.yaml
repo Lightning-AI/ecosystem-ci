@@ -12,6 +12,8 @@ contact:
   slack:
     # Adrian Wälchli
     - URC536Z0W
+    # Justus Schock
+    - U010XFPFETH
 
 env:
   # let's limit the installation only to Pytorch-Lightning

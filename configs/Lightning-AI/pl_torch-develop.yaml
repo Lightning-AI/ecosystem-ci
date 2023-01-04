@@ -12,6 +12,8 @@ contact:
   slack:
     # Carlos Mocholí
     - U019R2ZS25T
+    # Justus Schock
+    - U010XFPFETH
 
 env:
   # let's limit the installation only to Pytorch-Lightning
