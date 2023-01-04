@@ -15,8 +15,8 @@ target_repository:
 
 contact:
   slack:
-    # Kushashwa Ravi Shrimali
-    - U030AS8BRCY
+    # Ethan Harris
+    - USPB6E0LF
 
 env:
   # let's limit the installation only to Pytorch-Lightning

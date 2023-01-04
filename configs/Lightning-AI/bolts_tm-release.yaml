@@ -10,8 +10,7 @@ target_repository:
 
 contact:
   slack:
-    # Rohit Gupta
-    - U02EG9MDKUP
+    - UR9FXE6QG  # borda
 
 dependencies:
   - name: torchmetrics
