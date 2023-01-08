@@ -2,6 +2,8 @@ target_repository:
   HTTPS: https://github.com/manujosephv/pytorch_tabular.git
   checkout: main
   # OPTIONAL, define installing package extras
+  install_extras: extra
+  # OPTIONAL, define installing package extras
   requirements: requirements_testing.txt
   # copy some  test from the target repository
   copy_tests:
