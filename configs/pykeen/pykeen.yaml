@@ -4,8 +4,6 @@ target_repository:
   checkout: master
   # OPTIONAL, define installing package extras
   install_extras: lightning
-  # OPTIONAL, install additional requirements from a file
-  # requirements_file: requirements.txt
   # copy some  test from the target repository
   copy_tests:
     - tests/test_lightning.py
@@ -19,22 +17,12 @@ contact:
 
 dependencies:
   - name: pytorch-lightning
-    HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
+    HTTPS: https://github.com/Lightning-AI/lightning.git
     checkout: release/latest
-    # install_extras: all
-#  - name: Cython
-#    checkout: 0.29.24
-
-# OPTIONAL, running before installing your project
-# WARNING: this is custom for given OS, we do not manage any inter OS compatibility
-#before_test:
-#  - wget https://pl-flash-data.s3.amazonaws.com/titanic.zip
 
 testing:
   dirs:
     - tests/
-#  # OPTIONAL, additional pytest arguments
-#  pytest_args: --strict
 
 runtimes:
   - {os: "ubuntu-20.04", python-version: "3.10"}
