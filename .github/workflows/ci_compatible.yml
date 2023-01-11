@@ -66,12 +66,10 @@ jobs:
 
     - run: echo "${{ toJSON(matrix) }}" > project-results.json
     # todo: add job results
-    - run: python -c "print('config=${{ matrix.config }}'.replace('/', '.'))" >> $GITHUB_OUTPUT
-      id: clean
     - name: Upload pytest test results
       uses: actions/upload-artifact@v2
       with:
-        name: project-${{ github.sha }}-${{ steps.clean.outputs.config }}-${{ matrix.os }}-${{ matrix.python }}
+        name: project-${{ github.sha }}-${{ strategy.job-index }}
         path: project-results.json
 
     # report failure to Slack
@@ -102,12 +100,10 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: compatibility-${{ github.sha }}
-    - run: python -c "print('config=${{ matrix.config }}'.replace('/', '.'))" >> $GITHUB_OUTPUT
-      id: clean
     - name: Download 📥 project
       uses: actions/download-artifact@v3
       with:
-        name: project-${{ github.sha }}-${{ steps.clean.outputs.config }}-${{ matrix.os }}-${{ matrix.python }}
+        name: project-${{ github.sha }}-${{ strategy.job-index }}
 
     # TODO
     - run: |
