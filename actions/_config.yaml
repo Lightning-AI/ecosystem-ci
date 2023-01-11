@@ -37,6 +37,8 @@ dependencies:
     HTTPS: https://github.com/Lightning-AI/lightning.git
     checkout: release/stable
     # install_extras: all
+    install_flags:
+      - "--find-links https://download.pytorch.org/whl/cpu/torch_stable.html"
   - name: typing_extensions
     checkout: 4.1.1
     install_flags: "--use-pep517"
@@ -55,4 +57,4 @@ testing:
 runtimes:
   - {os: "ubuntu-20.04", python: "3.9"}
   - {os: "macOS-10.15", python: "3.7"}
-  - {os: "windows-2019", python: "3.8"}
+#  - {os: "windows-2019", python: "3.8"}  # SKIP, because of the wget
