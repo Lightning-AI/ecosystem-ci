@@ -46,7 +46,7 @@ jobs:
     - name: Upload placeholder
       uses: actions/upload-artifact@v2
       with:
-        name: compatibility
+        name: compatibility-${{ github.sha }}
         path: projects.json
 
   pytester:
@@ -66,10 +66,12 @@ jobs:
 
     - run: echo "${{ toJSON(matrix) }}" > project-results.json
     # todo: add job results
+    - run: python -c "print('config=${{ matrix.config }}'.replace('/', '.'))" >> $GITHUB_OUTPUT
+      id: clean
     - name: Upload pytest test results
       uses: actions/upload-artifact@v2
       with:
-        name: project-${{ matrix.config }}-${{ runner.os }}-${{ matrix.python }}
+        name: project-${{ github.sha }}-${{ steps.clean.outputs.config }}-${{ matrix.os }}-${{ matrix.python }}
         path: project-results.json
 
     # report failure to Slack
@@ -99,11 +101,13 @@ jobs:
     - name: Download 📥 summary
       uses: actions/download-artifact@v3
       with:
-        name: compatibility
+        name: compatibility-${{ github.sha }}
+    - run: python -c "print('config=${{ matrix.config }}'.replace('/', '.'))" >> $GITHUB_OUTPUT
+      id: clean
     - name: Download 📥 project
       uses: actions/download-artifact@v3
       with:
-        name: project-${{ matrix.config }}-${{ runner.os }}-${{ matrix.python }}
+        name: project-${{ github.sha }}-${{ steps.clean.outputs.config }}-${{ matrix.os }}-${{ matrix.python }}
 
     # TODO
     - run: |
@@ -112,7 +116,7 @@ jobs:
     - name: Upload pytest test results
       uses: actions/upload-artifact@v2
       with:
-        name: compatibility
+        name: compatibility-${{ github.sha }}
         path: projects.json
 
 
@@ -123,7 +127,7 @@ jobs:
     - name: Download 📥 summary
       uses: actions/download-artifact@v3
       with:
-        name: compatibility
+        name: compatibility-${{ github.sha }}
 
 
   messanger:
@@ -134,4 +138,4 @@ jobs:
     - name: Download 📥 summary
       uses: actions/download-artifact@v3
       with:
-        name: compatibility
+        name: compatibility-${{ github.sha }}
