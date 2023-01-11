@@ -26,7 +26,10 @@ def request_url(url: str, auth_token: Optional[str] = None) -> Optional[dict]:
 
 
 def _file_exits(fpath: str, ups: int = 3) -> str:
-    """Try to bump a few levels up in the dir tree. Needed for running from action folder."""
+    """Try to bump a few levels up in the dir tree.
+
+    Needed for running from action folder.
+    """
     for _ in range(ups):
         if os.path.isfile(fpath):
             return fpath
