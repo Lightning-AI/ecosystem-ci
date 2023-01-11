@@ -8,14 +8,11 @@ inputs:
   config:
     description: path to the particular config
     required: true
-  job-hash:
-    description: unique hash for this confing and env.
-    required: true
 
 runs:
   using: "composite"
   steps:
-  - name: Set up Python ${{ matrix.python }}
+  - name: Set up Python ${{ inputs.python }}
     uses: actions/setup-python@v2
     with:
       python-version: ${{ inputs.python }}
@@ -44,8 +41,8 @@ runs:
 
   - name: Setting outputs
     run: |
-      echo "PYTEST_ARGS=$(python actions/assistant.py specify_tests --config_file=${{ inputs.config }})" >> $GITHUB_ENV
-      echo "CONF_ENV=$(python actions/assistant.py dict_env --config_file=${{ inputs.config }})" >> $GITHUB_ENV
+      echo "_PYTEST_ARGS=$(python actions/assistant.py specify_tests --config_file=${{ inputs.config }})" >> $GITHUB_ENV
+      echo "_CONF_ENV=$(python actions/assistant.py dict_env --config_file=${{ inputs.config }})" >> $GITHUB_ENV
     shell: bash
 
   - name: Prepare environment
@@ -60,9 +57,9 @@ runs:
     shell: bash
 
   - name: Testing
-    env: ${{ fromJSON(env.CONF_ENV) }}
+    env: ${{ fromJSON(env._CONF_ENV) }}
     working-directory: _integrations
     run: |
-      coverage run -m pytest ${{ env.PYTEST_ARGS }} -v \
+      coverage run -m pytest ${{ env._PYTEST_ARGS }} -v \
         --junitxml="junit/test-project.xml"
     shell: bash
