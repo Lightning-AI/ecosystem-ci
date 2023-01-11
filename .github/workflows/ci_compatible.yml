@@ -92,10 +92,12 @@ jobs:
   collector:
     runs-on: ubuntu-latest
     needs: [generator, pytester]
+    if: ${{ always() }}
     strategy:
       max-parallel: 1  # run sequential to prevent download/upload collisions
       matrix: ${{ fromJSON(needs.generator.outputs.matrix) }}
     steps:
+    - run: echo "${{ needs.pytester.result }}"
     - name: Download 📥 summary
       uses: actions/download-artifact@v3
       with:
