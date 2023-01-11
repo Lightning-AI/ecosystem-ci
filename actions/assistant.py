@@ -25,6 +25,15 @@ def request_url(url: str, auth_token: Optional[str] = None) -> Optional[dict]:
     return json.loads(req.content.decode(req.encoding))
 
 
+def _file_exits(fpath: str, ups: int = 3) -> str:
+    """Try to bump a few levels up in the dir tree. Needed for running from action folder."""
+    for _ in range(ups):
+        if os.path.isfile(fpath):
+            return fpath
+        fpath = os.path.join("..", fpath)
+    return ""
+
+
 class AssistantCLI:
     _BASH_SCRIPT = ("set -e",)
     _FIELD_TARGET_REPO = "target_repository"
@@ -45,7 +54,7 @@ class AssistantCLI:
         data = request_url(url, auth_token)
         if not data:
             return [] if as_list else ""
-        files = [d["filename"] for d in data if os.path.isfile(d["filename"])]
+        files = [d["filename"] for d in data if _file_exits(d["filename"])]
         configs = [f.replace("configs/", "") for f in files if f.startswith("configs/")]
         return configs if as_list else "|".join(configs)
 
@@ -64,6 +73,9 @@ class AssistantCLI:
             configs = AssistantCLI.changed_configs(pr, auth_token)
         else:
             configs = AssistantCLI.find_all_configs()
+        if not configs:
+            # setting some default to prevent empty matrix
+            configs = ["../actions/_config.yaml"]
         runtimes = []
         for cfg in configs:
             cfg_runtimes = AssistantCLI._load_config(cfg).get("runtimes", {})
@@ -76,8 +88,8 @@ class AssistantCLI:
     def _load_config(config_file: str = "config.yaml", strict: bool = True) -> dict:
         if not os.path.isfile(config_file):
             config_file = os.path.join("configs", config_file)
-        assert os.path.isfile(config_file), f"Missing config file: {config_file}"
-        with open(config_file) as fp:
+        assert _file_exits(config_file), f"Missing config file: {config_file}"
+        with open(_file_exits(config_file)) as fp:
             config = yaml.safe_load(fp)
         if strict:
             miss = [fd for fd in AssistantCLI._MANDATORY_FIELDS if fd not in config]
