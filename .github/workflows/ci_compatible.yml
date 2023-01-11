@@ -42,6 +42,13 @@ jobs:
         echo $pr_runtimes
         echo "runtimes={include: $pr_runtimes}" >> $GITHUB_OUTPUT
 
+    - run: touch projects.json
+    - name: Upload placeholder
+      uses: actions/upload-artifact@v2
+      with:
+        name: compatibility
+        path: projects.json
+
   pytester:
     needs: generator
     runs-on: ${{ matrix.os }}
@@ -56,66 +63,18 @@ jobs:
         echo "${{ hashFiles('mtx.log') }}" > hash.log
         cat hash.log
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python }}
-      uses: actions/setup-python@v2
+    - name: Testing the project
+      uses: ./.github/actions/pytester
       with:
-        python-version: ${{ matrix.python }}
-
-    - name: Cache period
-      run: |
-        offset=$(python -c "import time ; days = time.time() / 60 / 60 / 24 ; print(int(days / 7))")
-        echo "period=$offset" >> $GITHUB_OUTPUT
-      id: times
-
-    - name: Get pip cache dir
-      id: pip-cache
-      run: echo "::set-output name=dir::$(pip cache dir)"
-
-    - name: Cache pip
-      uses: actions/cache@v3
-      with:
-        path: ${{ steps.pip-cache.outputs.dir }}
-        key: $COMMON-td${{ steps.times.outputs.period }}-pip-$HASH_FILES
-        restore-keys: $COMMON-td${{ steps.times.outputs.period }}-pip-
-      env:
-        COMMON: ${{ runner.os }}-py${{ matrix.python }}
-        HASH_FILES: ${{ hashFiles('requirements.txt') }}-${{ matrix.config }}
-
-    - name: Create script
-      run: |
-        pip install -q -r requirements.txt
-        python actions/assistant.py prepare_env --config_file=${{ matrix.config }} > prepare_env.sh
-        cat prepare_env.sh
-
-    - name: Some outputs
-      run: |
-        echo "args=$(python actions/assistant.py specify_tests --config_file=${{ matrix.config }})" >> $GITHUB_OUTPUT
-        echo "env=$(python actions/assistant.py dict_env --config_file=${{ matrix.config }})" >> $GITHUB_OUTPUT
-        echo "contacts=$(python actions/assistant.py contacts --config_file=${{ matrix.config }})" >> $GITHUB_OUTPUT
-      id: extras
-
-    - name: Prepare environment
-      run: |
-        bash prepare_env.sh
-
-    - name: Show dir tree
-      if: runner.os == 'Linux'
-      run: |
-        sudo apt install -q -y tree
-        tree .
-
-    - name: Testing
-      env: ${{ fromJSON(steps.extras.outputs.env) }}
-      working-directory: _integrations
-      run: |
-        coverage run -m pytest ${{ steps.extras.outputs.args }} -v --junitxml="junit/test-project-${{ matrix.config }}-${{ runner.os }}-${{ matrix.python }}.xml"
+        python: ${{ matrix.python }}
+        config: ${{ matrix.config }}
+        job-hash: ${{ matrix.config }}-${{ runner.os }}-${{ matrix.python }}
 
     - name: Upload pytest test results
       uses: actions/upload-artifact@v2
       with:
-        name: pytest-results-${{ runner.os }}-${{ matrix.python }}
+        name: project-${{ runner.os }}-${{ matrix.python }}
         path: junit/test-results-${{ runner.os }}-${{ matrix.python }}.xml
-      if: failure()
 
     # report failure to Slack
     # https://www.ravsam.in/blog/send-slack-notification-when-github-actions-fails/
@@ -141,16 +100,20 @@ jobs:
       max-parallel: 1  # run sequential to prevent download/upload collisions
       matrix: ${{ fromJSON(needs.generator.outputs.matrix) }}
     steps:
-    - name: Download 📥 artifact
+    - name: Download 📥 summary
       uses: actions/download-artifact@v3
       with:
-        name: pypi-packages-${{ github.sha }}
-        path: dist
+        name: compatibility
+    - name: Download 📥 project
+      uses: actions/download-artifact@v3
+      with:
+        name: project-${{ matrix.os }}-${{ matrix.python }}
+        path: _project
     - name: Upload pytest test results
       uses: actions/upload-artifact@v2
       with:
-        name: pytest-results-${{ runner.os }}-${{ matrix.python }}
-        path: junit/test-results-${{ runner.os }}-${{ matrix.python }}.xml
+        name: compatibility
+        path: projects.json
 
 
   director:

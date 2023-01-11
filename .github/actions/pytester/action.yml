@@ -1,0 +1,68 @@
+name: Project testing
+description: running the pytest on given project
+
+inputs:
+  python:
+    description: python version to run project on...
+    required: true
+  config:
+    description: path to the particular config
+    required: true
+  job-hash:
+    description: unique hash for this confing and env.
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+  - name: Set up Python ${{ matrix.python }}
+    uses: actions/setup-python@v2
+    with:
+      python-version: ${{ inputs.python }}
+
+  - name: Get pip cache dir
+    id: pip-cache
+    run: echo "::set-output name=dir::$(pip cache dir)"
+    shell: bash
+
+  - name: Cache pip
+    uses: actions/cache@v3
+    with:
+      path: ${{ steps.pip-cache.outputs.dir }}
+      key: $COMMON-pip-$HASH_FILES
+      restore-keys: $COMMON-pip-
+    env:
+      COMMON: ${{ runner.os }}-py${{ inputs.python }}
+      HASH_FILES: ${{ hashFiles('requirements.txt') }}
+
+  - name: Create script
+    run: |
+      pip install -q -r requirements.txt
+      python actions/assistant.py prepare_env --config_file=${{ inputs.config }} > prepare_env.sh
+      cat prepare_env.sh
+    shell: bash
+
+  - name: Setting outputs
+    run: |
+      echo "PYTEST_ARGS=$(python actions/assistant.py specify_tests --config_file=${{ inputs.config }})" >> $GITHUB_ENV
+      echo "CONF_ENV=$(python actions/assistant.py dict_env --config_file=${{ inputs.config }})" >> $GITHUB_ENV
+    shell: bash
+
+  - name: Prepare environment
+    run: bash prepare_env.sh
+    shell: bash
+
+  - name: Show dir tree
+    if: runner.os == 'Linux'
+    run: |
+      sudo apt install -q -y tree
+      tree .
+    shell: bash
+
+  - name: Testing
+    env: ${{ fromJSON(env.CONF_ENV) }}
+    working-directory: _integrations
+    run: |
+      coverage run -m pytest ${{ env.PYTEST_ARGS }} -v \
+        --junitxml="junit/test-project.xml"
+    shell: bash
