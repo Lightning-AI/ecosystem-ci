@@ -16,9 +16,7 @@ target_repository:
   install_flags: "--use-pep517"
   # copy some  test from the target repository
   copy_tests:
-    - integrations
-    - tests/__init__.py
-    - tests/helpers
+    - tests/integrations
 
 contact:
   slack:
@@ -50,7 +48,7 @@ before_test:
 
 testing:
   dirs:
-    - integrations
+    - tests
   # OPTIONAL, additional pytest arguments
   pytest_args: --strict
 
