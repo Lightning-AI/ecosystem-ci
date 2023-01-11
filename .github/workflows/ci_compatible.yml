@@ -21,7 +21,7 @@ defaults:
 
 jobs:
   generator:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     # Map a step output to a job output
     outputs:

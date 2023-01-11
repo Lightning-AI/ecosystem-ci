@@ -28,7 +28,7 @@ contact:
 # OPTIONAL, running before installing your project
 # WARNING: this is custom for given OS, we do not manage any inter OS compatibility
 before_install:
-  - pip install Cython==3.56
+  - pip install "Cython>=0.29"
 
 # OPTIONAL, if any installation require some env. variables
 env:
@@ -39,8 +39,8 @@ dependencies:
     HTTPS: https://github.com/Lightning-AI/lightning.git
     checkout: release/stable
     # install_extras: all
-  - name: Cython
-    checkout: 0.29.24
+  - name: typing_extensions
+    checkout: 4.1.1
     install_flags: "--use-pep517"
 
 # OPTIONAL, running before installing your project
