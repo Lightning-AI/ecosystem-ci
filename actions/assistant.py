@@ -187,18 +187,23 @@ class AssistantCLI:
             assert isinstance(repo["checkout"], str)
             cmds.append(f"git checkout {repo['checkout']}")
 
+        cmds += AssistantCLI.before_commands(repo, stage="install", as_append=True)
+
         if "requirements_file" in repo:
             reqs = repo["requirements_file"]
             reqs = [reqs] if isinstance(reqs, str) else reqs
             args = [f"-r {req}" for req in reqs] + ["--quiet", "--upgrade"]
             cmds.append("pip install " + " ".join(args))
 
-        pip_install = "."
-        if "install_extras" in repo:
-            pip_install += f"[{AssistantCLI._extras(repo['install_extras'])}]"
+        if "install_command" in repo:
+            cmds.append(repo["install_command"])
+        else:
+            pip_install = "."
+            if "install_extras" in repo:
+                pip_install += f"[{AssistantCLI._extras(repo['install_extras'])}]"
 
-        flags = AssistantCLI._get_flags(repo)
-        cmds.append("pip install " + " ".join([pip_install] + flags))
+            flags = AssistantCLI._get_flags(repo)
+            cmds.append("pip install " + " ".join([pip_install] + flags))
         cmds.append("pip list")
         cmds.append("cd ..")
 
@@ -226,10 +231,10 @@ class AssistantCLI:
 
     @staticmethod
     def before_commands(
-        config_file: str = "config.yaml", stage: str = "install", as_append: bool = False
+        config_file: Union[str, dict] = "config.yaml", stage: str = "install", as_append: bool = False
     ) -> Union[str, List[str]]:
         """Parse commands for eventual custom execution before install or before testing."""
-        config = AssistantCLI._load_config(config_file)
+        config = AssistantCLI._load_config(config_file) if isinstance(config_file, str) else config_file
         cmds = config.get(f"before_{stage}", [])
         if not as_append:
             cmds = os.linesep.join(list(AssistantCLI._BASH_SCRIPT) + cmds)
@@ -277,7 +282,8 @@ class AssistantCLI:
                 is_file = os.path.splitext(test)[-1] != ""
                 copy_flag = "-r" if not is_file else ""
                 script.append(f'cp {copy_flag} "{repo_test}" "{os.path.join(AssistantCLI._FOLDER_TESTS, test)}"')
-        script.append(f'rm -rf "{repo_name}"')
+        if repo.get("remove_dir", True):
+            script.append(f'rm -rf "{repo_name}"')
 
         reqs = config.get("dependencies", [])
         for req in reqs:
