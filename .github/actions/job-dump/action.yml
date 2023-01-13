@@ -10,19 +10,11 @@ runs:
   using: "composite"
   steps:
 
-  - name: Dump job's meta
-    run: |
-      echo "${{ toJSON(job) }}" > job.json
-      echo "${{ toJSON(matrix) }}" > project-results.json
-      cat project-results.json
-    shell: bash
-
   - name: Dump details
     run: |
       import json
-      with open("project-results.json") as fp:
-        data = json.load(fp)
-      data.update({"status": "${{ job.status }}" })
+      data = json.load('''${{ toJSON(matrix) }}''')
+      data.update('''${{ toJSON(job) }}''')
       with open("project-results.json", "w") as fp:
         json.dump(data, fp)
     shell: python
