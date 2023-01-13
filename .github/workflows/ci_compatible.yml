@@ -52,7 +52,6 @@ jobs:
   pytester:
     needs: generator
     runs-on: ${{ matrix.os }}
-    continue-on-error: true
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.generator.outputs.matrix) }}
@@ -96,6 +95,7 @@ jobs:
   collector:
     runs-on: ubuntu-latest
     needs: [generator, pytester]
+    if: always()
     strategy:
       max-parallel: 1  # run sequential to prevent download/upload collisions
       matrix: ${{ fromJSON(needs.generator.outputs.matrix) }}
@@ -121,7 +121,7 @@ jobs:
         path: projects.json
 
 
-  director:
+  watcher:
     runs-on: ubuntu-latest
     needs: collector
     steps:
@@ -133,7 +133,7 @@ jobs:
 
   messanger:
     runs-on: ubuntu-latest
-    needs: director
+    needs: collector
     if: github.event_name == 'schedule'
     steps:
     - name: Download 📥 summary
