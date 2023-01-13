@@ -40,9 +40,10 @@ runs:
     shell: bash
 
   - name: Setting outputs
+    id: meta
     run: |
-      echo "_PYTEST_ARGS=$(python actions/assistant.py specify_tests --config_file=${{ inputs.config }})" >> $GITHUB_ENV
-      echo "_CONF_ENV=$(python actions/assistant.py dict_env --config_file=${{ inputs.config }})" >> $GITHUB_ENV
+      echo "args=$(python actions/assistant.py specify_tests --config_file=${{ inputs.config }})" >> $GITHUB_ENV
+      echo "env=$(python actions/assistant.py dict_env --config_file=${{ inputs.config }})" >> $GITHUB_ENV
     shell: bash
 
   - name: Prepare environment
@@ -57,9 +58,9 @@ runs:
     shell: bash
 
   - name: Testing
-    env: ${{ fromJSON(env._CONF_ENV) }}
+    env: ${{ fromJSON(steps.meta.outputs.env) }}
     working-directory: _integrations
     run: |
-      coverage run -m pytest ${{ env._PYTEST_ARGS }} -v \
+      coverage run -m pytest ${{ steps.meta.outputs.args }} -v \
         --junitxml="junit/test-project.xml"
     shell: bash

@@ -58,22 +58,18 @@ jobs:
     timeout-minutes: 35
     steps:
     - uses: actions/checkout@v2
+
     - name: Testing the project
       uses: ./.github/actions/pytester
       with:
         python: ${{ matrix.python }}
         config: ${{ matrix.config }}
 
-    - run: echo "${{ toJSON(job) }}"
-    - run: echo "${{ toJSON(matrix) }}" > project-results.json
-    - run: echo "${{ github.job }}"  # The job_id of the current job.
-    - run: echo "${{ job.status }}"
-    # todo: add job results
-    - name: Upload pytest test results
-      uses: actions/upload-artifact@v2
+    - name: Dumping the job's detail
+      if: always()
+      uses: ./.github/actions/job-dump
       with:
-        name: project-${{ github.sha }}-${{ strategy.job-index }}
-        path: project-results.json
+        artifact-name: project-${{ github.sha }}-${{ strategy.job-index }}
 
     # report failure to Slack
     # https://www.ravsam.in/blog/send-slack-notification-when-github-actions-fails/
@@ -123,7 +119,7 @@ jobs:
 
   watcher:
     runs-on: ubuntu-latest
-    needs: collector
+    needs: pytester
     steps:
     - name: Download 📥 summary
       uses: actions/download-artifact@v3

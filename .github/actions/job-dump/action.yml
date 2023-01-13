@@ -1,0 +1,37 @@
+name: Dump job details
+description: save and upload job meta and status
+
+inputs:
+  artifact-name:
+    description: unique hash or index
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+
+  - name: Dump job's meta
+    run: |
+      echo "${{ toJSON(job) }}" > job.json
+      echo "${{ toJSON(matrix) }}" > project-results.json
+    shell: bash
+
+  - name: Dump details
+    run:
+      import json
+      with open("project-results.json") as fp:
+        data = json.load(fp)
+      data.update({"status": "${{ job.status }}" })
+      with open("project-results.json", "w") as fp:
+        json.dump(data, fp)
+    shell: python
+
+  - name: Show job's meta
+    run: cat project-results.json
+    shell: bash
+
+  - name: Upload pytest test results
+    uses: actions/upload-artifact@v2
+    with:
+      name: ${{ inputs.artifact-name }}
+      path: project-results.json
