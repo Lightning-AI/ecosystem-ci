@@ -13,7 +13,7 @@ runs:
   - name: Dump details
     run: |
       import json
-      data = json.load('''${{ toJSON(matrix) }}''')
+      data = json.loads('''${{ toJSON(matrix) }}''')
       data.update('''${{ toJSON(job) }}''')
       with open("project-results.json", "w") as fp:
         json.dump(data, fp)
