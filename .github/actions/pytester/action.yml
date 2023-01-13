@@ -42,8 +42,8 @@ runs:
   - name: Setting outputs
     id: meta
     run: |
-      echo "args=$(python actions/assistant.py specify_tests --config_file=${{ inputs.config }})" >> $GITHUB_ENV
-      echo "env=$(python actions/assistant.py dict_env --config_file=${{ inputs.config }})" >> $GITHUB_ENV
+      echo "args=$(python actions/assistant.py specify_tests --config_file=${{ inputs.config }})" >> $GITHUB_OUTPUT
+      echo "env=$(python actions/assistant.py dict_env --config_file=${{ inputs.config }})" >> $GITHUB_OUTPUT
     shell: bash
 
   - name: Prepare environment

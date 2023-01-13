@@ -17,7 +17,7 @@ runs:
     shell: bash
 
   - name: Dump details
-    run:
+    run: |
       import json
       with open("project-results.json") as fp:
         data = json.load(fp)
