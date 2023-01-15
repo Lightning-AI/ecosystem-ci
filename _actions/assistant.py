@@ -2,9 +2,11 @@ import glob
 import json
 import os
 import traceback
+from datetime import datetime
 from typing import Dict, List, Optional, Sequence, Union
 
 import fire
+import pandas as pd
 import requests
 import yaml
 
@@ -330,8 +332,6 @@ class AssistantCLI:
 
         Debugging in: https://app.slack.com/block-kit-builder
         """
-        import pandas as pd
-
         assert os.path.isfile(fpath_results), f"missing results data / JSON: {fpath_results}"
         assert os.path.isdir(dpath_configs), f"missing config folder: {dpath_configs}"
 
@@ -361,7 +361,8 @@ class AssistantCLI:
                     "fields": fields,
                 }
             )
-        return json.dumps(blocks)
+        now_str = datetime.now().strftime("%Y-%m-%d")
+        return json.dumps({"text": f"GitHub Action: compatibility result from {now_str}", "blocks": blocks})
 
 
 if __name__ == "__main__":

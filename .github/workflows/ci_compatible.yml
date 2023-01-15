@@ -38,7 +38,7 @@ jobs:
         PR_NUMBER: "${{ github.event.pull_request.number }}"
       run: |
         pip install -q -r requirements.txt
-        pr_runtimes=$(python _actions/assistant.py list_runtimes $PR_NUMBER 2>&1)
+        pr_runtimes=$(python _actions/assistant.py list_runtimes $PR_NUMBER)
         echo $pr_runtimes
         echo "runtimes={include: $pr_runtimes}" >> $GITHUB_OUTPUT
 
@@ -138,49 +138,27 @@ jobs:
     # always and success is need for running if eventually pytester failed
     if: always() && needs.collector.result == 'success' #&& (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')  # FIXME
     steps:
+    - uses: actions/checkout@v2
     - name: Download 📥 summary
       uses: actions/download-artifact@v3
       with:
         name: compatibility-${{ github.sha }}
     - run: cat projects.json
 
+    - name: Prepare Slack payload
+      run: |
+        pip install -q -r requirements.txt
+        payload=$(python _actions/assistant.py slack_message projects.json)
+        echo "$payload" > payload-slack-content.json
+        cat payload-slack-content.json
+
     - name: Post to a Slack channel
-      # TODO
       uses: slackapi/slack-github-action@v1.23.0
       with:
-        # Slack channel id, channel name, or user id to post message.
-        # See also: https://api.slack.com/methods/chat.postMessage#channels
-        channel-id: lightning-gallery-alerts
+        # channel-id: C02NJMSLFJR  # alerts-ecosystem-ci
         # For posting a rich message using Block Kit - https://app.slack.com/block-kit-builder
-        payload: |
-          {
-            "blocks": [
-              {
-                "type": "header",
-                "text": {
-                  "type": "plain_text",
-                  "text": "[Prod] ${{ matrix.app }} Clone And Run Test Failed ❌⛔",
-                  "emoji": true
-                }
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "Check logs or download the video artifacts from workflow <https://github.com/...>"
-                }
-              },
-              {
-                "type": "divider"
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "TODO: tag owners to notify them of the failure"
-                }
-              }
-            ]
-          }
+        payload-file-path: "./payload-slack-content.json"
       env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        # SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
