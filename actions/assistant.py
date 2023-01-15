@@ -45,6 +45,7 @@ class AssistantCLI:
     _MANDATORY_FIELDS = (_FIELD_TARGET_REPO, _FIELD_REQUIRE)
     _FOLDER_TESTS = "_integrations"
     _PATH_CONFIGS = os.path.join(_PATH_ROOT, "configs")
+    _STATUS_SIGN = dict(success=":white_check_mark:", failure=":x:", cancelled=":no_entry_sign:")
 
     @staticmethod
     def folder_local_tests() -> str:
@@ -325,6 +326,10 @@ class AssistantCLI:
 
     @staticmethod
     def slack_message(fpath_results: str = "projects.json", dpath_configs: str = "configs") -> str:
+        """Create Slack payload message from compatibility results.
+
+        Debugging in: https://app.slack.com/block-kit-builder
+        """
         import pandas as pd
 
         assert os.path.isfile(fpath_results), f"missing results data / JSON: {fpath_results}"
@@ -333,8 +338,30 @@ class AssistantCLI:
         with open(fpath_results) as fp:
             data = json.load(fp)
         df = pd.DataFrame(data)
-        df["group"] = df["config"].apply(lambda p: os.path.dirname(p))
 
+        blocks = []
+        for cfg, dfg in df.groupby("config"):
+            failed = any(s != "success" for s in dfg["status"])
+            cc = AssistantCLI.contacts(os.path.join(dpath_configs, cfg)) if failed else ""
+            dfg["sign"] = dfg["status"].map(AssistantCLI._STATUS_SIGN)
+            fields = [
+                {
+                    "type": "mrkdwn",
+                    "text": f"<{r['html_url']}|os:{r['os']}; py:{r['python']}> | {r['sign']}",
+                }
+                for _, r in dfg.iterrows()
+            ]
+            blocks.append(
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": f"*{cfg}*: compatibility outcomes {':interrobang:' if failed else ':zap:'}: {cc}",
+                    },
+                    "fields": fields,
+                }
+            )
+        return json.dumps(blocks)
 
 
 if __name__ == "__main__":

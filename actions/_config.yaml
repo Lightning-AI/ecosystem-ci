@@ -20,7 +20,7 @@ target_repository:
 
 contact:
   slack:
-    - borda
+    - UR9FXE6QG  # borda
   email: []
 
 # OPTIONAL, running before installing your project
