@@ -1,23 +1,14 @@
 # These owners will be the default owners for everything in the repo. Unless a later match takes precedence,
 # @global-owner1 and @global-owner2 will be requested for review when someone opens a pull request.
-* @borda
+* @borda @lantiga @akihironitta
 
 # owners
 /.github/CODEOWNERS   @Borda
 # main
-/README.md            @borda @tchaton
+/README.md            @borda @lantiga
 
 # CI/CD
-/.github/workflows/   @borda
-/.azure/              @borda
+/.github/workflows/   @borda @akihironitta
+/.azure/              @borda @akihironitta
 # configs in root
 /*.yml                @borda
-
-# Lightning-AI
-/configs/Lightning-AI/metrics*  @borda
-/configs/Lightning-AI/flash*    @ethanwharris
-/configs/Lightning-AI/lightning_transformers*    @seannaren
-/configs/SeanNaren/*    @seannaren
-
-# neptune-ai
-/configs/neptune-ai/*  @AleksanderWWW @aniezurawski @shnela @Raalsky @pitercl @twolodzko @PatrykGala
