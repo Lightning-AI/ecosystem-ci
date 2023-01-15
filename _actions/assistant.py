@@ -79,7 +79,7 @@ class AssistantCLI:
             configs = AssistantCLI.find_all_configs()
         if not configs:
             # setting some default to prevent empty matrix
-            configs = ["../actions/_config.yaml"]
+            configs = ["../_actions/_config.yaml"]
         runtimes = []
         for cfg in configs:
             cfg_runtimes = AssistantCLI._load_config(cfg).get("runtimes", {})

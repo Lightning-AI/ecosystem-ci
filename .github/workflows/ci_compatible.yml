@@ -38,7 +38,7 @@ jobs:
         PR_NUMBER: "${{ github.event.pull_request.number }}"
       run: |
         pip install -q -r requirements.txt
-        pr_runtimes=$(python actions/assistant.py list_runtimes $PR_NUMBER 2>&1)
+        pr_runtimes=$(python _actions/assistant.py list_runtimes $PR_NUMBER 2>&1)
         echo $pr_runtimes
         echo "runtimes={include: $pr_runtimes}" >> $GITHUB_OUTPUT
 
