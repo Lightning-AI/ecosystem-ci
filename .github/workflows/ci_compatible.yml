@@ -143,3 +143,44 @@ jobs:
       with:
         name: compatibility-${{ github.sha }}
     - run: cat projects.json
+
+    - name: Post to a Slack channel
+      # TODO
+      uses: slackapi/slack-github-action@v1.23.0
+      with:
+        # Slack channel id, channel name, or user id to post message.
+        # See also: https://api.slack.com/methods/chat.postMessage#channels
+        channel-id: lightning-gallery-alerts
+        # For posting a rich message using Block Kit - https://app.slack.com/block-kit-builder
+        payload: |
+          {
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": "[Prod] ${{ matrix.app }} Clone And Run Test Failed ❌⛔",
+                  "emoji": true
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "Check logs or download the video artifacts from workflow <https://github.com/...>"
+                }
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "TODO: tag owners to notify them of the failure"
+                }
+              }
+            ]
+          }
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

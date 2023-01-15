@@ -10,11 +10,19 @@ runs:
   using: "composite"
   steps:
 
+  - name: Get Current Job Log URL
+    uses: Tiryoh/gha-jobid-action@v0
+    id: jobid
+    with:
+      github_token: ${{ secrets.GITHUB_TOKEN }}
+      job_name: ${{ github.job }}
+
   - name: Dump details
     run: |
       import json
       data = json.loads('''${{ toJSON(matrix) }}''')
       data.update(json.loads('''${{ toJSON(job) }}'''))
+      data.update(json.loads('''${{ toJSON(steps.jobid.outputs) }}'''))
       with open("project-results.json", "w") as fp:
         json.dump(data, fp)
     shell: python
