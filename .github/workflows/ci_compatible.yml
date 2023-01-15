@@ -71,6 +71,7 @@ jobs:
       uses: ./.github/actions/job-dump
       with:
         artifact-name: project-${{ github.sha }}-${{ strategy.job-index }}
+        gh-token: ${{ secrets.GITHUB_TOKEN }}
 
     # report failure to Slack
     # https://www.ravsam.in/blog/send-slack-notification-when-github-actions-fails/

@@ -5,6 +5,9 @@ inputs:
   artifact-name:
     description: unique hash or index
     required: true
+  gh-token:
+    description: generated GH token
+    required: true
 
 runs:
   using: "composite"
@@ -14,7 +17,7 @@ runs:
     uses: Tiryoh/gha-jobid-action@v0
     id: jobid
     with:
-      github_token: ${{ secrets.GITHUB_TOKEN }}
+      github_token: ${{ inputs.gh-token }}
       job_name: ${{ github.job }}
 
   - name: Dump details
