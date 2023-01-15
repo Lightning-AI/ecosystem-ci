@@ -323,6 +323,19 @@ class AssistantCLI:
         args = AssistantCLI._pytest_args(testing.get("pytest_args"))
         return f"{dirs} {args}"
 
+    @staticmethod
+    def slack_message(fpath_results: str = "projects.json", dpath_configs: str = "configs") -> str:
+        import pandas as pd
+
+        assert os.path.isfile(fpath_results), f"missing results data / JSON: {fpath_results}"
+        assert os.path.isdir(dpath_configs), f"missing config folder: {dpath_configs}"
+
+        with open(fpath_results) as fp:
+            data = json.load(fp)
+        df = pd.DataFrame(data)
+        df["group"] = df["config"].apply(lambda p: os.path.dirname(p))
+
+
 
 if __name__ == "__main__":
     fire.Fire(AssistantCLI)

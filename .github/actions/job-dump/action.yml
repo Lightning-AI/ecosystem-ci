@@ -18,19 +18,19 @@ runs:
       data = json.loads('''${{ toJSON(matrix) }}''')
       data.update(json.loads('''${{ toJSON(job) }}'''))
       gh_job = "GH_JOB_${{ strategy.job-index }}"
-      gh_job_vars = [(n, v) for n, v in os.environ.items() if not n.startswith(gh_job)]
+      gh_job_vars = [(n, v) for n, v in os.environ.items() if n.startswith(gh_job)]
       assert gh_job_vars, f"missing env for: {gh_job}"
       data.update({n.replace(f"{gh_job}_", "").lower(): v for n, v in gh_job_vars})
-      with open("project-results.json", "w") as fp:
+      with open("meta.json", "w") as fp:
         json.dump(data, fp)
     shell: python
 
   - name: Show job's meta
-    run: cat project-results.json
+    run: cat meta.json
     shell: bash
 
   - name: Upload pytest test results
     uses: actions/upload-artifact@v2
     with:
       name: ${{ inputs.artifact-name }}
-      path: project-results.json
+      path: meta.json

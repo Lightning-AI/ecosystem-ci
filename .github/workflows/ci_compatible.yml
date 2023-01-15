@@ -112,7 +112,7 @@ jobs:
         import json
         with open("projects.json") as fp:
           data = json.load(fp)
-        with open("project-results.json") as fp:
+        with open("meta.json") as fp:
           data.append(json.load(fp))
         with open("projects.json", "w") as fp:
           json.dump(data, fp)
