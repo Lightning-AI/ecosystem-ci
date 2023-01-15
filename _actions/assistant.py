@@ -327,7 +327,7 @@ class AssistantCLI:
         return f"{dirs} {args}"
 
     @staticmethod
-    def slack_message(fpath_results: str = "projects.json", dpath_configs: str = "configs") -> str:
+    def slack_payload(fpath_results: str = "projects.json", dpath_configs: str = "configs") -> str:
         """Create Slack payload message from compatibility results.
 
         Debugging in: https://app.slack.com/block-kit-builder

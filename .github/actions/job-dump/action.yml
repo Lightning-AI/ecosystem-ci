@@ -10,6 +10,7 @@ runs:
   using: "composite"
   steps:
 
+  # TODO: this seems to mix jobs from multiple jobs not only this strategy
   - uses: ReeganExE/github-action-job-id@v1.0
 
   - name: Dump details
@@ -17,10 +18,11 @@ runs:
       import os, json
       data = json.loads('''${{ toJSON(matrix) }}''')
       data.update(json.loads('''${{ toJSON(job) }}'''))
-      gh_job = "GH_JOB_${{ strategy.job-index }}"
-      gh_job_vars = [(n, v) for n, v in os.environ.items() if n.startswith(gh_job)]
-      assert gh_job_vars, f"missing env for: {gh_job}"
-      data.update({n.replace(f"{gh_job}_", "").lower(): v for n, v in gh_job_vars})
+      gh_job_idx = ${{ strategy.job-index }} + 1  # offset is the generator job
+      gh_job_name = f"GH_JOB_{gh_job_idx}"
+      gh_job_vars = [(n, v) for n, v in os.environ.items() if n.startswith(gh_job_name)]
+      assert gh_job_vars, f"missing env for: {gh_job_name}"
+      data.update({n.replace(f"{gh_job_name}_", "").lower(): v for n, v in gh_job_vars})
       with open("meta.json", "w") as fp:
         json.dump(data, fp)
     shell: python
