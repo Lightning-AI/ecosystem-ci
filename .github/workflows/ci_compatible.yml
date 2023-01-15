@@ -120,7 +120,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: collector
     # always and success is need for running if eventually pytester failed
-    if: always() && needs.collector.result == 'success' && contains(fromJSON('["schedule", "workflow_dispatch"]'), github.event_name)
+    if: always() && needs.collector.result == 'success'
     steps:
     - uses: actions/checkout@v2
     - name: Download 📥 summary
@@ -137,6 +137,7 @@ jobs:
         cat payload-slack-content.json
 
     - name: Post to a Slack channel
+      if: contains(fromJSON('["schedule", "workflow_dispatch"]'), github.event_name)
       uses: slackapi/slack-github-action@v1.23.0
       with:
         # channel-id: C02NJMSLFJR  # alerts-ecosystem-ci
