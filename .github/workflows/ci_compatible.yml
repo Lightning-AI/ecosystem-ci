@@ -147,3 +147,27 @@ jobs:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
         # SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+
+  archiver:
+    runs-on: ubuntu-latest
+    needs: collector
+    # always and success is need for running if eventually pytester failed
+    if: always() && needs.collector.result == 'success' #&& (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')  # FIXME
+    steps:
+    - name: Checkout 🛎️
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # fetch all history for all branches and tags
+    - run: |
+        git checkout archiv
+        git merge main
+    - name: Download 📥 summary
+      uses: actions/download-artifact@v3
+      with:
+        name: compatibility-${{ github.sha }}
+    - run: |
+        cat projects.json
+        git add projects.json
+        git commit -m ""
+        git push
