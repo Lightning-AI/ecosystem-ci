@@ -5,27 +5,23 @@ inputs:
   artifact-name:
     description: unique hash or index
     required: true
-  gh-token:
-    description: generated GH token
-    required: true
 
 runs:
   using: "composite"
   steps:
 
-  - name: Get Current Job Log URL
-    uses: Tiryoh/gha-jobid-action@v0
-    id: jobid
-    with:
-      github_token: ${{ inputs.gh-token }}
-      job_name: ${{ github.job }}
+  - uses: ReeganExE/github-action-job-id@v1.0
 
   - name: Dump details
     run: |
-      import json
+      import os, json
       data = json.loads('''${{ toJSON(matrix) }}''')
       data.update(json.loads('''${{ toJSON(job) }}'''))
-      data.update(json.loads('''${{ toJSON(steps.jobid.outputs) }}'''))
+      gh_job = "GH_JOB_${{ strategy.job-index }}"
+      for n, v in os.environ.items():
+        if not n.startswith(gh_job):
+          continue
+        data[n.replace(f"{gh_job}_", "").lower()] = v
       with open("project-results.json", "w") as fp:
         json.dump(data, fp)
     shell: python
