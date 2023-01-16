@@ -174,7 +174,7 @@ jobs:
         cat projects.json
         git add projects.json
         git status
-        git commit -m "update compatibility $(date +"%Y-%m-%d")"
+        git commit -m "compatibility update $(date +"%Y-%m-%d")"
     - name: Kick
       if: contains(fromJSON('["schedule", "workflow_dispatch"]'), github.event_name)
       run: git push
