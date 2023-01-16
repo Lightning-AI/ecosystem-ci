@@ -116,7 +116,7 @@ jobs:
     - run: echo "${{ needs.pytester.result }}"
 
 
-  messanger:
+  messenger:
     runs-on: ubuntu-latest
     needs: collector
     # always and success is need for running if eventually pytester failed
