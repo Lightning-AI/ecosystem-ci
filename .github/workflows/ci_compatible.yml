@@ -1,0 +1,149 @@
+name: CI compatibility
+
+# see: https://help.github.com/en/actions/reference/events-that-trigger-workflows
+on:  # Trigger the workflow on push or pull request, but only for the main branch
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # At the end of every day
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  generator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # Map a step output to a job output
+    outputs:
+      matrix: ${{ steps.diff-files.outputs.runtimes }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Get PR diff
+      id: diff-files
+      env:
+        PR_NUMBER: "${{ github.event.pull_request.number }}"
+      run: |
+        pip install -q -r requirements.txt
+        pr_runtimes=$(python _actions/assistant.py list_runtimes $PR_NUMBER)
+        echo $pr_runtimes
+        echo "runtimes={include: $pr_runtimes}" >> $GITHUB_OUTPUT
+
+    - run: echo "[]" > projects.json
+    - name: Upload placeholder
+      uses: actions/upload-artifact@v2
+      with:
+        name: compatibility-${{ github.sha }}
+        path: projects.json
+
+  pytester:
+    needs: generator
+    runs-on: ${{ matrix.os }}
+    strategy:
+      max-parallel: 25
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.generator.outputs.matrix) }}
+    timeout-minutes: 35
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Testing the project
+      uses: ./.github/actions/pytester
+      with:
+        python: ${{ matrix.python }}
+        config: ${{ matrix.config }}
+
+    - name: Dumping the job's detail
+      if: always()
+      uses: ./.github/actions/job-dump
+      with:
+        artifact-name: project-${{ github.sha }}-${{ strategy.job-index }}
+
+
+  collector:
+    runs-on: ubuntu-latest
+    needs: [generator, pytester]
+    if: always()
+    strategy:
+      max-parallel: 1  # run sequential to prevent download/upload collisions
+      matrix: ${{ fromJSON(needs.generator.outputs.matrix) }}
+    steps:
+    - name: Download 📥 summary
+      uses: actions/download-artifact@v3
+      with:
+        name: compatibility-${{ github.sha }}
+    - name: Download 📥 project
+      uses: actions/download-artifact@v3
+      with:
+        name: project-${{ github.sha }}-${{ strategy.job-index }}
+
+    - run: ls -l
+    - name: append result
+      run: |
+        import json
+        with open("projects.json") as fp:
+          data = json.load(fp)
+        with open("meta.json") as fp:
+          data.append(json.load(fp))
+        with open("projects.json", "w") as fp:
+          json.dump(data, fp)
+      shell: python
+
+    - name: Upload pytest test results
+      uses: actions/upload-artifact@v2
+      with:
+        name: compatibility-${{ github.sha }}
+        path: projects.json
+
+
+  watcher:
+    runs-on: ubuntu-latest
+    needs: pytester
+    steps:
+    - run: echo "${{ needs.pytester.result }}"
+
+
+  messenger:
+    runs-on: ubuntu-latest
+    needs: collector
+    # always and success is need for running if eventually pytester failed
+    if: always() && needs.collector.result == 'success'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Download 📥 summary
+      uses: actions/download-artifact@v3
+      with:
+        name: compatibility-${{ github.sha }}
+    - run: cat projects.json
+
+    - name: Prepare Slack payload
+      run: |
+        pip install -q -r requirements.txt
+        payload=$(python _actions/assistant.py slack_payload projects.json)
+        echo "$payload" > payload-slack-content.json
+        cat payload-slack-content.json
+
+    - name: Post to a Slack channel
+      if: contains(fromJSON('["schedule", "workflow_dispatch"]'), github.event_name)
+      uses: slackapi/slack-github-action@v1.23.0
+      with:
+        # channel-id: C02NJMSLFJR  # alerts-ecosystem-ci
+        # For posting a rich message using Block Kit - https://app.slack.com/block-kit-builder
+        payload-file-path: "./payload-slack-content.json"
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        # SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

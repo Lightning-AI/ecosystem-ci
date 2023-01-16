@@ -46,7 +46,7 @@ jobs:
 
     - name: Testing
       run: |
-        coverage run -m pytest actions -v --junitxml="junit/test-results-${{ runner.os }}-${{ matrix.python }}.xml"
+        coverage run -m pytest _actions -v --junitxml="junit/test-results-${{ runner.os }}-${{ matrix.python }}.xml"
 
     - name: Upload pytest test results
       uses: actions/upload-artifact@v2
