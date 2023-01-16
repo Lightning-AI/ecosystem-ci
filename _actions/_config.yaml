@@ -16,9 +16,7 @@ target_repository:
   install_flags: "--use-pep517"
   # copy some  test from the target repository
   copy_tests:
-    - integrations
-    - tests/__init__.py
-    - tests/helpers
+    - tests/integrations
 
 contact:
   slack:
@@ -28,7 +26,7 @@ contact:
 # OPTIONAL, running before installing your project
 # WARNING: this is custom for given OS, we do not manage any inter OS compatibility
 before_install:
-  - pip install Cython==3.56
+  - pip install "Cython>=0.29"
 
 # OPTIONAL, if any installation require some env. variables
 env:
@@ -39,8 +37,10 @@ dependencies:
     HTTPS: https://github.com/Lightning-AI/lightning.git
     checkout: release/stable
     # install_extras: all
-  - name: Cython
-    checkout: 0.29.24
+    install_flags:
+      - "--find-links https://download.pytorch.org/whl/cpu/torch_stable.html"
+  - name: typing_extensions
+    checkout: 4.1.1
     install_flags: "--use-pep517"
 
 # OPTIONAL, running before installing your project
@@ -50,11 +50,11 @@ before_test:
 
 testing:
   dirs:
-    - integrations
+    - tests
   # OPTIONAL, additional pytest arguments
   pytest_args: --strict
 
 runtimes:
   - {os: "ubuntu-20.04", python: "3.9"}
   - {os: "macOS-10.15", python: "3.7"}
-  - {os: "windows-2019", python: "3.8"}
+#  - {os: "windows-2019", python: "3.8"}  # SKIP, because of the wget
