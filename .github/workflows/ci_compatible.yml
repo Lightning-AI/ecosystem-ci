@@ -158,16 +158,22 @@ jobs:
     - name: Checkout 🛎️
       uses: actions/checkout@v3
       with:
+        ref: 'archive'
         fetch-depth: 0  # fetch all history for all branches and tags
-    - run: |
-        git checkout archiv
-        git merge main
+    - name: Sync with main
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git merge origin/main
     - name: Download 📥 summary
       uses: actions/download-artifact@v3
       with:
         name: compatibility-${{ github.sha }}
-    - run: |
+    - name: Update results
+      env:
+        DATE: $(date +"%Y-%m-%d")
+      run: |
         cat projects.json
         git add projects.json
-        git commit -m ""
+        git commit -m "update compatibility ${DATE}"
         git push
