@@ -170,10 +170,9 @@ jobs:
       with:
         name: compatibility-${{ github.sha }}
     - name: Update results
-      env:
-        DATE: $(date +"%Y-%m-%d")
       run: |
         cat projects.json
         git add projects.json
-        git commit -m "update compatibility ${DATE}"
+        git status
+        git commit -m "update compatibility $(date +"%Y-%m-%d")"
         git push
