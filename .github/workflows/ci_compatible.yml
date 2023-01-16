@@ -46,7 +46,7 @@ jobs:
 
     - run: echo "[]" > projects.json
     - name: Upload placeholder
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: compatibility-${{ github.sha }}
         path: projects.json
@@ -105,7 +105,7 @@ jobs:
       shell: python
 
     - name: Upload pytest test results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: compatibility-${{ github.sha }}
         path: projects.json

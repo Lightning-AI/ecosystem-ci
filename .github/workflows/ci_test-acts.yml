@@ -49,7 +49,7 @@ jobs:
         coverage run -m pytest _actions -v --junitxml="junit/test-results-${{ runner.os }}-${{ matrix.python }}.xml"
 
     - name: Upload pytest test results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: pytest-results-${{ runner.os }}-${{ matrix.python }}
         path: junit/test-results-${{ runner.os }}-${{ matrix.python }}.xml
@@ -62,7 +62,7 @@ jobs:
         coverage xml
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v3
       if: always()
       # see: https://github.com/actions/toolkit/issues/399
       continue-on-error: true
