@@ -17,7 +17,7 @@ contact:
 
 env:
   # let's limit the installation only to Pytorch-Lightning
-  PACKAGE_NAME: lite
+  PACKAGE_NAME: fabric
 
 dependencies:
   - name: torch
