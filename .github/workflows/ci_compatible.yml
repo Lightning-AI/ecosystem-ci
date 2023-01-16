@@ -147,3 +147,34 @@ jobs:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
         # SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+
+  archiver:
+    runs-on: ubuntu-latest
+    needs: collector
+    # always and success is need for running if eventually pytester failed
+    if: always() && needs.collector.result == 'success'
+    steps:
+    - name: Checkout 🛎️
+      uses: actions/checkout@v3
+      with:
+        ref: 'archive'
+        fetch-depth: 0  # fetch all history for all branches and tags
+    - name: Sync with main
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git merge origin/main
+    - name: Download 📥 summary
+      uses: actions/download-artifact@v3
+      with:
+        name: compatibility-${{ github.sha }}
+    - name: Update results
+      run: |
+        cat projects.json
+        git add projects.json
+        git status
+        git commit -m "compatibility update $(date +"%Y-%m-%d")"
+    - name: Kick
+      if: contains(fromJSON('["schedule", "workflow_dispatch"]'), github.event_name)
+      run: git push
