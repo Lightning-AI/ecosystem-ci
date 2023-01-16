@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - uses: docker/setup-buildx-action@v1
       - name: Login to DockerHub
@@ -36,7 +36,7 @@ jobs:
         with:
           build-args: |
             PYTORCH_VERSION=${{ matrix.pytorch_version }}
-          file: actions/Dockerfile
+          file: _actions/Dockerfile
           push: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
           tags: pytorchlightning/ecosystem-ci:pt${{ matrix.pytorch_version }}
         timeout-minutes: 25
