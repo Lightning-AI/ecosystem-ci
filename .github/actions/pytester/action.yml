@@ -47,6 +47,7 @@ runs:
     shell: bash
 
   - name: Prepare environment
+    timeout-minutes: 30
     run: bash prepare_env.sh
     shell: bash
 
