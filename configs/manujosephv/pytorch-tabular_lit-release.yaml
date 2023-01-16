@@ -1,0 +1,32 @@
+target_repository:
+  HTTPS: https://github.com/manujosephv/pytorch_tabular.git
+  checkout: main
+  # OPTIONAL, define installing package extras
+  install_extras: extra
+  # OPTIONAL, define installing package extras
+  requirements: requirements_testing.txt
+  # copy some  test from the target repository
+  copy_tests:
+    - tests
+
+#contact:
+#  slack: # TODO
+
+env:
+  # let's limit the installation only to Pytorch-Lightning
+  PACKAGE_NAME: pytorch
+
+dependencies:
+  - name: pytorch-lightning
+    HTTPS: https://github.com/Lightning-AI/lightning.git
+    checkout: release/stable
+    # install_extras: all
+# TODO: enable after fixing compatibility with task
+#  - name: torchmetrics
+#    HTTPS: https://github.com/Lightning-AI/metrics.git
+#    checkout: release/stable
+
+runtimes:
+  - {os: "ubuntu-20.04", python: "3.9"}
+  - {os: "macOS-10.15", python: "3.7"}
+  - {os: "windows-2019", python: "3.8"}

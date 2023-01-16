@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from actions.assistant import AssistantCLI
+from _actions.assistant import AssistantCLI
 
 _PATH_DIR = os.path.dirname(__file__)
 _PATH_CONFIG = os.path.join(_PATH_DIR, "_config.yaml")
