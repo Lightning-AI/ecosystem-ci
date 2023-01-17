@@ -48,7 +48,10 @@ class AssistantCLI:
     _FOLDER_TESTS = "_integrations"
     _PATH_CONFIGS = os.path.join(_PATH_ROOT, "configs")
     _STATUS_SIGN = dict(
-        success=":white_check_mark:", failure=":x:", cancelled=":no_entry_sign:", skipped=":grey_question:",
+        success=":white_check_mark:",
+        failure=":x:",
+        cancelled=":no_entry_sign:",
+        skipped=":grey_question:",
     )
 
     @staticmethod
