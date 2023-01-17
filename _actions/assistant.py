@@ -47,7 +47,12 @@ class AssistantCLI:
     _MANDATORY_FIELDS = (_FIELD_TARGET_REPO, _FIELD_REQUIRE)
     _FOLDER_TESTS = "_integrations"
     _PATH_CONFIGS = os.path.join(_PATH_ROOT, "configs")
-    _STATUS_SIGN = dict(success=":white_check_mark:", failure=":x:", cancelled=":no_entry_sign:")
+    _STATUS_SIGN = dict(
+        success=":white_check_mark:",
+        failure=":x:",
+        cancelled=":no_entry_sign:",
+        skipped=":grey_question:",
+    )
 
     @staticmethod
     def folder_local_tests() -> str:
