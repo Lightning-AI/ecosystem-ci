@@ -254,7 +254,7 @@ class AssistantCLI:
         config = AssistantCLI._load_config(config_file)
         cmds = config.get(f"before_{stage}", [])
         if not as_append:
-            cmds = os.linesep.join(list(AssistantCLI._BASH_SCRIPT) + cmds)
+            return os.linesep.join(list(AssistantCLI._BASH_SCRIPT) + cmds)
         return cmds
 
     @staticmethod
