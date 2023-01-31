@@ -47,12 +47,12 @@ class AssistantCLI:
     _MANDATORY_FIELDS = (_FIELD_TARGET_REPO, _FIELD_REQUIRE)
     _FOLDER_TESTS = "_integrations"
     _PATH_CONFIGS = os.path.join(_PATH_ROOT, "configs")
-    _STATUS_SIGN = dict(
-        success=":white_check_mark:",
-        failure=":x:",
-        cancelled=":no_entry_sign:",
-        skipped=":grey_question:",
-    )
+    _STATUS_SIGN = {
+        "success": ":white_check_mark:",
+        "failure": ":x:",
+        "cancelled": ":no_entry_sign:",
+        "skipped": ":grey_question:",
+    }
 
     @staticmethod
     def folder_local_tests() -> str:
@@ -74,8 +74,7 @@ class AssistantCLI:
         """Find all configs YAML|YML in given folder recursively."""
         files = glob.glob(os.path.join(configs_folder, "**", "*.yaml"), recursive=True)
         files += glob.glob(os.path.join(configs_folder, "**", "*.yml"), recursive=True)
-        files = [cfg.replace("configs/", "") if cfg.startswith("configs/") else cfg for cfg in files]
-        return files
+        return [cfg.replace("configs/", "") if cfg.startswith("configs/") else cfg for cfg in files]
 
     @staticmethod
     def list_runtimes(pr: Optional[int] = None, auth_token: Optional[str] = None) -> str:
@@ -146,8 +145,7 @@ class AssistantCLI:
     @staticmethod
     def _extras(extras: Union[str, list, tuple] = "") -> str:
         """Create a list of eventual extras fro pip installation."""
-        extras = ",".join(extras) if isinstance(extras, (tuple, list, set)) else extras
-        return extras
+        return ",".join(extras) if isinstance(extras, (tuple, list, set)) else extras
 
     @staticmethod
     def _get_flags(repo: dict, defaults: Sequence[str] = ("--quiet",)) -> List[str]:
@@ -195,8 +193,7 @@ class AssistantCLI:
             if "checkout" in repo:
                 pkg += f"=={repo['checkout']}"
         flags = AssistantCLI._get_flags(repo, defaults=("--quiet", "--upgrade"))
-        cmd = " ".join(["pip install", pkg, " ".join(flags)])
-        return cmd
+        return " ".join(["pip install", pkg, " ".join(flags)])
 
     @staticmethod
     def _install_repo(repo: Dict[str, str], remove_dir: bool = True) -> List[str]:
@@ -314,15 +311,13 @@ class AssistantCLI:
 
     @staticmethod
     def _pytest_dirs(dirs: Union[None, str, list, tuple] = "") -> str:
-        dirs = "." if not dirs else dirs
-        dirs = " ".join(dirs) if isinstance(dirs, (tuple, list, set)) else dirs
-        return dirs
+        dirs = dirs if dirs else "."
+        return " ".join(dirs) if isinstance(dirs, (tuple, list, set)) else dirs
 
     @staticmethod
     def _pytest_args(args: Union[None, str, list, tuple] = "") -> str:
         args = args or ""
-        args = " ".join(args) if isinstance(args, (tuple, list, set)) else args
-        return args
+        return " ".join(args) if isinstance(args, (tuple, list, set)) else args
 
     @staticmethod
     def specify_tests(config_file: str = "config.yaml") -> str:
