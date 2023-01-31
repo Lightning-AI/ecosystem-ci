@@ -37,11 +37,6 @@ exclude_lines = [
     "pass",
 ]
 
-[tool.coverage.run]
-parallel = true
-#concurrency = "thread"
-relative_files = true
-
 
 [tool.ruff]
 line-length = 120
