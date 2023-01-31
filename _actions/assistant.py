@@ -158,8 +158,10 @@ class AssistantCLI:
 
     @staticmethod
     def _install_pip(repo: Dict[str, str]) -> str:
-        """Create command for installing a project from source (if HTTPS is given) or from PyPI (if at least name is
-        given).
+        """Create command for installing a project from source or from PyPI.
+
+        - source: if HTTPS is given
+        - PyPI: if at least name is iven
 
         Args:
             repo: it is package or repository with additional key fields
