@@ -33,16 +33,10 @@ repos:
       - id: docformatter
         args: [--in-place, --wrap-summaries=120, --wrap-descriptions=120]
 
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.11.4
+  - repo: https://github.com/omnilib/ufmt
+    rev: v2.0.1
     hooks:
-      - id: isort
-
-  - repo: https://github.com/psf/black
-    rev: 22.12.0
-    hooks:
-      - id: black
-        name: Black code
+      - id: ufmt
 
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.16
@@ -57,8 +51,11 @@ repos:
     rev: v1.4.0
     hooks:
       - id: yesqa
+        additional_dependencies:
+          - pep8-naming
 
-  - repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.0.237
     hooks:
-      - id: flake8
+      - id: ruff
+        args: ["--fix"]
