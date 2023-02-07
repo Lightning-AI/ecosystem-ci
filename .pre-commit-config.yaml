@@ -28,7 +28,7 @@ repos:
         name: Upgrade code
 
   - repo: https://github.com/PyCQA/docformatter
-    rev: v1.5.1
+    rev: v1.6.0.rc1
     hooks:
       - id: docformatter
         args: [--in-place, --wrap-summaries=120, --wrap-descriptions=120]
@@ -55,7 +55,7 @@ repos:
           - pep8-naming
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.237
+    rev: v0.0.243
     hooks:
       - id: ruff
         args: ["--fix"]
