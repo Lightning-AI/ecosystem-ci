@@ -1,7 +1,7 @@
 Cython  # some projects need it for compiling
 fire>=0.4
 PyYAML>=5.3
-coverage>=5.0
-pytest>=5.0
+coverage>=6.0
+pytest>=7.0
 requests
 pandas>1.0
