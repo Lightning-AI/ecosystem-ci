@@ -25,7 +25,7 @@ env:
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/Lightning-AI/lightning.git
-    checkout: release/stable
+    checkout: release/LTS
   - name: torchmetrics
     HTTPS: https://github.com/Lightning-AI/metrics.git
     checkout: release/stable
