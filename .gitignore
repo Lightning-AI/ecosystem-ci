@@ -117,3 +117,5 @@ lightning_logs
 *.gz
 .DS_Store
 .*_submit.py
+
+.ruff_cache/

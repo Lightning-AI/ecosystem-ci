@@ -44,18 +44,30 @@ line-length = 120
 select = [
     "E", "W",  # see: https://pypi.org/project/pycodestyle
     "F",  # see: https://pypi.org/project/pyflakes
+    "I",  #see: https://pypi.org/project/isort/
     "D",  # see: https://pypi.org/project/pydocstyle
     "N",  # see: https://pypi.org/project/pep8-naming
+    "S",  # see: https://pypi.org/project/flake8-bandit
 ]
 extend-select = [
+    "A",  # see: https://pypi.org/project/flake8-builtins
+    "B",  # see: https://pypi.org/project/flake8-bugbear
     "C4",  # see: https://pypi.org/project/flake8-comprehensions
     "PT",  # see: https://pypi.org/project/flake8-pytest-style
     "RET",  # see: https://pypi.org/project/flake8-return
     "SIM",  # see: https://pypi.org/project/flake8-simplify
+    "YTT",  # see: https://pypi.org/project/flake8-2020
+    "ANN",  # see: https://pypi.org/project/flake8-annotations
+    "TID",  # see: https://pypi.org/project/flake8-tidy-imports/
+    "T10",  # see: https://pypi.org/project/flake8-debugger
+    "Q",  # see: https://pypi.org/project/flake8-quotes
+    "EXE",  # see: https://pypi.org/project/flake8-executable
+    "ISC",  # see: https://pypi.org/project/flake8-implicit-str-concat
+    "PIE",  # see: https://pypi.org/project/flake8-pie
+    "PLE",  # see: https://pypi.org/project/pylint/
+    "PERF",  # see: https://pypi.org/project/perflint/
+    "PYI",  # see: https://pypi.org/project/flake8-pyi/
 ]
-#ignore = [
-#    "E731",  # Do not assign a lambda expression, use a def
-#]
 # Exclude a variety of commonly ignored directories.
 exclude = [
     ".eggs",
