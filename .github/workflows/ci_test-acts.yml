@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-20.04 , macOS-10.15, windows-2019]
+        os: [ubuntu-20.04, macOS-11, windows-2022]
         python: ["3.9"]
     # Timeout: https://stackoverflow.com/a/59076067/4521646
     timeout-minutes: 10
@@ -41,12 +41,10 @@ jobs:
         restore-keys: ${{ runner.os }}-py${{ matrix.python }}-pip-
 
     - name: Install requirements
-      run: |
-        pip install -q -r requirements.txt
+      run: pip install -q -r requirements.txt
 
     - name: Testing
-      run: |
-        coverage run -m pytest _actions -v --junitxml="junit/test-results-${{ runner.os }}-${{ matrix.python }}.xml"
+      run: coverage run -m pytest _actions -v --junitxml="junit/test-results-${{ runner.os }}-${{ matrix.python }}.xml"
 
     - name: Upload pytest test results
       uses: actions/upload-artifact@v3
@@ -56,14 +54,12 @@ jobs:
       if: failure()
 
     - name: Statistics
-      if: success()
       run: |
         coverage report
         coverage xml
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
-      if: always()
       # see: https://github.com/actions/toolkit/issues/399
       continue-on-error: true
       with:
