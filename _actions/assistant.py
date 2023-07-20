@@ -98,7 +98,8 @@ class AssistantCLI:
     def _load_config(config_file: str = "config.yaml", strict: bool = True) -> dict:
         if not os.path.isfile(config_file):
             config_file = os.path.join("configs", config_file)
-        assert _file_exits(config_file), f"Missing config file: {config_file}"
+        if not _file_exits(config_file):
+            raise FileNotFoundError(f"Missing config file: {config_file}")
         with open(_file_exits(config_file)) as fp:
             config = yaml.safe_load(fp)
         if strict:
@@ -164,7 +165,8 @@ class AssistantCLI:
         Args:
             repo: it is package or repository with additional key fields
         """
-        assert any(k in repo for k in ["HTTPS", "name"]), f"Missing key `HTTPS` or `name` among {repo.keys()}"
+        if not any(k in repo for k in ["HTTPS", "name"]):
+            raise ValueError(f"Missing key `HTTPS` or `name` among {repo.keys()}")
         # pip install -q 'https://github.com/...#egg=lightning-flash[tabular]
         name = repo.get("name")
         if not name:
@@ -181,7 +183,7 @@ class AssistantCLI:
 
             pkg = f"git+{url}"
             if "checkout" in repo:
-                assert isinstance(repo["checkout"], str)
+                assert isinstance(repo["checkout"], str)  # noqa: S101
                 pkg += f"@{repo['checkout']}"
             if "install_extras" in repo:
                 pkg += f"#egg={name}[{AssistantCLI._extras(repo['install_extras'])}]"
@@ -198,7 +200,8 @@ class AssistantCLI:
     @staticmethod
     def _install_repo(repo: Dict[str, str], remove_dir: bool = True) -> List[str]:
         """Create command for installing a project from source assuming it is Git project."""
-        assert "HTTPS" in repo, f"Missing key `HTTPS` among {repo.keys()}"
+        if "HTTPS" not in repo:
+            raise ValueError(f"Missing key `HTTPS` among {repo.keys()}")
         url = AssistantCLI._https(
             repo.get("HTTPS"), token=repo.get("token"), username=repo.get("username"), password=repo.get("password")
         )
@@ -206,7 +209,7 @@ class AssistantCLI:
         repo_name, _ = os.path.splitext(os.path.basename(repo.get("HTTPS")))
         cmds = [cmd_git, f"cd {repo_name}"]
         if "checkout" in repo:
-            assert isinstance(repo["checkout"], str)
+            assert isinstance(repo["checkout"], str)  # noqa: S101
             cmds.append(f"git checkout {repo['checkout']}")
 
         if "requirements_file" in repo:
@@ -220,7 +223,7 @@ class AssistantCLI:
             pip_install += f"[{AssistantCLI._extras(repo['install_extras'])}]"
 
         flags = AssistantCLI._get_flags(repo)
-        cmds.append("pip install " + " ".join([pip_install] + flags))
+        cmds.append("pip install " + " ".join([pip_install, *flags]))
         cmds.append("pip list")
         cmds.append("cd ..")
 
@@ -302,8 +305,7 @@ class AssistantCLI:
         script.append(f'rm -rf "{repo_name}"')
 
         reqs = config.get("dependencies", [])
-        for req in reqs:
-            script.append(AssistantCLI._install_pip(req))
+        script += [AssistantCLI._install_pip(req) for req in reqs]
         script.append("pip list")
 
         script += [f"cd {AssistantCLI._FOLDER_TESTS}"]
@@ -335,8 +337,10 @@ class AssistantCLI:
 
         Debugging in: https://app.slack.com/block-kit-builder
         """
-        assert os.path.isfile(fpath_results), f"missing results data / JSON: {fpath_results}"
-        assert os.path.isdir(dpath_configs), f"missing config folder: {dpath_configs}"
+        if not os.path.isfile(fpath_results):
+            raise FileNotFoundError(f"missing results data / JSON: {fpath_results}")
+        if not os.path.isdir(dpath_configs):
+            raise NotADirectoryError(f"missing config folder: {dpath_configs}")
 
         with open(fpath_results) as fp:
             data = json.load(fp)

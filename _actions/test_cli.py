@@ -22,5 +22,5 @@ _PATH_CONFIG = os.path.join(_PATH_DIR, "_config.yaml")
         "specify_tests",
     ],
 )
-def test_assistant_commands(cmd):
+def test_assistant_commands(cmd: str) -> None:
     AssistantCLI().__getattribute__(cmd)(_PATH_CONFIG)
