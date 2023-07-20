@@ -2,9 +2,9 @@ name: CI internal
 
 # see: https://help.github.com/en/actions/reference/events-that-trigger-workflows
 on:  # Trigger the workflow on push or pull request, but only for the main branch
-  push: {}
-  pull_request:
+  push:
     branches: [main]
+  pull_request: {}
 
 defaults:
   run:
@@ -12,7 +12,6 @@ defaults:
 
 jobs:
   pytest-internal:
-
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -21,7 +20,6 @@ jobs:
         python: ["3.9"]
     # Timeout: https://stackoverflow.com/a/59076067/4521646
     timeout-minutes: 10
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python }}
@@ -44,14 +42,7 @@ jobs:
       run: pip install -q -r requirements.txt
 
     - name: Testing
-      run: coverage run -m pytest _actions -v --junitxml="junit/test-results-${{ runner.os }}-${{ matrix.python }}.xml"
-
-    - name: Upload pytest test results
-      uses: actions/upload-artifact@v3
-      with:
-        name: pytest-results-${{ runner.os }}-${{ matrix.python }}
-        path: junit/test-results-${{ runner.os }}-${{ matrix.python }}.xml
-      if: failure()
+      run: coverage run -m pytest _actions -v
 
     - name: Statistics
       run: |
@@ -68,3 +59,18 @@ jobs:
         flags: cpu,pytest,${{ runner.os }}
         name: CLI-coverage
         fail_ci_if_error: false
+
+
+  testing-guardian:
+    runs-on: ubuntu-latest
+    needs: pytest-internal
+    if: always()
+    steps:
+    - run: echo "${{ needs.pytester.result }}"
+    - name: failing...
+      if: needs.pytester.result == 'failure'
+      run: exit 1
+    - name: cancelled or skipped...
+      if: contains(fromJSON('["cancelled", "skipped"]'), needs.pytester.result)
+      timeout-minutes: 1
+      run: sleep 90
