@@ -18,7 +18,10 @@ assignees: ''
 
 <!-- A clear and concise description of what you expected to happen. -->
 
-### Environment
+### Additional context
+
+<details>
+  <summary>Environment</summary>
 
 - OS (e.g., Linux):
 - Python version:
@@ -26,6 +29,6 @@ assignees: ''
 - How you installed PyTorch (`conda`, `pip`, source):
 - Any other relevant information:
 
-### Additional context
+</details>
 
 <!-- Add any other context about the problem here. -->

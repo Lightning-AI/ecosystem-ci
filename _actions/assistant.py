@@ -2,9 +2,11 @@ import glob
 import json
 import os
 import traceback
+from datetime import datetime
 from typing import Dict, List, Optional, Sequence, Union
 
 import fire
+import pandas as pd
 import requests
 import yaml
 
@@ -25,6 +27,18 @@ def request_url(url: str, auth_token: Optional[str] = None) -> Optional[dict]:
     return json.loads(req.content.decode(req.encoding))
 
 
+def _file_exits(fpath: str, ups: int = 3) -> str:
+    """Try to bump a few levels up in the dir tree.
+
+    Needed for running from action folder.
+    """
+    for _ in range(ups):
+        if os.path.isfile(fpath):
+            return fpath
+        fpath = os.path.join("..", fpath)
+    return ""
+
+
 class AssistantCLI:
     _BASH_SCRIPT = ("set -e",)
     _FIELD_TARGET_REPO = "target_repository"
@@ -33,6 +47,12 @@ class AssistantCLI:
     _MANDATORY_FIELDS = (_FIELD_TARGET_REPO, _FIELD_REQUIRE)
     _FOLDER_TESTS = "_integrations"
     _PATH_CONFIGS = os.path.join(_PATH_ROOT, "configs")
+    _STATUS_SIGN = {
+        "success": ":white_check_mark:",
+        "failure": ":x:",
+        "cancelled": ":no_entry_sign:",
+        "skipped": ":grey_question:",
+    }
 
     @staticmethod
     def folder_local_tests() -> str:
@@ -45,7 +65,7 @@ class AssistantCLI:
         data = request_url(url, auth_token)
         if not data:
             return [] if as_list else ""
-        files = [d["filename"] for d in data if os.path.isfile(d["filename"])]
+        files = [d["filename"] for d in data if _file_exits(d["filename"])]
         configs = [f.replace("configs/", "") for f in files if f.startswith("configs/")]
         return configs if as_list else "|".join(configs)
 
@@ -54,8 +74,7 @@ class AssistantCLI:
         """Find all configs YAML|YML in given folder recursively."""
         files = glob.glob(os.path.join(configs_folder, "**", "*.yaml"), recursive=True)
         files += glob.glob(os.path.join(configs_folder, "**", "*.yml"), recursive=True)
-        files = [cfg.replace("configs/", "") if cfg.startswith("configs/") else cfg for cfg in files]
-        return files
+        return [cfg.replace("configs/", "") if cfg.startswith("configs/") else cfg for cfg in files]
 
     @staticmethod
     def list_runtimes(pr: Optional[int] = None, auth_token: Optional[str] = None) -> str:
@@ -64,6 +83,9 @@ class AssistantCLI:
             configs = AssistantCLI.changed_configs(pr, auth_token)
         else:
             configs = AssistantCLI.find_all_configs()
+        if not configs:
+            # setting some default to prevent empty matrix
+            configs = ["../_actions/_config.yaml"]
         runtimes = []
         for cfg in configs:
             cfg_runtimes = AssistantCLI._load_config(cfg).get("runtimes", {})
@@ -76,8 +98,8 @@ class AssistantCLI:
     def _load_config(config_file: str = "config.yaml", strict: bool = True) -> dict:
         if not os.path.isfile(config_file):
             config_file = os.path.join("configs", config_file)
-        assert os.path.isfile(config_file), f"Missing config file: {config_file}"
-        with open(config_file) as fp:
+        assert _file_exits(config_file), f"Missing config file: {config_file}"
+        with open(_file_exits(config_file)) as fp:
             config = yaml.safe_load(fp)
         if strict:
             miss = [fd for fd in AssistantCLI._MANDATORY_FIELDS if fd not in config]
@@ -123,8 +145,7 @@ class AssistantCLI:
     @staticmethod
     def _extras(extras: Union[str, list, tuple] = "") -> str:
         """Create a list of eventual extras fro pip installation."""
-        extras = ",".join(extras) if isinstance(extras, (tuple, list, set)) else extras
-        return extras
+        return ",".join(extras) if isinstance(extras, (tuple, list, set)) else extras
 
     @staticmethod
     def _get_flags(repo: dict, defaults: Sequence[str] = ("--quiet",)) -> List[str]:
@@ -135,8 +156,10 @@ class AssistantCLI:
 
     @staticmethod
     def _install_pip(repo: Dict[str, str]) -> str:
-        """Create command for installing a project from source (if HTTPS is given) or from PyPI (if at least name is
-        given).
+        """Create command for installing a project from source or from PyPI.
+
+        - source: if HTTPS is given
+        - PyPI: if at least name is iven
 
         Args:
             repo: it is package or repository with additional key fields
@@ -170,8 +193,7 @@ class AssistantCLI:
             if "checkout" in repo:
                 pkg += f"=={repo['checkout']}"
         flags = AssistantCLI._get_flags(repo, defaults=("--quiet", "--upgrade"))
-        cmd = " ".join(["pip install", pkg, " ".join(flags)])
-        return cmd
+        return " ".join(["pip install", pkg, " ".join(flags)])
 
     @staticmethod
     def _install_repo(repo: Dict[str, str], remove_dir: bool = True) -> List[str]:
@@ -232,7 +254,7 @@ class AssistantCLI:
         config = AssistantCLI._load_config(config_file)
         cmds = config.get(f"before_{stage}", [])
         if not as_append:
-            cmds = os.linesep.join(list(AssistantCLI._BASH_SCRIPT) + cmds)
+            return os.linesep.join(list(AssistantCLI._BASH_SCRIPT) + cmds)
         return cmds
 
     @staticmethod
@@ -289,15 +311,13 @@ class AssistantCLI:
 
     @staticmethod
     def _pytest_dirs(dirs: Union[None, str, list, tuple] = "") -> str:
-        dirs = "." if not dirs else dirs
-        dirs = " ".join(dirs) if isinstance(dirs, (tuple, list, set)) else dirs
-        return dirs
+        dirs = dirs if dirs else "."
+        return " ".join(dirs) if isinstance(dirs, (tuple, list, set)) else dirs
 
     @staticmethod
     def _pytest_args(args: Union[None, str, list, tuple] = "") -> str:
         args = args or ""
-        args = " ".join(args) if isinstance(args, (tuple, list, set)) else args
-        return args
+        return " ".join(args) if isinstance(args, (tuple, list, set)) else args
 
     @staticmethod
     def specify_tests(config_file: str = "config.yaml") -> str:
@@ -307,6 +327,44 @@ class AssistantCLI:
         dirs = AssistantCLI._pytest_dirs(testing.get("dirs"))
         args = AssistantCLI._pytest_args(testing.get("pytest_args"))
         return f"{dirs} {args}"
+
+    @staticmethod
+    def slack_payload(fpath_results: str = "projects.json", dpath_configs: str = "configs") -> str:
+        """Create Slack payload message from compatibility results.
+
+        Debugging in: https://app.slack.com/block-kit-builder
+        """
+        assert os.path.isfile(fpath_results), f"missing results data / JSON: {fpath_results}"
+        assert os.path.isdir(dpath_configs), f"missing config folder: {dpath_configs}"
+
+        with open(fpath_results) as fp:
+            data = json.load(fp)
+        df = pd.DataFrame(data)
+
+        blocks = []
+        for cfg, dfg in df.groupby("config"):
+            failed = any(s != "success" for s in dfg["status"])
+            cc = AssistantCLI.contacts(os.path.join(dpath_configs, cfg)) if failed else ""
+            dfg["sign"] = dfg["status"].map(AssistantCLI._STATUS_SIGN)
+            fields = [
+                {
+                    "type": "mrkdwn",
+                    "text": f"<{r['html_url']}|os:{r['os']}; py:{r['python']}> | {r['sign']}",
+                }
+                for _, r in dfg.iterrows()
+            ]
+            blocks.append(
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": f"*{cfg}*: compatibility outcomes {':interrobang:' if failed else ':zap:'}: {cc}",
+                    },
+                    "fields": fields,
+                }
+            )
+        now_str = datetime.now().strftime("%Y-%m-%d")
+        return json.dumps({"text": f"GitHub Action: compatibility result from {now_str}", "blocks": blocks})
 
 
 if __name__ == "__main__":

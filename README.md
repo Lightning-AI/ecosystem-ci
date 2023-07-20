@@ -1,8 +1,8 @@
-![Logo](actions/logo.png)
+![Logo](_actions/logo.png)
 
 **Automated Testing for Lightning EcoSystem Projects**
 
-[![Lightning](https://img.shields.io/badge/-Lightning-792ee5?logo=pytorchlightning&logoColor=white)](https://pytorchlightning.ai)
+[![Lightning](https://img.shields.io/badge/-Lightning-792ee5?logo=pytorchlightning&logoColor=white)](https://lightning.ai)
 [![CI internal](https://github.com/Lightning-AI/ecosystem-ci/actions/workflows/ci_test-acts.yml/badge.svg?branch=main&event=push)](https://github.com/Lightning-AI/ecosystem-ci/actions/workflows/ci_test-acts.yml)
 [![codecov](https://codecov.io/gh/Lightning-AI/ecosystem-ci/branch/main/graph/badge.svg?token=binMTx5wr4)](https://codecov.io/gh/Lightning-AI/ecosystem-ci)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Lightning-AI/ecosystem-ci/main.svg)](https://results.pre-commit.ci/latest/github/Lightning-AI/ecosystem-ci/main)
@@ -31,7 +31,7 @@ Here are pre-requisites for your project before adding to the Lightning EcoSyste
    gh repo fork Lightning-AI/ecosystem-ci
    cd ecosystem-ci/
    ```
-1. Copy the [template file](actions/_config.yaml) in `configs` folder and call it `<my_project_name>.yaml`.
+1. Copy the [template file](_actions/_config.yaml) in `configs` folder and call it `<my_project_name>.yaml`.
    ```
    cp configs/template.yaml configs/<my_project_name>.yaml
    ```
@@ -73,10 +73,10 @@ Here are pre-requisites for your project before adding to the Lightning EcoSyste
 ### Additional suggestions and engagement rules
 
 - To qualify for GPU machines we require your project to have 100+ GitHub stars (please note that this is for capacity reasons and may change in the future)
-- (**Optional**) Join our [Slack](https://www.pytorchlightning.ai/community) channel `#alerts-ecosystem-ci` to be notified if your project is breaking
+- (**Optional**) Join our [Slack](https://www.lightning.ai/community) channel `#alerts-ecosystem-ci` to be notified if your project is breaking
 - (**Kind request**) include Lightning badge in your readme:
   ```md
-  [![Lightning](https://img.shields.io/badge/-Lightning-792ee5?logo=pytorchlightning&logoColor=white)](https://pytorchlightning.ai)
+  [![Lightning](https://img.shields.io/badge/-Lightning-792ee5?logo=pytorchlightning&logoColor=white)](https://lightning.ai)
   ```
 
 ## Configuring my project

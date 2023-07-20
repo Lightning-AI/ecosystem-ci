@@ -20,7 +20,7 @@ env:
 dependencies:
   - name: pytorch-lightning
     HTTPS: https://github.com/Lightning-AI/lightning.git
-    checkout: release/stable
+    checkout: release/LTS
     # install_extras: all
 
 runtimes:

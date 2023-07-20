@@ -1,16 +1,16 @@
 target_repository:
-  HTTPS: https://github.com/vturrisi/solo-learn.git
+  HTTPS: https://github.com/manujosephv/pytorch_tabular.git
   checkout: main
   # OPTIONAL, define installing package extras
-  install_extras: umap
+  install_extras: extra
+  # OPTIONAL, define installing package extras
+  requirements: requirements_testing.txt
   # copy some  test from the target repository
   copy_tests:
     - tests
 
-contact:
-  slack:
-    # Victor Turrisi
-    - U0303D6JSAF
+#contact:
+#  slack: # TODO
 
 env:
   # let's limit the installation only to Pytorch-Lightning
@@ -21,20 +21,10 @@ dependencies:
     HTTPS: https://github.com/Lightning-AI/lightning.git
     checkout: release/LTS
     # install_extras: all
-  - name: torchmetrics
-    HTTPS: https://github.com/Lightning-AI/metrics.git
-    checkout: release/stable
-  - name: lightning-bolts
-    HTTPS: https://github.com/Lightning-AI/lightning-bolts.git
-    checkout: release/stable
-  - name: h5py
-
-testing:
-  dirs:
-    - tests/args
-    - tests/losses
-    - tests/methods
-    - tests/utils
+# TODO: enable after fixing compatibility with task
+#  - name: torchmetrics
+#    HTTPS: https://github.com/Lightning-AI/metrics.git
+#    checkout: release/stable
 
 runtimes:
   - {os: "ubuntu-20.04", python: "3.9"}
