@@ -1,0 +1,34 @@
+target_repository:
+  HTTPS: https://github.com/scverse/scvi-tools.git
+  # OPTIONAL, checkout a particular branch or a tag
+  checkout: main
+  # OPTIONAL, define installing package extras
+  install_extras: all
+  # copy some  test from the target repository
+  copy_tests:
+    - tests/models
+
+contact:
+  email: [martinkim@berkeley.edu]
+
+# OPTIONAL, if any installation require some env. variables
+env:
+  PACKAGE_NAME: "scvi-tools"
+
+dependencies:
+  - name: pytorch-lightning
+    HTTPS: https://github.com/Lightning-AI/lightning.git
+    checkout: release/stable
+    # install_extras: all
+    install_flags:
+      - "--find-links https://download.pytorch.org/whl/cpu/torch_stable.html"
+  - name: typing_extensions
+    checkout: 4.1.1
+    install_flags: "--use-pep517"
+
+testing:
+  dirs:
+    - tests
+
+runtimes:
+  - {os: "ubuntu-20.04", python: "3.10"}
