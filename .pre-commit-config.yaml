@@ -28,7 +28,7 @@ repos:
         name: Upgrade code
 
   - repo: https://github.com/omnilib/ufmt
-    rev: v2.1.0
+    rev: v2.2.0
     hooks:
       - id: ufmt
 
@@ -53,7 +53,7 @@ repos:
           - flake8-bugbear
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.0.281
+    rev: v0.0.282
     hooks:
       - id: ruff
         args: ["--fix"]
