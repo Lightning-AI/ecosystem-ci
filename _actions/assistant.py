@@ -41,7 +41,7 @@ def _file_exits(fpath: str, ups: int = 3) -> str:
 
 class AssistantCLI:
     _BASH_SCRIPT = ("set -e",)
-    _FIELD_TARGET_REPO = "target_repository"
+    _FIELD_TARGET_REPO = "source_repository"
     _FIELD_REQUIRE = "dependencies"
     _FIELD_TESTS = "testing"
     _MANDATORY_FIELDS = (_FIELD_TARGET_REPO, _FIELD_REQUIRE)

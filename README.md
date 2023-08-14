@@ -37,7 +37,7 @@ Here are pre-requisites for your project before adding to the Lightning EcoSyste
    ```
 1. At the minimum, modify the `HTTPS` variable to point to your repository. See [Configuring my project](https://github.com/Lightning-AI/ecosystem-ci/tree/main#configuring-my-project) for more options.
    ```yaml
-   target_repository:
+   source_repository:
      HTTPS: https://github.com/MyUsername/MyProject.git
    ...
    ```
@@ -48,7 +48,7 @@ Here are pre-requisites for your project before adding to the Lightning EcoSyste
      ```yaml
      runtimes:
        - {os: "ubuntu-20.04", python: "3.9"}
-       - {os: "macOS-10.15", python: "3.7"}
+       - {os: "macOS-12", python: "3.7"}
        - {os: "windows-2019", python: "3.8"}
      ...
      ```
@@ -83,7 +83,7 @@ Here are pre-requisites for your project before adding to the Lightning EcoSyste
 
 The config include a few different sections:
 
-- `target_repository` include your project
+- `source_repository` include your project
 - `env` (optional) define any environment variables required when running tests
 - `dependencies` listing all dependencies which are taken outside pip
 - `testing` defines specific pytest arguments and what folders shall be tested
@@ -91,7 +91,7 @@ The config include a few different sections:
 All dependencies as well as the target repository is sharing the same template with the only required field `HTTPS` and all others are optional:
 
 ```yaml
-target_repository:
+source_repository:
   HTTPS: https://github.com/Lightning-AI/metrics.git
   username: my-nick  # Optional, used when checking out private/protected repo
   password: dont-tell-anyone # Optional, used when checking out private/protected repo

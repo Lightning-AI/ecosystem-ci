@@ -1,4 +1,4 @@
-target_repository:
+source_repository:
   HTTPS: https://github.com/vturrisi/solo-learn.git
   checkout: main
   # OPTIONAL, define installing package extras
