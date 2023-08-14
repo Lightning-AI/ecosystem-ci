@@ -1,4 +1,4 @@
-target_repository:
+source_repository:
   HTTPS: https://github.com/Lightning-AI/lightning-flash.git
   # checkout a particular branch or a tag
   checkout: master
