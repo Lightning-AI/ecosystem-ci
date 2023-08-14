@@ -48,7 +48,7 @@ Here are pre-requisites for your project before adding to the Lightning EcoSyste
      ```yaml
      runtimes:
        - {os: "ubuntu-20.04", python: "3.9"}
-       - {os: "macOS-10.15", python: "3.7"}
+       - {os: "macOS-12", python: "3.7"}
        - {os: "windows-2019", python: "3.8"}
      ...
      ```
