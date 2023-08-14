@@ -6,7 +6,7 @@ source_repository:
   install_extras: image,text,tabular
   # copy some  test from the target repository
   copy_tests:
-    - flash_examples
+    - examples
     - tests/__init__.py
     - tests/helpers
     - tests/examples/__init__.py
