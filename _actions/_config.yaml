@@ -1,4 +1,4 @@
-target_repository:
+source_repository:
   HTTPS: https://github.com/Lightning-AI/metrics.git
   # OPTIONAL, for some protected repository
   # username: my-nick
@@ -56,5 +56,5 @@ testing:
 
 runtimes:
   - {os: "ubuntu-20.04", python: "3.10"}
-  - {os: "macOS-10.15", python: "3.8"}
+  - {os: "macOS-12", python: "3.8"}
 #  - {os: "windows-2019", python: "3.8"}  # SKIP, because of the wget

@@ -1,4 +1,4 @@
-target_repository:
+source_repository:
   HTTPS: https://github.com/neptune-ai/neptune-client
   # OPTIONAL, checkout a particular branch or a tag
   checkout: master
@@ -40,5 +40,5 @@ testing:
 
 runtimes:
   - {os: "ubuntu-20.04", python: "3.8"}
-  - {os: "macOS-10.15", python: "3.8"}
+  - {os: "macOS-12", python: "3.8"}
 #  - {os: "windows-2019", python: "3.7"}

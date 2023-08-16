@@ -21,14 +21,14 @@ repos:
       - id: detect-private-key
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.3.2
+    rev: v3.10.1
     hooks:
       - id: pyupgrade
         args: [--py38-plus]
         name: Upgrade code
 
   - repo: https://github.com/omnilib/ufmt
-    rev: v2.1.0
+    rev: v2.2.0
     hooks:
       - id: ufmt
 
@@ -42,14 +42,18 @@ repos:
           - mdformat_frontmatter
 
   - repo: https://github.com/asottile/yesqa
-    rev: v1.4.0
+    rev: v1.5.0
     hooks:
       - id: yesqa
         additional_dependencies:
           - pep8-naming
+          - flake8-pytest-style
+          - flake8-bandit
+          - flake8-builtins
+          - flake8-bugbear
 
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.263
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.0.284
     hooks:
       - id: ruff
         args: ["--fix"]

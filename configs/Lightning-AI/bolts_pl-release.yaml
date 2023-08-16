@@ -1,4 +1,4 @@
-target_repository:
+source_repository:
   HTTPS: https://github.com/Lightning-AI/lightning-bolts.git
   # checkout a particular branch or a tag
   checkout: master
@@ -29,4 +29,4 @@ testing:
 
 runtimes:
   - {os: "ubuntu-20.04", python: "3.8"}
-  - {os: "macOS-10.15", python: "3.8"}
+  - {os: "macOS-12", python: "3.8"}
