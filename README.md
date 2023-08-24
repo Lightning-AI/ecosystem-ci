@@ -33,7 +33,7 @@ Here are pre-requisites for your project before adding to the Lightning EcoSyste
    ```
 1. Copy the [template file](_actions/_config.yaml) in `configs` folder and call it `<my_project_name>.yaml`.
    ```
-   cp configs/template.yaml configs/<my_project_name>.yaml
+   cp actions/_config.yaml configs/<my_project_name>.yaml
    ```
 1. At the minimum, modify the `HTTPS` variable to point to your repository. See [Configuring my project](https://github.com/Lightning-AI/ecosystem-ci/tree/main#configuring-my-project) for more options.
    ```yaml

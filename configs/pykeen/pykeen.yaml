@@ -1,0 +1,29 @@
+target_repository:
+  HTTPS: https://github.com/pykeen/pykeen.git
+  # OPTIONAL, checkout a particular branch or a tag
+  checkout: master
+  # OPTIONAL, define installing package extras
+  install_extras: lightning
+  # copy some  test from the target repository
+  copy_tests:
+    - tests/test_lightning.py
+    - tests/utils.py
+
+contact:
+  slack:
+    # Max Berrendorf
+    - U03DAAVMLSH
+  email: []
+
+dependencies:
+  - name: pytorch-lightning
+    HTTPS: https://github.com/Lightning-AI/lightning.git
+    checkout: release/latest
+
+testing:
+  dirs:
+    - tests/
+
+runtimes:
+  - {os: "ubuntu-20.04", python-version: "3.10"}
+  - {os: "windows-2019", python-version: "3.8"}
