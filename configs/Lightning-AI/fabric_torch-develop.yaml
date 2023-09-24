@@ -1,0 +1,35 @@
+target_repository:
+  HTTPS: https://github.com/Lightning-AI/lightning.git
+  # checkout a particular branch or a tag
+  checkout: master
+  # define installing package extras
+  install_extras: dev
+  # copy some  test from the target repository
+  copy_tests:
+    - tests/tests_fabric
+
+contact:
+  slack:
+    # Adrian Wälchli
+    - URC536Z0W
+    # Justus Schock
+    - U010XFPFETH
+
+env:
+  # let's limit the installation only to Fabric
+  PACKAGE_NAME: fabric
+
+dependencies:
+  - name: torch
+    install_flags:
+      - "-f https://download.pytorch.org/whl/nightly/torch_nightly.html"
+      - "--pre"
+
+testing:
+  # additional pytest arguments
+  pytest_args: --strict
+
+runtimes:
+  - {os: "ubuntu-22.04", python: "3.10"}
+  - {os: "macOS-12", python: "3.10"}
+  - {os: "windows-2022", python: "3.10"}

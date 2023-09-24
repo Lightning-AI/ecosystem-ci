@@ -56,7 +56,7 @@ jobs:
       max-parallel: 25
       fail-fast: false
       matrix: ${{ fromJSON(needs.generator.outputs.matrix) }}
-    timeout-minutes: 35
+    timeout-minutes: 90
     steps:
     - uses: actions/checkout@v3
 
