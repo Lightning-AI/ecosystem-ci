@@ -1,0 +1,40 @@
+target_repository:
+  HTTPS: https://github.com/Lightning-AI/metrics.git
+  # checkout a particular branch or a tag
+  checkout: master
+  # define installing package extras
+  install_extras:
+    - all
+    - test
+  # install additional requirements from a file
+  requirements_file: requirements/audio_test.txt
+  # copy some  test from the target repository
+  copy_tests:
+    - tests/unittests
+
+contact:
+  slack:
+    # Nicki Skafte
+    - USZ6EQ8A2
+    # Justus Schock
+    - U010XFPFETH
+
+dependencies:
+  - name: torch
+    install_flags:
+      - "-f https://download.pytorch.org/whl/nightly/torch_nightly.html"
+      - "--pre"
+
+# running before installing your project
+before_test:
+  - wget https://pl-public-data.s3.amazonaws.com/metrics/data.zip
+  - unzip -o data.zip
+  - mv _data tests/
+
+testing:
+  # additional pytest arguments
+  pytest_args: --timeout=120
+
+runtimes:
+  - {os: "ubuntu-22.04", python: "3.9"}
+#  - {os: "macOS-12", python: "3.9"}

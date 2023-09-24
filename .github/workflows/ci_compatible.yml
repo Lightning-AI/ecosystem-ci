@@ -32,12 +32,14 @@ jobs:
       with:
         python-version: 3.8
 
+    - name: Install requirements
+      run: pip install -q -r requirements.txt
+
     - name: Get PR diff
       id: diff-files
       env:
         PR_NUMBER: "${{ github.event.pull_request.number }}"
       run: |
-        pip install -q -r requirements.txt
         pr_runtimes=$(python _actions/assistant.py list_runtimes $PR_NUMBER)
         echo $pr_runtimes
         echo "runtimes={include: $pr_runtimes}" >> $GITHUB_OUTPUT
@@ -56,7 +58,7 @@ jobs:
       max-parallel: 25
       fail-fast: false
       matrix: ${{ fromJSON(needs.generator.outputs.matrix) }}
-    timeout-minutes: 35
+    timeout-minutes: 120
     steps:
     - uses: actions/checkout@v3
 
