@@ -24,6 +24,6 @@ dependencies:
     # install_extras: all
 
 runtimes:
-  - {os: "ubuntu-20.04", python: "3.8"}
-  - {os: "macOS-11", python: "3.8"}
-  - {os: "windows-2022", python: "3.8"}
+  - { os: "ubuntu-20.04", python: "3.8" }
+  - { os: "macOS-11", python: "3.8" }
+  - { os: "windows-2022", python: "3.8" }
