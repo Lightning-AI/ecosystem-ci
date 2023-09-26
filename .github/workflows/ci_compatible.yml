@@ -1,7 +1,7 @@
 name: CI compatibility
 
 # see: https://help.github.com/en/actions/reference/events-that-trigger-workflows
-on:  # Trigger the workflow on push or pull request, but only for the main branch
+on: # Trigger the workflow on push or pull request, but only for the main branch
   push:
     branches: [main]
   pull_request:
@@ -27,27 +27,27 @@ jobs:
     outputs:
       matrix: ${{ steps.diff-files.outputs.runtimes }}
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-python@v4
-      with:
-        python-version: 3.8
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
 
-    - name: Get PR diff
-      id: diff-files
-      env:
-        PR_NUMBER: "${{ github.event.pull_request.number }}"
-      run: |
-        pip install -q -r requirements.txt
-        pr_runtimes=$(python _actions/assistant.py list_runtimes $PR_NUMBER)
-        echo $pr_runtimes
-        echo "runtimes={include: $pr_runtimes}" >> $GITHUB_OUTPUT
+      - name: Get PR diff
+        id: diff-files
+        env:
+          PR_NUMBER: "${{ github.event.pull_request.number }}"
+        run: |
+          pip install -q -r requirements.txt
+          pr_runtimes=$(python _actions/assistant.py list_runtimes $PR_NUMBER)
+          echo $pr_runtimes
+          echo "runtimes={include: $pr_runtimes}" >> $GITHUB_OUTPUT
 
-    - run: echo "[]" > projects.json
-    - name: Upload placeholder
-      uses: actions/upload-artifact@v3
-      with:
-        name: compatibility-${{ github.sha }}
-        path: projects.json
+      - run: echo "[]" > projects.json
+      - name: Upload placeholder
+        uses: actions/upload-artifact@v3
+        with:
+          name: compatibility-${{ github.sha }}
+          path: projects.json
 
   pytester:
     needs: generator
@@ -58,71 +58,68 @@ jobs:
       matrix: ${{ fromJSON(needs.generator.outputs.matrix) }}
     timeout-minutes: 35
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Testing the project
-      uses: ./.github/actions/pytester
-      with:
-        python: ${{ matrix.python }}
-        config: ${{ matrix.config }}
+      - name: Testing the project
+        uses: ./.github/actions/pytester
+        with:
+          python: ${{ matrix.python }}
+          config: ${{ matrix.config }}
 
-    - name: Dumping the job's detail
-      if: always()
-      uses: ./.github/actions/job-dump
-      with:
-        artifact-name: project-${{ github.sha }}-${{ strategy.job-index }}
-
+      - name: Dumping the job's detail
+        if: always()
+        uses: ./.github/actions/job-dump
+        with:
+          artifact-name: project-${{ github.sha }}-${{ strategy.job-index }}
 
   collector:
     runs-on: ubuntu-latest
     needs: [generator, pytester]
     if: always()
     strategy:
-      max-parallel: 1  # run sequential to prevent download/upload collisions
+      max-parallel: 1 # run sequential to prevent download/upload collisions
       matrix: ${{ fromJSON(needs.generator.outputs.matrix) }}
     steps:
-    - name: Download 📥 summary
-      uses: actions/download-artifact@v3
-      with:
-        name: compatibility-${{ github.sha }}
-    - name: Download 📥 project
-      uses: actions/download-artifact@v3
-      with:
-        name: project-${{ github.sha }}-${{ strategy.job-index }}
+      - name: Download 📥 summary
+        uses: actions/download-artifact@v3
+        with:
+          name: compatibility-${{ github.sha }}
+      - name: Download 📥 project
+        uses: actions/download-artifact@v3
+        with:
+          name: project-${{ github.sha }}-${{ strategy.job-index }}
 
-    - run: ls -l
-    - name: append result
-      run: |
-        import json
-        with open("projects.json") as fp:
-          data = json.load(fp)
-        with open("meta.json") as fp:
-          data.append(json.load(fp))
-        with open("projects.json", "w") as fp:
-          json.dump(data, fp)
-      shell: python
+      - run: ls -l
+      - name: append result
+        run: |
+          import json
+          with open("projects.json") as fp:
+            data = json.load(fp)
+          with open("meta.json") as fp:
+            data.append(json.load(fp))
+          with open("projects.json", "w") as fp:
+            json.dump(data, fp)
+        shell: python
 
-    - name: Upload pytest test results
-      uses: actions/upload-artifact@v3
-      with:
-        name: compatibility-${{ github.sha }}
-        path: projects.json
-
+      - name: Upload pytest test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: compatibility-${{ github.sha }}
+          path: projects.json
 
   watcher:
     runs-on: ubuntu-latest
     needs: pytester
     if: always()
     steps:
-    - run: echo "${{ needs.pytester.result }}"
-    - name: failing...
-      if: needs.pytester.result == 'failure'
-      run: exit 1
-    - name: cancelled or skipped...
-      if: contains(fromJSON('["cancelled", "skipped"]'), needs.pytester.result)
-      timeout-minutes: 1
-      run: sleep 90
-
+      - run: echo "${{ needs.pytester.result }}"
+      - name: failing...
+        if: needs.pytester.result == 'failure'
+        run: exit 1
+      - name: cancelled or skipped...
+        if: contains(fromJSON('["cancelled", "skipped"]'), needs.pytester.result)
+        timeout-minutes: 1
+        run: sleep 90
 
   messenger:
     runs-on: ubuntu-latest
@@ -130,32 +127,31 @@ jobs:
     # always and success is need for running if eventually pytester failed
     if: always() && needs.collector.result == 'success'
     steps:
-    - uses: actions/checkout@v3
-    - name: Download 📥 summary
-      uses: actions/download-artifact@v3
-      with:
-        name: compatibility-${{ github.sha }}
-    - run: cat projects.json
+      - uses: actions/checkout@v3
+      - name: Download 📥 summary
+        uses: actions/download-artifact@v3
+        with:
+          name: compatibility-${{ github.sha }}
+      - run: cat projects.json
 
-    - name: Prepare Slack payload
-      run: |
-        pip install -q -r requirements.txt
-        payload=$(python _actions/assistant.py slack_payload projects.json)
-        echo "$payload" > payload-slack-content.json
-        cat payload-slack-content.json
+      - name: Prepare Slack payload
+        run: |
+          pip install -q -r requirements.txt
+          payload=$(python _actions/assistant.py slack_payload projects.json)
+          echo "$payload" > payload-slack-content.json
+          cat payload-slack-content.json
 
-    - name: Post to a Slack channel
-      if: contains(fromJSON('["schedule", "workflow_dispatch"]'), github.event_name)
-      uses: slackapi/slack-github-action@v1.24.0
-      with:
-        # channel-id: C02NJMSLFJR  # alerts-ecosystem-ci
-        # For posting a rich message using Block Kit - https://app.slack.com/block-kit-builder
-        payload-file-path: "./payload-slack-content.json"
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-        # SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-
+      - name: Post to a Slack channel
+        if: contains(fromJSON('["schedule", "workflow_dispatch"]'), github.event_name)
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          # channel-id: C02NJMSLFJR  # alerts-ecosystem-ci
+          # For posting a rich message using Block Kit - https://app.slack.com/block-kit-builder
+          payload-file-path: "./payload-slack-content.json"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          # SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
   archiver:
     runs-on: ubuntu-latest
@@ -163,26 +159,26 @@ jobs:
     # always and success is need for running if eventually pytester failed
     if: always() && needs.collector.result == 'success'
     steps:
-    - name: Checkout 🛎️
-      uses: actions/checkout@v3
-      with:
-        ref: 'archive'
-        fetch-depth: 0  # fetch all history for all branches and tags
-    - name: Sync with main
-      run: |
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        git merge origin/main
-    - name: Download 📥 summary
-      uses: actions/download-artifact@v3
-      with:
-        name: compatibility-${{ github.sha }}
-    - name: Update results
-      run: |
-        cat projects.json
-        git add projects.json
-        git status
-        git commit -m "compatibility update $(date +"%Y-%m-%d")"
-    - name: Kick
-      if: contains(fromJSON('["schedule", "workflow_dispatch"]'), github.event_name)
-      run: git push
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+        with:
+          ref: "archive"
+          fetch-depth: 0 # fetch all history for all branches and tags
+      - name: Sync with main
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git merge origin/main
+      - name: Download 📥 summary
+        uses: actions/download-artifact@v3
+        with:
+          name: compatibility-${{ github.sha }}
+      - name: Update results
+        run: |
+          cat projects.json
+          git add projects.json
+          git status
+          git commit -m "compatibility update $(date +"%Y-%m-%d")"
+      - name: Kick
+        if: contains(fromJSON('["schedule", "workflow_dispatch"]'), github.event_name)
+        run: git push
