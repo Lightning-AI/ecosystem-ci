@@ -145,7 +145,7 @@ class AssistantCLI:
 
     @staticmethod
     def _extras(extras: Union[str, list, tuple] = "") -> str:
-        """Create a list of eventual extras fro pip installation."""
+        """Create a list of eventual extras for pip installation."""
         return ",".join(extras) if isinstance(extras, (tuple, list, set)) else extras
 
     @staticmethod

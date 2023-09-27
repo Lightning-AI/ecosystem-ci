@@ -20,7 +20,7 @@ source_repository:
 
 contact:
   slack:
-    - UR9FXE6QG  # borda
+    - UR9FXE6QG # borda
   email: []
 
 # OPTIONAL, running before installing your project
@@ -55,6 +55,6 @@ testing:
   pytest_args: --strict
 
 runtimes:
-  - {os: "ubuntu-20.04", python: "3.10"}
-  - {os: "macOS-12", python: "3.8"}
+  - { os: "ubuntu-20.04", python: "3.10" }
+  - { os: "macOS-12", python: "3.8" }
 #  - {os: "windows-2019", python: "3.8"}  # SKIP, because of the wget
