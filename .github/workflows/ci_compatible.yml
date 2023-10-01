@@ -27,7 +27,7 @@ jobs:
     outputs:
       matrix: ${{ steps.diff-files.outputs.runtimes }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
           python-version: 3.8
@@ -58,7 +58,7 @@ jobs:
       matrix: ${{ fromJSON(needs.generator.outputs.matrix) }}
     timeout-minutes: 35
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Testing the project
         uses: ./.github/actions/pytester
@@ -127,7 +127,7 @@ jobs:
     # always and success is need for running if eventually pytester failed
     if: always() && needs.collector.result == 'success'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download 📥 summary
         uses: actions/download-artifact@v3
         with:
@@ -160,7 +160,7 @@ jobs:
     if: always() && needs.collector.result == 'success'
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: "archive"
           fetch-depth: 0 # fetch all history for all branches and tags
