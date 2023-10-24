@@ -42,7 +42,7 @@ repos:
         #args: ["--write-changes"]
 
   - repo: https://github.com/omnilib/ufmt
-    rev: v2.2.0
+    rev: v2.3.0
     hooks:
       - id: ufmt
 
@@ -67,7 +67,7 @@ repos:
           - flake8-bugbear
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.0.292
+    rev: v0.1.1
     hooks:
       - id: ruff
         args: ["--fix"]
