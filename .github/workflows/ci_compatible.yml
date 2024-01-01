@@ -81,11 +81,11 @@ jobs:
       matrix: ${{ fromJSON(needs.generator.outputs.matrix) }}
     steps:
       - name: Download 📥 summary
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: compatibility-${{ github.sha }}
       - name: Download 📥 project
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: project-${{ github.sha }}-${{ strategy.job-index }}
 
@@ -129,7 +129,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download 📥 summary
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: compatibility-${{ github.sha }}
       - run: cat projects.json
@@ -170,7 +170,7 @@ jobs:
           git config user.email github-actions@github.com
           git merge origin/main
       - name: Download 📥 summary
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: compatibility-${{ github.sha }}
       - name: Update results
