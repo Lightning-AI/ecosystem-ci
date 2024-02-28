@@ -2,8 +2,8 @@ import glob
 import json
 import os
 import traceback
+from collections.abc import Sequence
 from datetime import datetime
-from typing import Dict, List, Optional, Sequence, Union
 
 import fire
 import pandas as pd
@@ -14,7 +14,7 @@ _PATH_ROOT = os.path.dirname(os.path.dirname(__file__))
 _REQUEST_TIMEOUT = 10
 
 
-def request_url(url: str, auth_token: Optional[str] = None) -> Optional[dict]:
+def request_url(url: str, auth_token: str | None = None) -> dict | None:
     """General request with checking if request limit was reached."""
     auth_header = {"Authorization": f"token {auth_token}"} if auth_token else {}
     try:
@@ -59,7 +59,7 @@ class AssistantCLI:
         return AssistantCLI._FOLDER_TESTS
 
     @staticmethod
-    def changed_configs(pr: int, auth_token: Optional[str] = None, as_list: bool = True) -> Union[str, List[str]]:
+    def changed_configs(pr: int, auth_token: str | None = None, as_list: bool = True) -> str | list[str]:
         """Determine what configs were changed in particular PR."""
         url = f"https://api.github.com/repos/Lightning-AI/ecosystem-ci/pulls/{pr}/files"
         data = request_url(url, auth_token)
@@ -70,14 +70,14 @@ class AssistantCLI:
         return configs if as_list else "|".join(configs)
 
     @staticmethod
-    def find_all_configs(configs_folder: str = _PATH_CONFIGS) -> List[str]:
+    def find_all_configs(configs_folder: str = _PATH_CONFIGS) -> list[str]:
         """Find all configs YAML|YML in given folder recursively."""
         files = glob.glob(os.path.join(configs_folder, "**", "*.yaml"), recursive=True)
         files += glob.glob(os.path.join(configs_folder, "**", "*.yml"), recursive=True)
         return [cfg.replace("configs/", "") if cfg.startswith("configs/") else cfg for cfg in files]
 
     @staticmethod
-    def list_runtimes(pr: Optional[int] = None, auth_token: Optional[str] = None) -> str:
+    def list_runtimes(pr: int | None = None, auth_token: str | None = None) -> str:
         """Extract all runtime combinations in the whole repository or just for particular PR."""
         if isinstance(pr, int):
             configs = AssistantCLI.changed_configs(pr, auth_token)
@@ -131,9 +131,7 @@ class AssistantCLI:
         return ", ".join(contacts)
 
     @staticmethod
-    def _https(
-        https: str, token: Optional[str] = None, username: Optional[str] = None, password: Optional[str] = None
-    ) -> str:
+    def _https(https: str, token: str | None = None, username: str | None = None, password: str | None = None) -> str:
         """Format the complete HTTPS path in case token or user authentication is required."""
         login = token if token else ""
         if not login and username:
@@ -144,19 +142,19 @@ class AssistantCLI:
         return f"https://{login}{url}"
 
     @staticmethod
-    def _extras(extras: Union[str, list, tuple] = "") -> str:
+    def _extras(extras: str | list | tuple = "") -> str:
         """Create a list of eventual extras for pip installation."""
-        return ",".join(extras) if isinstance(extras, (tuple, list, set)) else extras
+        return ",".join(extras) if isinstance(extras, tuple | list | set) else extras
 
     @staticmethod
-    def _get_flags(repo: dict, defaults: Sequence[str] = ("--quiet",)) -> List[str]:
+    def _get_flags(repo: dict, defaults: Sequence[str] = ("--quiet",)) -> list[str]:
         """Extract the install's flags with some defaults."""
         flags = repo.get("install_flags", [])
         flags = [flags] if isinstance(flags, str) else flags
         return list(set(flags + list(defaults)))
 
     @staticmethod
-    def _install_pip(repo: Dict[str, str]) -> str:
+    def _install_pip(repo: dict[str, str]) -> str:
         """Create command for installing a project from source or from PyPI.
 
         - source: if HTTPS is given
@@ -198,7 +196,7 @@ class AssistantCLI:
         return " ".join(["pip install", pkg, " ".join(flags)])
 
     @staticmethod
-    def _install_repo(repo: Dict[str, str], remove_dir: bool = True) -> List[str]:
+    def _install_repo(repo: dict[str, str], remove_dir: bool = True) -> list[str]:
         """Create command for installing a project from source assuming it is Git project."""
         if "HTTPS" not in repo:
             raise ValueError(f"Missing key `HTTPS` among {repo.keys()}")
@@ -252,7 +250,7 @@ class AssistantCLI:
     @staticmethod
     def before_commands(
         config_file: str = "config.yaml", stage: str = "install", as_append: bool = False
-    ) -> Union[str, List[str]]:
+    ) -> str | list[str]:
         """Parse commands for eventual custom execution before install or before testing."""
         config = AssistantCLI._load_config(config_file)
         cmds = config.get(f"before_{stage}", [])
@@ -261,7 +259,7 @@ class AssistantCLI:
         return cmds
 
     @staticmethod
-    def _export_env(env: Dict[str, str]) -> List[str]:
+    def _export_env(env: dict[str, str]) -> list[str]:
         """Create exporting for environment variables from config."""
         return [f'export {name}="{val}"' for name, val in env.items()]
 
@@ -312,14 +310,14 @@ class AssistantCLI:
         return os.linesep.join(script)
 
     @staticmethod
-    def _pytest_dirs(dirs: Union[None, str, list, tuple] = "") -> str:
+    def _pytest_dirs(dirs: None | str | list | tuple = "") -> str:
         dirs = dirs if dirs else "."
-        return " ".join(dirs) if isinstance(dirs, (tuple, list, set)) else dirs
+        return " ".join(dirs) if isinstance(dirs, tuple | list | set) else dirs
 
     @staticmethod
-    def _pytest_args(args: Union[None, str, list, tuple] = "") -> str:
+    def _pytest_args(args: None | str | list | tuple = "") -> str:
         args = args or ""
-        return " ".join(args) if isinstance(args, (tuple, list, set)) else args
+        return " ".join(args) if isinstance(args, tuple | list | set) else args
 
     @staticmethod
     def specify_tests(config_file: str = "config.yaml") -> str:
@@ -357,16 +355,14 @@ class AssistantCLI:
                 }
                 for _, r in dfg.iterrows()
             ]
-            blocks.append(
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": f"*{cfg}*: compatibility outcomes {':interrobang:' if failed else ':zap:'}: {cc}",
-                    },
-                    "fields": fields,
-                }
-            )
+            blocks.append({
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"*{cfg}*: compatibility outcomes {':interrobang:' if failed else ':zap:'}: {cc}",
+                },
+                "fields": fields,
+            })
         now_str = datetime.now().strftime("%Y-%m-%d")
         return json.dumps({"text": f"GitHub Action: compatibility result from {now_str}", "blocks": blocks})
 
