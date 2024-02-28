@@ -357,16 +357,14 @@ class AssistantCLI:
                 }
                 for _, r in dfg.iterrows()
             ]
-            blocks.append(
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": f"*{cfg}*: compatibility outcomes {':interrobang:' if failed else ':zap:'}: {cc}",
-                    },
-                    "fields": fields,
-                }
-            )
+            blocks.append({
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"*{cfg}*: compatibility outcomes {':interrobang:' if failed else ':zap:'}: {cc}",
+                },
+                "fields": fields,
+            })
         now_str = datetime.now().strftime("%Y-%m-%d")
         return json.dumps({"text": f"GitHub Action: compatibility result from {now_str}", "blocks": blocks})
 
