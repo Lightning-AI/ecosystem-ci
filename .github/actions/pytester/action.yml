@@ -51,10 +51,9 @@ runs:
       shell: bash
 
     - name: Show dir tree
-      if: runner.os == 'Linux'
       run: |
-        sudo apt install -q -y tree
-        tree .
+        pip install -q py-tree
+        py-tree .
       shell: bash
 
     - name: Testing

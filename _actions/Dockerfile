@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG PYTORCH_VERSION=1.8.1
-ARG CUDA_VERSION=11.1
+ARG PYTORCH_VERSION=1.13.1
+ARG CUDA_VERSION=11.8
 
 # https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes
 #FROM nvcr.io/nvidia/pytorch:${PYTORCH_VERSION}-py3
