@@ -3,6 +3,60 @@
 line-length = 120
 exclude = "(.eggs|.git|.hg|.mypy_cache|.venv|_build|buck-out|build|dist)"
 
+[tool.ruff]
+target-version = "py38"
+line-length = 120
+# Enable Pyflakes `E` and `F` codes by default.
+lint.select = [
+    "E", "W",  # see: https://pypi.org/project/pycodestyle
+    "F",  # see: https://pypi.org/project/pyflakes
+    "I",  #see: https://pypi.org/project/isort/
+    "D",  # see: https://pypi.org/project/pydocstyle
+    "N",  # see: https://pypi.org/project/pep8-naming
+    "S",  # see: https://pypi.org/project/flake8-bandit
+    "UP",  # see: https://docs.astral.sh/ruff/rules/#pyupgrade-up
+]
+lint.extend-select = [
+    "A",  # see: https://pypi.org/project/flake8-builtins
+    "B",  # see: https://pypi.org/project/flake8-bugbear
+    "C4",  # see: https://pypi.org/project/flake8-comprehensions
+    "PT",  # see: https://pypi.org/project/flake8-pytest-style
+    "RET",  # see: https://pypi.org/project/flake8-return
+    "SIM",  # see: https://pypi.org/project/flake8-simplify
+    "YTT",  # see: https://pypi.org/project/flake8-2020
+    "ANN",  # see: https://pypi.org/project/flake8-annotations
+    "TID",  # see: https://pypi.org/project/flake8-tidy-imports/
+    "T10",  # see: https://pypi.org/project/flake8-debugger
+    "Q",  # see: https://pypi.org/project/flake8-quotes
+    "EXE",  # see: https://pypi.org/project/flake8-executable
+    "ISC",  # see: https://pypi.org/project/flake8-implicit-str-concat
+    "PIE",  # see: https://pypi.org/project/flake8-pie
+    "PLE",  # see: https://pypi.org/project/pylint/
+    "PERF",  # see: https://pypi.org/project/perflint/
+    "PYI",  # see: https://pypi.org/project/flake8-pyi/
+    "RUF", # see: https://docs.astral.sh/ruff/rules/#ruff-specific-rules-ruf
+]
+lint.ignore-init-module-imports = true
+lint.unfixable = ["F401"]
+lint.ignore = [
+    "RUF012",  # Mutable class attributes should be annotated with `typing.ClassVar`
+]
+
+[tool.ruff.lint.per-file-ignores]
+"setup.py" = ["D100", "SIM115"]
+"__about__.py" = ["D100"]
+"__init__.py" = ["D100"]
+
+[tool.ruff.lint.pydocstyle]
+# Use Google-style docstrings.
+convention = "google"
+
+#[tool.ruff.pycodestyle]
+#ignore-overlong-task-comments = true
+
+[tool.ruff.lint.mccabe]
+# Unlike Flake8, default to a complexity level of 10.
+max-complexity = 10
 
 [tool.isort]
 profile = "black"
@@ -10,6 +64,14 @@ line_length = 120
 force_sort_within_sections = "False"
 order_by_type = "False"
 
+[tool.codespell]
+#skip = '*.py'
+quiet-level = 3
+# comma separated list of words; waiting for:
+#  https://github.com/codespell-project/codespell/issues/2839#issuecomment-1731601603
+# also adding links until they ignored by its: nature
+#  https://github.com/codespell-project/codespell/issues/2243#issuecomment-1732019960
+#ignore-words-list = ""
 
 [tool.pytest.ini_options]
 norecursedirs = [
@@ -36,75 +98,3 @@ exclude_lines = [
     "pragma: no cover",
     "pass",
 ]
-
-
-[tool.codespell]
-#skip = '*.py'
-quiet-level = 3
-# comma separated list of words; waiting for:
-#  https://github.com/codespell-project/codespell/issues/2839#issuecomment-1731601603
-# also adding links until they ignored by its: nature
-#  https://github.com/codespell-project/codespell/issues/2243#issuecomment-1732019960
-#ignore-words-list = ""
-
-
-[tool.ruff]
-line-length = 120
-# Enable Pyflakes `E` and `F` codes by default.
-select = [
-    "E", "W",  # see: https://pypi.org/project/pycodestyle
-    "F",  # see: https://pypi.org/project/pyflakes
-    "I",  #see: https://pypi.org/project/isort/
-    "D",  # see: https://pypi.org/project/pydocstyle
-    "N",  # see: https://pypi.org/project/pep8-naming
-    "S",  # see: https://pypi.org/project/flake8-bandit
-]
-extend-select = [
-    "A",  # see: https://pypi.org/project/flake8-builtins
-    "B",  # see: https://pypi.org/project/flake8-bugbear
-    "C4",  # see: https://pypi.org/project/flake8-comprehensions
-    "PT",  # see: https://pypi.org/project/flake8-pytest-style
-    "RET",  # see: https://pypi.org/project/flake8-return
-    "SIM",  # see: https://pypi.org/project/flake8-simplify
-    "YTT",  # see: https://pypi.org/project/flake8-2020
-    "ANN",  # see: https://pypi.org/project/flake8-annotations
-    "TID",  # see: https://pypi.org/project/flake8-tidy-imports/
-    "T10",  # see: https://pypi.org/project/flake8-debugger
-    "Q",  # see: https://pypi.org/project/flake8-quotes
-    "EXE",  # see: https://pypi.org/project/flake8-executable
-    "ISC",  # see: https://pypi.org/project/flake8-implicit-str-concat
-    "PIE",  # see: https://pypi.org/project/flake8-pie
-    "PLE",  # see: https://pypi.org/project/pylint/
-    "PERF",  # see: https://pypi.org/project/perflint/
-    "PYI",  # see: https://pypi.org/project/flake8-pyi/
-]
-# Exclude a variety of commonly ignored directories.
-exclude = [
-    ".eggs",
-    ".git",
-    ".mypy_cache",
-    ".ruff_cache",
-    "__pypackages__",
-    "_build",
-    "build",
-    "dist",
-    "docs"
-]
-ignore-init-module-imports = true
-unfixable = ["F401"]
-
-[tool.ruff.per-file-ignores]
-"setup.py" = ["D100", "SIM115"]
-"__about__.py" = ["D100"]
-"__init__.py" = ["D100"]
-
-[tool.ruff.pydocstyle]
-# Use Google-style docstrings.
-convention = "google"
-
-#[tool.ruff.pycodestyle]
-#ignore-overlong-task-comments = true
-
-[tool.ruff.mccabe]
-# Unlike Flake8, default to a complexity level of 10.
-max-complexity = 10
