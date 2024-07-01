@@ -31,7 +31,7 @@ jobs:
 
       - name: Build and Publish Docker Hub
         # publish master/release
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           build-args: |
             PYTORCH_VERSION=${{ matrix.pytorch_version }}
