@@ -143,7 +143,7 @@ jobs:
 
       - name: Post to a Slack channel
         if: contains(fromJSON('["schedule", "workflow_dispatch"]'), github.event_name)
-        uses: slackapi/slack-github-action@v1.26.0
+        uses: slackapi/slack-github-action@v1.27.0
         with:
           # channel-id: C02NJMSLFJR  # alerts-ecosystem-ci
           # For posting a rich message using Block Kit - https://app.slack.com/block-kit-builder
