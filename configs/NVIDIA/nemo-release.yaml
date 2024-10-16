@@ -22,6 +22,8 @@ dependencies:
     install_extras: loggers
 
 testing:
+  dirs:
+    - tests
   # additional pytest arguments
   pytest_args: -m "not pleasefixme and not torch_tts" --cpu --with_downloads --relax_numba_compat
 
