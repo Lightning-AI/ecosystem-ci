@@ -44,7 +44,7 @@ jobs:
 
       - run: echo "[]" > projects.json
       - name: Upload placeholder
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: compatibility-${{ github.sha }}
           path: projects.json
@@ -81,31 +81,36 @@ jobs:
       matrix: ${{ fromJSON(needs.generator.outputs.matrix) }}
     steps:
       - name: Download 📥 summary
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: compatibility-${{ github.sha }}
       - name: Download 📥 project
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
+        id: download-project
         with:
-          name: project-${{ github.sha }}-${{ strategy.job-index }}
+          pattern: project-${{ github.sha }}-*
 
       - run: ls -l
       - name: append result
         run: |
           import json
+          import os
           with open("projects.json") as fp:
             data = json.load(fp)
-          with open("meta.json") as fp:
-            data.append(json.load(fp))
+          for root, dirs, files in os.walk("${{ steps.download-project.outputs.download-path }}"):
+            if "meta.json" in files:
+              with open(root+"/meta.json") as fp:
+                data.append(json.load(fp))
           with open("projects.json", "w") as fp:
             json.dump(data, fp)
         shell: python
 
       - name: Upload pytest test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: compatibility-${{ github.sha }}
           path: projects.json
+          overwrite: true
 
   watcher:
     runs-on: ubuntu-latest
@@ -129,7 +134,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download 📥 summary
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: compatibility-${{ github.sha }}
       - run: cat projects.json
@@ -170,7 +175,7 @@ jobs:
           git config user.email github-actions@github.com
           git merge origin/main
       - name: Download 📥 summary
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: compatibility-${{ github.sha }}
       - name: Update results
