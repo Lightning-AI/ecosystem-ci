@@ -40,7 +40,7 @@ dependencies:
     install_flags:
       - "--find-links https://download.pytorch.org/whl/cpu/torch_stable.html"
   - name: typing_extensions
-    checkout: 4.1.1
+    checkout: 4.7.1
     install_flags: "--use-pep517"
 
 # OPTIONAL, running before installing your project
