@@ -29,14 +29,14 @@ repos:
         args: ["--print-width=120"]
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.3.0
+    rev: v2.4.1
     hooks:
       - id: codespell
         additional_dependencies: [tomli]
         #args: ["--write-changes"]
 
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.18
+    rev: 0.7.22
     hooks:
       - id: mdformat
         additional_dependencies:
@@ -45,17 +45,17 @@ repos:
           - mdformat_frontmatter
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.7.1
+    rev: v0.9.7
     hooks:
       - id: ruff-format
       - id: ruff
         args: ["--fix"]
 
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: v2.4.3
+    rev: v2.5.0
     hooks:
       - id: pyproject-fmt
   - repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.22
+    rev: v0.23
     hooks:
       - id: validate-pyproject
