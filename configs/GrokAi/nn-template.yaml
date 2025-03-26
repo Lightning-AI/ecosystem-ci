@@ -1,0 +1,59 @@
+target_repository:
+  HTTPS: https://github.com/grok-ai/nn-template
+  # OPTIONAL, for some protected repository
+  # username: my-nick
+  # OPTIONAL, paired with the username
+  # password: dont-tell-anyone
+  # OPTIONAL, overrides the user/pass
+  # token: authentication-token
+  # OPTIONAL, checkout a particular branch or a tag
+  checkout: master
+  # OPTIONAL, define installing package extras
+  install_extras: all
+  # OPTIONAL, install additional requirements from a file
+  requirements_file: requirements.txt
+  # copy some  test from the target repository
+  copy_tests:
+    - integrations
+    - tests/__init__.py
+    - tests/helpers
+
+contact:
+  slack:
+    - lucmos
+  email: [luca.moschella94@gmail.com]
+
+# OPTIONAL, running before installing your project
+# WARNING: this is custom for given OS, we do not manage any inter OS compatibility
+before_install:
+  - pip install Cython==3.56
+
+# OPTIONAL, if any installation require some env. variables
+env:
+  HOROVOD_BUILD_ARCH_FLAGS: "-mfma"
+  # HOROVOD_WITHOUT_MXNET: 1
+  # HOROVOD_WITHOUT_TENSORFLOW: 1
+
+dependencies:
+  - name: pytorch-lightning
+    HTTPS: https://github.com/PyTorchLightning/pytorch-lightning.git
+    checkout: release/1.5.x
+    # install_extras: all
+  - name: Cython
+    checkout: 0.29.24
+
+# OPTIONAL, running before installing your project
+# WARNING: this is custom for given OS, we do not manage any inter OS compatibility
+before_test:
+  - wget https://pl-flash-data.s3.amazonaws.com/titanic.zip
+
+testing:
+  dirs:
+    - tests
+  # OPTIONAL, additional pytest arguments
+  pytest_args: --strict
+
+runtimes:
+  - {os: "ubuntu-20.04", python-version: "3.9"}
+  - {os: "macOS-10.15", python-version: "3.7"}
+  - {os: "windows-2019", python-version: "3.8"}
